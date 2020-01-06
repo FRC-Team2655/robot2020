@@ -8,7 +8,6 @@
 #pragma once
 
 #include <frc/commands/Subsystem.h>
-#include "Robot.h"
 #include <rev/CANSparkMax.h>
 #include "RobotMap.h"
 #include "commands/DriveJoystickCommand.h"
