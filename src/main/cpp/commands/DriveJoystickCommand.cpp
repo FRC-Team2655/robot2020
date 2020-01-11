@@ -34,4 +34,4 @@ void DriveJoystickCommand::Execute() {
 void DriveJoystickCommand::End(bool interrupted) {}
 
 // Returns true when the command should end.
-bool DriveJoystickCommand::IsFinished() { return true; }
+bool DriveJoystickCommand::IsFinished() { return false; }
