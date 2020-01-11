@@ -12,6 +12,7 @@
 
 #include "subsystems/DriveBaseSubsystem.h"
 #include "OI.h"
+#include "commands/DriveJoystickCommand.h"
 
 class Robot : public frc::TimedRobot {
  public:

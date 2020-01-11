@@ -9,11 +9,11 @@
 
 #include "RobotMap.h"
 
-const int LMaster = 1;
+const int LMaster = 7;
 const int LSlave1 = 2;
 const int LSlave2 = 3;
 
-const int RMaster = 4;
+const int RMaster = 1;
 const int RSlave1 = 5;
 const int RSlave2 = 6;
 
@@ -22,5 +22,3 @@ const double LMaxVelocity = 5700.0;
 const double RMaxVelocity = 5800.0;
 
 const double DriveRampRate = 0.23;  // Minimum time (sec) to go from 0 to full
-
-const int joystick0 = 0;

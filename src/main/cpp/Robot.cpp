@@ -9,11 +9,13 @@
 
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/CommandScheduler.h>
+#include <frc2/command/RunCommand.h>
 
 DriveBaseSubsystem Robot::driveBase;
 OI Robot::oi;
 
-void Robot::RobotInit() {}
+void Robot::RobotInit() {
+}
 
 /**
  * This function is called every robot packet, no matter the mode. Use
@@ -30,9 +32,12 @@ void Robot::RobotPeriodic() { frc2::CommandScheduler::GetInstance().Run(); }
  * can use it to reset any subsystem information you want to clear when the
  * robot is disabled.
  */
-void Robot::DisabledInit() {}
+void Robot::DisabledInit() {
+        Robot::driveBase.setBrakeMode();
+}
 
-void Robot::DisabledPeriodic() {}
+void Robot::DisabledPeriodic() {
+}
 
 /**
  * This autonomous runs the autonomous command selected by your {@link
@@ -49,7 +54,9 @@ void Robot::TeleopInit() {
 /**
  * This function is called periodically during operator control.
  */
-void Robot::TeleopPeriodic() {}
+void Robot::TeleopPeriodic() {
+    Robot::driveBase.setCoastMode();
+}
 
 /**
  * This function is called periodically during test mode.

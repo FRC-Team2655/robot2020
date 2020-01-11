@@ -10,10 +10,10 @@
 using IdleMode = rev::CANSparkMax::IdleMode;
 
 DriveBaseSubsystem::DriveBaseSubsystem() {
-  leftSlave.Follow(leftMaster);
+  /*leftSlave1.Follow(leftMaster);
   leftSlave2.Follow(leftMaster);
-  rightSlave.Follow(rightMaster);
-  rightSlave2.Follow(rightMaster);
+  rightSlave1.Follow(rightMaster);
+  rightSlave2.Follow(rightMaster);*/
 
   leftPID.SetP(1e-4);
   leftPID.SetI(0);
@@ -29,31 +29,31 @@ DriveBaseSubsystem::DriveBaseSubsystem() {
   rightPID.SetIZone(0);
   rightPID.SetOutputRange(-1, 1);
 
-  rightMaster.SetInverted(true);
-
   leftMaster.SetClosedLoopRampRate(DriveRampRate);
   rightMaster.SetClosedLoopRampRate(DriveRampRate);
 
   // Current limiting
   const int stallLimit = 38, freeLimit = 60, limitRPM = 2000;
   leftMaster.SetSmartCurrentLimit(stallLimit, freeLimit, limitRPM);
-  leftSlave.SetSmartCurrentLimit(stallLimit, freeLimit, limitRPM);
-  leftSlave2.SetSmartCurrentLimit(stallLimit, freeLimit, limitRPM);
+  //leftSlave1.SetSmartCurrentLimit(stallLimit, freeLimit, limitRPM);
+  //leftSlave2.SetSmartCurrentLimit(stallLimit, freeLimit, limitRPM);
   rightMaster.SetSmartCurrentLimit(stallLimit, freeLimit, limitRPM);
-  rightSlave.SetSmartCurrentLimit(stallLimit, freeLimit, limitRPM);
-  rightSlave2.SetSmartCurrentLimit(stallLimit, freeLimit, limitRPM);
+  //rightSlave1.SetSmartCurrentLimit(stallLimit, freeLimit, limitRPM);
+  //rightSlave2.SetSmartCurrentLimit(stallLimit, freeLimit, limitRPM);
 
 
   leftMaster.BurnFlash();
   rightMaster.BurnFlash();
 
+  SetDefaultCommand(driveJoystick);
+
   rightMaster.SetInverted(true);
-  rightSlave.SetInverted(true);
-  rightSlave2.SetInverted(true);
+  leftMaster.SetInverted(true);
 }
 
 // This method will be called once per scheduler run
-void DriveBaseSubsystem::Periodic() {}
+void DriveBaseSubsystem::Periodic() {
+}
 
 void DriveBaseSubsystem::drivePercentage(double speed, double rotation){
 	std::array<double, 2> speeds = arcadeDrive(speed, rotation);
@@ -62,11 +62,11 @@ void DriveBaseSubsystem::drivePercentage(double speed, double rotation){
 
 void DriveBaseSubsystem::driveTankPercentage(double leftPercentage, double rightPercentage) {
 	leftMaster.Set(leftPercentage);
-	//leftSlave.Set(leftPercentage);
+	//leftSlave1.Set(leftPercentage);
 	//leftSlave2.Set(leftPercentage);
 
 	rightMaster.Set(rightPercentage);
-	//rightSlave.Set(rightPercentage);
+	//rightSlave1.Set(rightPercentage);
 	//rightSlave2.Set(rightPercentage);
 }
 
@@ -130,20 +130,20 @@ void DriveBaseSubsystem::driveTankVelocity(double lVel, double rVel) {
 
 void DriveBaseSubsystem::setBrakeMode() {
 	leftMaster.SetIdleMode(IdleMode::kBrake);
-	leftSlave.SetIdleMode(IdleMode::kBrake);
-	leftSlave2.SetIdleMode(IdleMode::kBrake);
+	//leftSlave1.SetIdleMode(IdleMode::kBrake);
+	//leftSlave2.SetIdleMode(IdleMode::kBrake);
 
 	rightMaster.SetIdleMode(IdleMode::kBrake);
-	rightSlave.SetIdleMode(IdleMode::kBrake);
-	rightSlave2.SetIdleMode(IdleMode::kBrake);
+	//rightSlave1.SetIdleMode(IdleMode::kBrake);
+	//rightSlave2.SetIdleMode(IdleMode::kBrake);
 }
 
 void DriveBaseSubsystem::setCoastMode() {
 	leftMaster.SetIdleMode(IdleMode::kCoast);
-	leftSlave.SetIdleMode(IdleMode::kCoast);
-	leftSlave2.SetIdleMode(IdleMode::kCoast);
+	//leftSlave1.SetIdleMode(IdleMode::kCoast);
+	//leftSlave2.SetIdleMode(IdleMode::kCoast);
 
 	rightMaster.SetIdleMode(IdleMode::kCoast);
-	rightSlave.SetIdleMode(IdleMode::kCoast);
-	rightSlave2.SetIdleMode(IdleMode::kCoast);
+	//rightSlave1.SetIdleMode(IdleMode::kCoast);
+	//rightSlave2.SetIdleMode(IdleMode::kCoast);
 }

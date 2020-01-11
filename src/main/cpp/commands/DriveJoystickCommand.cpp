@@ -13,21 +13,17 @@ DriveJoystickCommand::DriveJoystickCommand() {
 }
 
 // Called when the command is initially scheduled.
-void DriveJoystickCommand::Initialize() {}
+void DriveJoystickCommand::Initialize() {
+}
 
 // Called repeatedly when this Command is scheduled to run
 void DriveJoystickCommand::Execute() {
   double power = -1 * jshelper::getAxisValue(Robot::oi.driveAxisConfig, Robot::oi.js0->GetRawAxis(1));
 	double rotate = .4 * jshelper::getAxisValue(Robot::oi.rotateAxisConfig, Robot::oi.js0->GetRawAxis(2));
 
-  std::cout << "power: " << power << "rotate: " << rotate << "\n" << "-----------------------" << "\n" << std::endl;
+  //std::cout << "power: " << power << "rotate: " << rotate << "\n" << "-----------------------" << "\n" << std::endl;
 
-  // Option button
-  /*if(Robot::oi.js0->GetRawButton(10) && Robot::visionManager.isTapeDetected()){
-    rotate =  0.5 * (1.0/80) * Robot::visionManager.getRelativeTapeHeading();
-  }*/
-
-	Robot::driveBase.drivePercentage(power, rotate);
+	Robot::driveBase.driveVelocity(power, rotate);
 }
 
 // Called once the command ends or is interrupted.
