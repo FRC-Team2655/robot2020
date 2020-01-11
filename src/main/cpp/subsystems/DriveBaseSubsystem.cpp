@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) 2017-2018 FIRST. All Rights Reserved.                        */
+/* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -9,7 +9,7 @@
 
 using IdleMode = rev::CANSparkMax::IdleMode;
 
-DriveBaseSubsystem::DriveBaseSubsystem() : Subsystem("DriveBaseSubsystem") {
+DriveBaseSubsystem::DriveBaseSubsystem() {
   leftSlave.Follow(leftMaster);
   leftSlave2.Follow(leftMaster);
   rightSlave.Follow(rightMaster);
@@ -52,20 +52,14 @@ DriveBaseSubsystem::DriveBaseSubsystem() : Subsystem("DriveBaseSubsystem") {
   rightSlave2.SetInverted(true);
 }
 
-void DriveBaseSubsystem::InitDefaultCommand() {
-	SetDefaultCommand(new DriveJoystickCommand());
-}
+// This method will be called once per scheduler run
+void DriveBaseSubsystem::Periodic() {}
 
 void DriveBaseSubsystem::drivePercentage(double speed, double rotation){
 	std::array<double, 2> speeds = arcadeDrive(speed, rotation);
 	driveTankPercentage(speeds[0], speeds[1]);
 }
-void DriveBaseSubsystem::driveVelocity(double speed, double rotation) {
-	std::array<double, 2> speeds = arcadeDrive(speed, rotation);
-	speeds[0] *= MaxVelocity;
-	speeds[1] *= MaxVelocity;
-	driveTankVelocity(speeds[0], speeds[1]);
-}
+
 void DriveBaseSubsystem::driveTankPercentage(double leftPercentage, double rightPercentage) {
 	leftMaster.Set(leftPercentage);
 	//leftSlave.Set(leftPercentage);
@@ -74,22 +68,6 @@ void DriveBaseSubsystem::driveTankPercentage(double leftPercentage, double right
 	rightMaster.Set(rightPercentage);
 	//rightSlave.Set(rightPercentage);
 	//rightSlave2.Set(rightPercentage);
-}
-void DriveBaseSubsystem::driveTankVelocity(double lVel, double rVel) {
-	if (lVel == 0) {
-		// If target velocity is 0 do not use PID to get to 0 just cut power (0%)
-		leftMaster.Set(0);
-	}else {
-		// Drive the left side in velocity closed loop mode (set pid reference = setpoint for PID)
-		leftPID.SetReference(lVel, rev::ControlType::kVelocity);
-	}
-
-	if (rVel == 0) {
-		rightMaster.Set(0);
-	}
-	else {
-		rightPID.SetReference(rVel, rev::ControlType::kVelocity);
-	}
 }
 
 std::array<double, 2> DriveBaseSubsystem::arcadeDrive(double xSpeed, double zRotation) {
@@ -126,6 +104,29 @@ std::array<double, 2> DriveBaseSubsystem::arcadeDrive(double xSpeed, double zRot
 	return { leftMotorOutput, rightMotorOutput };
 }
 
+void DriveBaseSubsystem::driveVelocity(double speed, double rotation) {
+	std::array<double, 2> speeds = arcadeDrive(speed, rotation);
+	speeds[0] *= MaxVelocity;
+	speeds[1] *= MaxVelocity;
+	driveTankVelocity(speeds[0], speeds[1]);
+}
+
+void DriveBaseSubsystem::driveTankVelocity(double lVel, double rVel) {
+	if (lVel == 0) {
+		// If target velocity is 0 do not use PID to get to 0 just cut power (0%)
+		leftMaster.Set(0);
+	}else {
+		// Drive the left side in velocity closed loop mode (set pid reference = setpoint for PID)
+		leftPID.SetReference(lVel, rev::ControlType::kVelocity);
+	}
+
+	if (rVel == 0) {
+		rightMaster.Set(0);
+	}
+	else {
+		rightPID.SetReference(rVel, rev::ControlType::kVelocity);
+	}
+}
 
 void DriveBaseSubsystem::setBrakeMode() {
 	leftMaster.SetIdleMode(IdleMode::kBrake);

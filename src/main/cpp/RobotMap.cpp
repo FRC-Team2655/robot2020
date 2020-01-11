@@ -1,15 +1,26 @@
+/*----------------------------------------------------------------------------*/
+/* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
+/* Open Source Software - may be modified and shared by FRC teams. The code   */
+/* must be accompanied by the FIRST BSD license file in the root directory of */
+/* the project.                                                               */
+/*----------------------------------------------------------------------------*/
+
+#pragma once
+
 #include "RobotMap.h"
 
-// SPARK MAX IDs
 const int LMaster = 1;
-const int LSlave = 2;
-const int LSlave2 = 6;
-const int RMaster = 3;
-const int RSlave = 4;
-const int RSlave2 = 7;
+const int LSlave1 = 2;
+const int LSlave2 = 3;
+
+const int RMaster = 4;
+const int RSlave1 = 5;
+const int RSlave2 = 6;
 
 const double MaxVelocity = 5500;    // This is capped at the slowest velocity on ANY robot to ensure that paths work the same
 const double LMaxVelocity = 5700.0;
 const double RMaxVelocity = 5800.0;
 
 const double DriveRampRate = 0.23;  // Minimum time (sec) to go from 0 to full
+
+const int joystick0 = 0;

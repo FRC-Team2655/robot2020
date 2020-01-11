@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) 2017-2018 FIRST. All Rights Reserved.                        */
+/* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -9,10 +9,10 @@
 #include "Robot.h"
 
 DriveJoystickCommand::DriveJoystickCommand() {
-  Requires(&Robot::driveBase);
+  AddRequirements(&Robot::driveBase);
 }
 
-// Called just before this Command runs the first time
+// Called when the command is initially scheduled.
 void DriveJoystickCommand::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
@@ -30,12 +30,8 @@ void DriveJoystickCommand::Execute() {
 	Robot::driveBase.drivePercentage(power, rotate);
 }
 
-// Make this return true when this Command no longer needs to run execute()
-bool DriveJoystickCommand::IsFinished() { return false; }
+// Called once the command ends or is interrupted.
+void DriveJoystickCommand::End(bool interrupted) {}
 
-// Called once after isFinished returns true
-void DriveJoystickCommand::End() {}
-
-// Called when another command which requires one or more of the same
-// subsystems is scheduled to run
-void DriveJoystickCommand::Interrupted() {}
+// Returns true when the command should end.
+bool DriveJoystickCommand::IsFinished() { return true; }

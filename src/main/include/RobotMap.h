@@ -7,14 +7,12 @@
 
 #pragma once
 
-#include <string>
-
-// SPARK MAX IDs
 const extern int LMaster;
-const extern int LSlave;
+const extern int LSlave1;
 const extern int LSlave2;
+
 const extern int RMaster;
-const extern int RSlave;
+const extern int RSlave1;
 const extern int RSlave2;
 
 const extern double MaxVelocity;
@@ -22,3 +20,5 @@ const extern double LMaxVelocity;
 const extern double RMaxVelocity;
 
 const extern double DriveRampRate;
+
+const extern int joystick0;

@@ -12,14 +12,14 @@ using namespace team2655;
 OI::OI() {
   js0 = new frc::Joystick(0);
 
-  frc::JoystickButton *xBtn = new frc::JoystickButton(js0, 2);
-  frc::JoystickButton *squareBtn = new frc::JoystickButton(js0, 1);
-  frc::JoystickButton *r3Btn = new frc::JoystickButton(js0, 12);
-  frc::JoystickButton *r2Btn = new frc::JoystickButton(js0, 8);
-  frc::JoystickButton *l1Btn = new frc::JoystickButton(js0, 5);
-  frc::JoystickButton *r1Btn = new frc::JoystickButton(js0, 6);
-  frc::JoystickButton *triangleBtn = new frc::JoystickButton(js0, 4);
-  frc::JoystickButton *circleBtn = new frc::JoystickButton(js0, 3);
-  frc::JoystickButton *shareBtn = new frc::JoystickButton(js0, 9);
-  frc::JoystickButton *l2Btn = new frc::JoystickButton(js0, 7);
+  frc2::JoystickButton *xBtn = new frc2::JoystickButton(js0, 2);
+  frc2::JoystickButton *squareBtn = new frc2::JoystickButton(js0, 1);
+  frc2::JoystickButton *r3Btn = new frc2::JoystickButton(js0, 12);
+  frc2::JoystickButton *r2Btn = new frc2::JoystickButton(js0, 8);
+  frc2::JoystickButton *l1Btn = new frc2::JoystickButton(js0, 5);
+  frc2::JoystickButton *r1Btn = new frc2::JoystickButton(js0, 6);
+  frc2::JoystickButton *triangleBtn = new frc2::JoystickButton(js0, 4);
+  frc2::JoystickButton *circleBtn = new frc2::JoystickButton(js0, 3);
+  frc2::JoystickButton *shareBtn = new frc2::JoystickButton(js0, 9);
+  frc2::JoystickButton *l2Btn = new frc2::JoystickButton(js0, 7);
 }
