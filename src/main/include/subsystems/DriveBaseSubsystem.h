@@ -10,7 +10,7 @@
 #include <frc2/command/SubsystemBase.h>
 #include "RobotMap.h"
 #include "commands/DriveJoystickCommand.h"
-
+#include <frc/Encoder.h>
 #include <rev/CANSparkMax.h>
 
 using MotorType = rev::CANSparkMax::MotorType;
@@ -35,6 +35,11 @@ class DriveBaseSubsystem : public frc2::SubsystemBase {
   
   void setBrakeMode();
 
+  double getRightEncoderOutput();
+  double getLeftEncoderOutput();
+
+  void resetEncoders();
+
  private:
   rev::CANSparkMax leftMaster {LMaster, MotorType::kBrushless};
   //rev::CANSparkMax leftSlave1 {LSlave1, MotorType::kBrushless};
@@ -42,6 +47,9 @@ class DriveBaseSubsystem : public frc2::SubsystemBase {
   rev::CANSparkMax rightMaster {RMaster, MotorType::kBrushless};
   //rev::CANSparkMax rightSlave1 {RSlave1, MotorType::kBrushless};
   //rev::CANSparkMax rightSlave2 {RSlave2, MotorType::kBrushless};
+
+  frc::Encoder rightEncoder {1, 2, true};
+  frc::Encoder leftEncoder {5, 6, true};
 
   rev::CANPIDController leftPID = leftMaster.GetPIDController();
   rev::CANPIDController rightPID = rightMaster.GetPIDController();

@@ -9,7 +9,7 @@
 
 #include "RobotMap.h"
 
-const int LMaster = 7;
+const int LMaster = 1;
 const int LSlave1 = 2;
 const int LSlave2 = 3;
 

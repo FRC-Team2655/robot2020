@@ -15,6 +15,7 @@ DriveBaseSubsystem Robot::driveBase;
 OI Robot::oi;
 
 void Robot::RobotInit() {
+    frc::SmartDashboard::PutBoolean("Reset Encoders", false);
 }
 
 /**
@@ -25,7 +26,17 @@ void Robot::RobotInit() {
  * <p> This runs after the mode specific periodic functions, but before
  * LiveWindow and SmartDashboard integrated updating.
  */
-void Robot::RobotPeriodic() { frc2::CommandScheduler::GetInstance().Run(); }
+void Robot::RobotPeriodic() { 
+    frc::SmartDashboard::PutNumber("Left Output: ", driveBase.getLeftEncoderOutput());
+    frc::SmartDashboard::PutNumber("Right Output: ", driveBase.getRightEncoderOutput());
+
+    if (frc::SmartDashboard::GetBoolean("Reset Encoders", false) == true) {
+        driveBase.resetEncoders();
+        frc::SmartDashboard::PutBoolean("Reset Encoders", false);
+    }
+
+    frc2::CommandScheduler::GetInstance().Run();
+}
 
 /**
  * This function is called once each time the robot enters Disabled mode. You
@@ -33,7 +44,7 @@ void Robot::RobotPeriodic() { frc2::CommandScheduler::GetInstance().Run(); }
  * robot is disabled.
  */
 void Robot::DisabledInit() {
-        Robot::driveBase.setBrakeMode();
+    driveBase.setBrakeMode();
 }
 
 void Robot::DisabledPeriodic() {
@@ -44,18 +55,19 @@ void Robot::DisabledPeriodic() {
  * RobotContainer} class.
  */
 void Robot::AutonomousInit() {
+
 }
 
 void Robot::AutonomousPeriodic() {}
 
 void Robot::TeleopInit() {
+    driveBase.setCoastMode();
 }
 
 /**
  * This function is called periodically during operator control.
  */
 void Robot::TeleopPeriodic() {
-    Robot::driveBase.setCoastMode();
 }
 
 /**

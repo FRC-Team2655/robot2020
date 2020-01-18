@@ -6,6 +6,7 @@
 /*----------------------------------------------------------------------------*/
 
 #include "subsystems/DriveBaseSubsystem.h"
+#include "Robot.h"
 
 using IdleMode = rev::CANSparkMax::IdleMode;
 
@@ -47,7 +48,7 @@ DriveBaseSubsystem::DriveBaseSubsystem() {
 
   SetDefaultCommand(driveJoystick);
 
-  rightMaster.SetInverted(true);
+  rightMaster.SetInverted(false);
   leftMaster.SetInverted(true);
 }
 
@@ -146,4 +147,17 @@ void DriveBaseSubsystem::setCoastMode() {
 	rightMaster.SetIdleMode(IdleMode::kCoast);
 	//rightSlave1.SetIdleMode(IdleMode::kCoast);
 	//rightSlave2.SetIdleMode(IdleMode::kCoast);
+}
+
+double DriveBaseSubsystem::getLeftEncoderOutput() {
+	return (leftEncoder.GetRaw() / 8192.0);
+}
+
+double DriveBaseSubsystem::getRightEncoderOutput() {
+	return (rightEncoder.GetRaw() / 8192.0);
+}
+
+void DriveBaseSubsystem::resetEncoders() {
+	leftEncoder.Reset();
+	rightEncoder.Reset();
 }
