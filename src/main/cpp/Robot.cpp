@@ -13,9 +13,12 @@
 
 DriveBaseSubsystem Robot::driveBase;
 OI Robot::oi;
+ShooterSubsystem Robot::shooter;
 
 void Robot::RobotInit() {
     frc::SmartDashboard::PutBoolean("Reset Encoders", false);
+
+    shooter.setCoastMode();
 }
 
 /**

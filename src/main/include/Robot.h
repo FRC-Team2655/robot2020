@@ -13,11 +13,13 @@
 #include "subsystems/DriveBaseSubsystem.h"
 #include "OI.h"
 #include "commands/DriveJoystickCommand.h"
+#include "subsystems/ShooterSubsystem.h"
 
 class Robot : public frc::TimedRobot {
  public:
   static OI oi;
   static DriveBaseSubsystem driveBase;
+  static ShooterSubsystem shooter;
 
   void RobotInit() override;
   void RobotPeriodic() override;

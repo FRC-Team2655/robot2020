@@ -124,6 +124,7 @@ void DriveBaseSubsystem::driveTankVelocity(double lVel, double rVel) {
 	if (rVel == 0) {
 		rightMaster.Set(0);
 	}
+	
 	else {
 		rightPID.SetReference(rVel, rev::ControlType::kVelocity);
 	}

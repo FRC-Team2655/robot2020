@@ -15,6 +15,19 @@ const extern int RMaster;
 const extern int RSlave1;
 const extern int RSlave2;
 
+const extern int ShooterMaster;
+const extern int ShooterSlave1;
+const extern int ShooterSlave2;
+
+const extern int KickerID;
+
+const extern int ForwardBelt;
+const extern int BackwardBelt;
+const extern int BottomBelt;
+
+const extern double incrementShooterSpeed;
+const extern double maxShooterSpeed;
+
 const extern double MaxVelocity;
 const extern double LMaxVelocity;
 const extern double RMaxVelocity;
