@@ -13,14 +13,17 @@ class ShooterSubsystem : public frc2::SubsystemBase {
 
   void runShooter(double speed);
   void setCoastMode();
+
   void stopShooter();
+
+  void runBelts(double speed);
+  void stopBelts();
 
   void Periodic();
 
  private:
   rev::CANSparkMax shooterMaster {ShooterMaster, MotorType::kBrushless};
   rev::CANSparkMax shooterSlave1 {ShooterSlave1, MotorType::kBrushless};
-  rev::CANSparkMax shooterSlave2 {ShooterSlave2, MotorType::kBrushless};
 
   rev::CANSparkMax kicker {KickerID, MotorType::kBrushless};
 

@@ -14,11 +14,14 @@
 DriveBaseSubsystem Robot::driveBase;
 OI Robot::oi;
 ShooterSubsystem Robot::shooter;
+IntakeSubsystem Robot::intake;
+Autonomous Robot::autonomous;
 
 void Robot::RobotInit() {
     frc::SmartDashboard::PutBoolean("Reset Encoders", false);
 
     shooter.setCoastMode();
+    intake.setCoastMode();
 }
 
 /**
@@ -58,10 +61,19 @@ void Robot::DisabledPeriodic() {
  * RobotContainer} class.
  */
 void Robot::AutonomousInit() {
+    autonomousCommand = autonomous.getAutonomousCommand();
 
+    if (autonomousCommand != nullptr) {
+        autonomousCommand->Schedule();
+    }
 }
 
-void Robot::AutonomousPeriodic() {}
+void Robot::AutonomousPeriodic() {
+    if (autonomousCommand != nullptr) {
+        autonomousCommand->Cancel();
+        autonomousCommand = nullptr;
+    }
+}
 
 void Robot::TeleopInit() {
     driveBase.setCoastMode();

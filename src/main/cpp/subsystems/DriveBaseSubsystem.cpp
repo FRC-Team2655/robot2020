@@ -7,28 +7,18 @@
 
 #include "subsystems/DriveBaseSubsystem.h"
 #include "Robot.h"
+#include <math.h>
 
 using IdleMode = rev::CANSparkMax::IdleMode;
 
 DriveBaseSubsystem::DriveBaseSubsystem() {
-  /*leftSlave1.Follow(leftMaster);
+  leftEncoder.SetDistancePerPulse(0);
+  rightEncoder.SetDistancePerPulse(0);
+
+  leftSlave1.Follow(leftMaster);
   leftSlave2.Follow(leftMaster);
   rightSlave1.Follow(rightMaster);
-  rightSlave2.Follow(rightMaster);*/
-
-  leftPID.SetP(1e-4);
-  leftPID.SetI(0);
-  leftPID.SetD(0);
-  leftPID.SetFF(1/LMaxVelocity);
-  leftPID.SetIZone(0);
-  leftPID.SetOutputRange(-1, 1);
-
-  rightPID.SetP(1e-4);
-  rightPID.SetI(0);
-  rightPID.SetD(0);
-  rightPID.SetFF(1/RMaxVelocity);
-  rightPID.SetIZone(0);
-  rightPID.SetOutputRange(-1, 1);
+  rightSlave2.Follow(rightMaster);
 
   leftMaster.SetClosedLoopRampRate(DriveRampRate);
   rightMaster.SetClosedLoopRampRate(DriveRampRate);
@@ -36,11 +26,11 @@ DriveBaseSubsystem::DriveBaseSubsystem() {
   // Current limiting
   const int stallLimit = 38, freeLimit = 60, limitRPM = 2000;
   leftMaster.SetSmartCurrentLimit(stallLimit, freeLimit, limitRPM);
-  //leftSlave1.SetSmartCurrentLimit(stallLimit, freeLimit, limitRPM);
-  //leftSlave2.SetSmartCurrentLimit(stallLimit, freeLimit, limitRPM);
+  leftSlave1.SetSmartCurrentLimit(stallLimit, freeLimit, limitRPM);
+  leftSlave2.SetSmartCurrentLimit(stallLimit, freeLimit, limitRPM);
   rightMaster.SetSmartCurrentLimit(stallLimit, freeLimit, limitRPM);
-  //rightSlave1.SetSmartCurrentLimit(stallLimit, freeLimit, limitRPM);
-  //rightSlave2.SetSmartCurrentLimit(stallLimit, freeLimit, limitRPM);
+  rightSlave1.SetSmartCurrentLimit(stallLimit, freeLimit, limitRPM);
+  rightSlave2.SetSmartCurrentLimit(stallLimit, freeLimit, limitRPM);
 
 
   leftMaster.BurnFlash();
@@ -63,12 +53,12 @@ void DriveBaseSubsystem::drivePercentage(double speed, double rotation){
 
 void DriveBaseSubsystem::driveTankPercentage(double leftPercentage, double rightPercentage) {
 	leftMaster.Set(leftPercentage);
-	//leftSlave1.Set(leftPercentage);
-	//leftSlave2.Set(leftPercentage);
+	leftSlave1.Set(leftPercentage);
+	leftSlave2.Set(leftPercentage);
 
 	rightMaster.Set(rightPercentage);
-	//rightSlave1.Set(rightPercentage);
-	//rightSlave2.Set(rightPercentage);
+	rightSlave1.Set(rightPercentage);
+	rightSlave2.Set(rightPercentage);
 }
 
 std::array<double, 2> DriveBaseSubsystem::arcadeDrive(double xSpeed, double zRotation) {
@@ -117,8 +107,8 @@ void DriveBaseSubsystem::driveTankVelocity(double lVel, double rVel) {
 		// If target velocity is 0 do not use PID to get to 0 just cut power (0%)
 		leftMaster.Set(0);
 	}else {
-		// Drive the left side in velocity closed loop mode (set pid reference = setpoint for PID)
-		leftPID.SetReference(lVel, rev::ControlType::kVelocity);
+		// Drive motor using PID, lVel = setpoint
+		leftMaster.Set(leftPID.Calculate(leftEncoder.GetRate(), lVel));
 	}
 
 	if (rVel == 0) {
@@ -126,28 +116,28 @@ void DriveBaseSubsystem::driveTankVelocity(double lVel, double rVel) {
 	}
 	
 	else {
-		rightPID.SetReference(rVel, rev::ControlType::kVelocity);
+		rightMaster.Set(rightPID.Calculate(rightEncoder.GetRate(), rVel));
 	}
 }
 
 void DriveBaseSubsystem::setBrakeMode() {
 	leftMaster.SetIdleMode(IdleMode::kBrake);
-	//leftSlave1.SetIdleMode(IdleMode::kBrake);
-	//leftSlave2.SetIdleMode(IdleMode::kBrake);
+	leftSlave1.SetIdleMode(IdleMode::kBrake);
+	leftSlave2.SetIdleMode(IdleMode::kBrake);
 
 	rightMaster.SetIdleMode(IdleMode::kBrake);
-	//rightSlave1.SetIdleMode(IdleMode::kBrake);
-	//rightSlave2.SetIdleMode(IdleMode::kBrake);
+	rightSlave1.SetIdleMode(IdleMode::kBrake);
+	rightSlave2.SetIdleMode(IdleMode::kBrake);
 }
 
 void DriveBaseSubsystem::setCoastMode() {
 	leftMaster.SetIdleMode(IdleMode::kCoast);
-	//leftSlave1.SetIdleMode(IdleMode::kCoast);
-	//leftSlave2.SetIdleMode(IdleMode::kCoast);
+	leftSlave1.SetIdleMode(IdleMode::kCoast);
+	leftSlave2.SetIdleMode(IdleMode::kCoast);
 
 	rightMaster.SetIdleMode(IdleMode::kCoast);
-	//rightSlave1.SetIdleMode(IdleMode::kCoast);
-	//rightSlave2.SetIdleMode(IdleMode::kCoast);
+	rightSlave1.SetIdleMode(IdleMode::kCoast);
+	rightSlave2.SetIdleMode(IdleMode::kCoast);
 }
 
 double DriveBaseSubsystem::getLeftEncoderOutput() {
@@ -158,7 +148,25 @@ double DriveBaseSubsystem::getRightEncoderOutput() {
 	return (rightEncoder.GetRaw() / 8192.0);
 }
 
+frc::DifferentialDriveWheelSpeeds DriveBaseSubsystem::getEncoderOutputs() {
+	return {units::meters_per_second_t(leftEncoder.GetRate()),
+			units::meters_per_second_t(rightEncoder.GetRate())};
+}
+
+void DriveBaseSubsystem::tankDriveVolts(units::volt_t left, units::volt_t right) {
+	leftMaster.SetVoltage(left);
+	leftSlave1.SetVoltage(left);
+	leftSlave2.SetVoltage(left);
+	rightMaster.SetVoltage(-right);
+	rightSlave1.SetVoltage(-right);
+	rightSlave2.SetVoltage(-right);
+}
+
 void DriveBaseSubsystem::resetEncoders() {
 	leftEncoder.Reset();
 	rightEncoder.Reset();
+}
+
+frc::Rotation2d DriveBaseSubsystem::getIMUAngle() {
+	return frc::Rotation2d((units::radian_t)(imu.GetAngle() * 3.141592 / 180.0));
 }

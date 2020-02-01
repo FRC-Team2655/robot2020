@@ -4,7 +4,9 @@ using IdleMode = rev::CANSparkMax::IdleMode;
 
 ShooterSubsystem::ShooterSubsystem() {
     shooterSlave1.Follow(shooterMaster);
-    shooterSlave2.Follow(shooterMaster);
+
+    beltBottom.Follow(beltForward);
+    kicker.Follow(beltForward);
 }
 
 void ShooterSubsystem::Periodic() {}
@@ -21,8 +23,16 @@ void ShooterSubsystem::runShooter(double startingSpeed) {
     }
 
     shooterMaster.Set(shooterSpeed);
+}
 
-    std::cout << "Speed: " << shooterSpeed<< std::endl;
+void ShooterSubsystem::runBelts(double speed) {
+    beltForward.Set(speed);
+    beltBackward.Set(-speed);
+}
+
+void ShooterSubsystem::stopBelts() {
+    beltForward.Set(0);
+    beltBackward.Set(0);
 }
 
 void ShooterSubsystem::stopShooter() {
@@ -33,5 +43,8 @@ void ShooterSubsystem::stopShooter() {
 void ShooterSubsystem::setCoastMode() {
     shooterMaster.SetIdleMode(IdleMode::kCoast);
     shooterSlave1.SetIdleMode(IdleMode::kCoast);
-    shooterSlave2.SetIdleMode(IdleMode::kCoast);
+
+    beltForward.SetIdleMode(IdleMode::kCoast);
+    beltBackward.SetIdleMode(IdleMode::kCoast);
+    beltBottom.SetIdleMode(IdleMode::kCoast);
 }

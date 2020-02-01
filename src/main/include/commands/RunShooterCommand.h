@@ -6,7 +6,7 @@
 class RunShooterCommand
     : public frc2::CommandHelper<frc2::CommandBase, RunShooterCommand> {
  public:
-  RunShooterCommand(double speed);
+  RunShooterCommand(double shooterSpeed, double beltSpeed);
 
   void Initialize() override;
 
@@ -16,5 +16,5 @@ class RunShooterCommand
 
   bool IsFinished() override;
 private:
-  double speed;
+  double shooterSpeed, beltSpeed;
 };

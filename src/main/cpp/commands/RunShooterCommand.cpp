@@ -1,21 +1,22 @@
 #include "commands/RunShooterCommand.h"
 #include "Robot.h"
 
-RunShooterCommand::RunShooterCommand(double speed) : speed(speed) {
-  //AddRequirements(&Robot::shooter);
+RunShooterCommand::RunShooterCommand(double shooterSpeed, double beltSpeed) : shooterSpeed(shooterSpeed),
+                                                                              beltSpeed(beltSpeed)  {
+  AddRequirements(&Robot::shooter);
 }
 
 void RunShooterCommand::Initialize() {
-  std::cout << "Initialize" << std::endl;
 }
 
 void RunShooterCommand::Execute() {
-  std::cout << "execute" << std::endl;
-  Robot::shooter.runShooter(speed);
+  Robot::shooter.runShooter(shooterSpeed);
+  Robot::shooter.runBelts(beltSpeed);
 }
 
 void RunShooterCommand::End(bool interrupted) {
   Robot::shooter.stopShooter();
+  Robot::shooter.stopBelts();
 }
 
 bool RunShooterCommand::IsFinished() { return false; }

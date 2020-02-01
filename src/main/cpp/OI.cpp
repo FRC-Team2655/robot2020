@@ -3,7 +3,7 @@
 
 using namespace team2655;
 
-OI::OI() {
+OI::OI(){
   js0 = new frc::Joystick(0);
   
   runButtons();
@@ -11,9 +11,8 @@ OI::OI() {
 
 void OI::runButtons() {
   xBtn = new frc2::JoystickButton(js0, 2);
-  xBtn->WhileHeld(rsCommand);
-}
+  squareBtn = new frc2::JoystickButton(js0, 1);
 
-/*frc2::Command* OI::getAutonomousCommand() {
-  frc::DifferentialDriveVoltageConstraint autoVoltageConstraint(frc::SimpleMotorFeedForward)
-}*/
+  xBtn->WhileHeld(rsCommand);
+  squareBtn->WhileHeld(riCommand);
+}
