@@ -15,7 +15,6 @@
 #include <adi/ADIS16470_IMU.h>
 #include <frc/geometry/Rotation2d.h>
 #include <frc/controller/PIDController.h>
-#include <frc/controller/SimpleMotorFeedforward.h>
 
 #include <units/units.h>
 
@@ -28,24 +27,28 @@ class DriveBaseSubsystem : public frc2::SubsystemBase {
   void Periodic();
 
   void drivePercentage(double speed, double rotation);
+
   void driveTankPercentage(double lVel, double rVel);
 
   std::array<double, 2> arcadeDrive(double xSpeed, double zRotation);
 
   void driveTankVelocity(double lVel, double rVel);
+
   void driveVelocity(double speed, double rotation);
 
-  void tankDriveVolts(units::volt_t left, units::volt_t right);
-
   void setCoastMode();
+  
   void setBrakeMode();
 
   double getRightEncoderOutput();
   double getLeftEncoderOutput();
+  frc::DifferentialDriveWheelSpeeds getEncoderOutputs();
+
   void resetEncoders();
 
-  frc::DifferentialDriveWheelSpeeds getEncoderOutputs();
   frc::Rotation2d getIMUAngle();
+
+  void tankDriveVolts(units::volt_t left, units::volt_t right);
 
  private:
   rev::CANSparkMax leftMaster {LMaster, MotorType::kBrushless};
@@ -55,11 +58,11 @@ class DriveBaseSubsystem : public frc2::SubsystemBase {
   rev::CANSparkMax rightSlave1 {RSlave1, MotorType::kBrushless};
   rev::CANSparkMax rightSlave2 {RSlave2, MotorType::kBrushless};
 
+  frc::Encoder rightEncoder {REncA, REncB, true};
+  frc::Encoder leftEncoder {LEncA, LEncB, true};
+
   frc2::PIDController leftPID {1e-4, 0, 0};
   frc2::PIDController rightPID {1e-4, 0, 0};
-
-  frc::Encoder rightEncoder {1, 2, true};
-  frc::Encoder leftEncoder {5, 6, true};
 
   DriveJoystickCommand driveJoystick;
 

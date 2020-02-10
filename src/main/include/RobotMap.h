@@ -19,25 +19,6 @@ const extern int RMaster;
 const extern int RSlave1;
 const extern int RSlave2;
 
-const extern int ShooterMaster;
-const extern int ShooterSlave1;
-const extern int ShooterSlave2;
-
-const extern int rollersIntake;
-const extern int intakeMotor;
-
-const extern int KickerID;
-
-const extern int ForwardBelt;
-const extern int BackwardBelt;
-const extern int BottomBelt;
-
-const extern double incrementShooterSpeed;
-const extern double maxShooterSpeed;
-
-const extern double incrementIntakeSpeed;
-const extern double maxIntakeSpeed;
-
 const extern double MaxVelocity;
 const extern double LMaxVelocity;
 const extern double RMaxVelocity;
@@ -50,3 +31,20 @@ const extern double kRamseteB;
 const extern double kRamseteZeta;
 
 const extern double kPDriveVel;
+
+const extern int LEncA;
+const extern int LEncB;
+const extern int REncA;
+const extern int REncB;
+
+const extern int Shooter1ID;
+const extern int Shooter2ID;
+
+const extern double incrementShooterSpeed;
+const extern double maxShooterSpeed;
+
+const extern int KickerID;
+
+const extern int BeltLeft;
+const extern int BeltRight;
+const extern int BeltBottom;

@@ -107,7 +107,7 @@ void DriveBaseSubsystem::driveTankVelocity(double lVel, double rVel) {
 		// If target velocity is 0 do not use PID to get to 0 just cut power (0%)
 		leftMaster.Set(0);
 	}else {
-		// Drive motor using PID, lVel = setpoint
+		// Drive the left side in velocity closed loop mode (set pid reference = setpoint for PID)
 		leftMaster.Set(leftPID.Calculate(leftEncoder.GetRate(), lVel));
 	}
 

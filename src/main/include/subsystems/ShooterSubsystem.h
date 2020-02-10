@@ -4,6 +4,7 @@
 #include <rev/CANSparkMax.h>
 #include "RobotMap.h"
 #include "commands/RunShooterCommand.h"
+#include <ctre/Phoenix.h>
 
 using MotorType = rev::CANSparkMax::MotorType;
 
@@ -13,7 +14,6 @@ class ShooterSubsystem : public frc2::SubsystemBase {
 
   void runShooter(double speed);
   void setCoastMode();
-
   void stopShooter();
 
   void runBelts(double speed);
@@ -22,14 +22,14 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   void Periodic();
 
  private:
-  rev::CANSparkMax shooterMaster {ShooterMaster, MotorType::kBrushless};
-  rev::CANSparkMax shooterSlave1 {ShooterSlave1, MotorType::kBrushless};
+  rev::CANSparkMax shooter1 {Shooter1ID, MotorType::kBrushless};
+  rev::CANSparkMax shooter2 {Shooter2ID, MotorType::kBrushless};
 
-  rev::CANSparkMax kicker {KickerID, MotorType::kBrushless};
+  WPI_TalonSRX kicker {KickerID};
 
-  rev::CANSparkMax beltForward {ForwardBelt, MotorType::kBrushless};
-  rev::CANSparkMax beltBackward {BackwardBelt, MotorType::kBrushless};
-  rev::CANSparkMax beltBottom {BottomBelt, MotorType::kBrushless};
+  WPI_TalonSRX leftBelt {BeltLeft};
+  WPI_TalonSRX rightBelt {BeltRight};
+  WPI_TalonSRX bottomBelt {BeltBottom};
 
   double shooterSpeed;
 };

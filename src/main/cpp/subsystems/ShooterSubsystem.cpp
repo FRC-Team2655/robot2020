@@ -1,12 +1,11 @@
 #include "subsystems/ShooterSubsystem.h"
 
 using IdleMode = rev::CANSparkMax::IdleMode;
+using NeutralMode = ctre::phoenix::motorcontrol::NeutralMode;
 
 ShooterSubsystem::ShooterSubsystem() {
-    shooterSlave1.Follow(shooterMaster);
-
-    beltBottom.Follow(beltForward);
-    kicker.Follow(beltForward);
+    shooter1.SetInverted(false);
+    shooter2.SetInverted(false);
 }
 
 void ShooterSubsystem::Periodic() {}
@@ -22,29 +21,36 @@ void ShooterSubsystem::runShooter(double startingSpeed) {
         shooterSpeed = maxShooterSpeed;
     }
 
-    shooterMaster.Set(shooterSpeed);
-}
+    shooter1.Set(shooterSpeed);
+    shooter2.Set(-shooterSpeed);
 
-void ShooterSubsystem::runBelts(double speed) {
-    beltForward.Set(speed);
-    beltBackward.Set(-speed);
-}
-
-void ShooterSubsystem::stopBelts() {
-    beltForward.Set(0);
-    beltBackward.Set(0);
+    std::cout << "Speed: " << shooterSpeed<< std::endl;
 }
 
 void ShooterSubsystem::stopShooter() {
-    shooterSpeed = 0;
-    shooterMaster.Set(shooterSpeed);
+    shooterSpeed = 0.0;
+    shooter1.Set(shooterSpeed);
+    shooter2.Set(shooterSpeed);
 }
 
 void ShooterSubsystem::setCoastMode() {
-    shooterMaster.SetIdleMode(IdleMode::kCoast);
-    shooterSlave1.SetIdleMode(IdleMode::kCoast);
+    shooter1.SetIdleMode(IdleMode::kCoast);
+    shooter2.SetIdleMode(IdleMode::kCoast);
 
-    beltForward.SetIdleMode(IdleMode::kCoast);
-    beltBackward.SetIdleMode(IdleMode::kCoast);
-    beltBottom.SetIdleMode(IdleMode::kCoast);
+    kicker.SetNeutralMode(NeutralMode::Coast);
+    leftBelt.SetNeutralMode(NeutralMode::Coast);
+    rightBelt.SetNeutralMode(NeutralMode::Coast);
+    bottomBelt.SetNeutralMode(NeutralMode::Coast);
+}
+
+void ShooterSubsystem::runBelts(double speed) {
+    leftBelt.Set(speed);
+    bottomBelt.Set(speed);
+    rightBelt.Set(-0.5 * speed);
+}
+
+void ShooterSubsystem::stopBelts() {
+    leftBelt.Set(0);
+    rightBelt.Set(0);
+    bottomBelt.Set(0);
 }

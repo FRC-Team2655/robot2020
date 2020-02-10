@@ -13,27 +13,9 @@ const int LMaster = 1;
 const int LSlave1 = 2;
 const int LSlave2 = 3;
 
-const int RMaster = 4;
+const int RMaster = 6;
 const int RSlave1 = 5;
-const int RSlave2 = 6;
-
-const int rollersIntake = 13;
-const int intakeMotor = 14;
-
-const int ShooterMaster = 11;
-const int ShooterSlave1 = 12;
-
-const int KickerID = 10;
-
-const int ForwardBelt = 7;
-const int BackwardBelt = 8;
-const int BottomBelt = 9;
-
-const double incrementShooterSpeed = 0.05;
-const double maxShooterSpeed = 0.75;
-
-const double incrementIntakeSpeed = 0.05;
-const double maxIntakeSpeed = 0.50;
+const int RSlave2 = 4;
 
 const double MaxVelocity = 5500;    // This is capped at the slowest velocity on ANY robot to ensure that paths work the same
 const double LMaxVelocity = 5700.0;
@@ -45,3 +27,20 @@ const double kRamseteB = 2;
 const double kRamseteZeta = 0.7;
 
 const double kPDriveVel = 8.5;
+
+const int LEncA = 5;
+const int LEncB = 6;
+const int REncA = 1;
+const int REncB = 2;
+
+const int Shooter1ID = 7;
+const int Shooter2ID = 8;
+
+const double incrementShooterSpeed = 0.05;
+const double maxShooterSpeed = 1.0;
+
+const int KickerID = 11;
+
+const int BeltLeft = 7;
+const int BeltRight = 8;
+const int BeltBottom = 9;

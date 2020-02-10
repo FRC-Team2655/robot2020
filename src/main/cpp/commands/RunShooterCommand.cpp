@@ -1,8 +1,8 @@
 #include "commands/RunShooterCommand.h"
 #include "Robot.h"
 
-RunShooterCommand::RunShooterCommand(double shooterSpeed, double beltSpeed) : shooterSpeed(shooterSpeed),
-                                                                              beltSpeed(beltSpeed)  {
+RunShooterCommand::RunShooterCommand(double speed, double beltSpeed) : speed(speed), 
+                                                                        beltSpeed(beltSpeed) {
   AddRequirements(&Robot::shooter);
 }
 
@@ -10,7 +10,7 @@ void RunShooterCommand::Initialize() {
 }
 
 void RunShooterCommand::Execute() {
-  Robot::shooter.runShooter(shooterSpeed);
+  Robot::shooter.runShooter(speed);
   Robot::shooter.runBelts(beltSpeed);
 }
 
