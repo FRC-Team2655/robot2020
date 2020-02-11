@@ -37,10 +37,10 @@ const int Shooter1ID = 7;
 const int Shooter2ID = 8;
 
 const double incrementShooterSpeed = 0.05;
-const double maxShooterSpeed = 1.0;
+const double maxShooterSpeed = 0.9;
 
-const int KickerID = 11;
+const int KickerID = 13;
 
-const int BeltLeft = 7;
-const int BeltRight = 8;
-const int BeltBottom = 9;
+const int BeltLeft = 10;
+const int BeltRight = 11;
+const int BeltBottom = 12;

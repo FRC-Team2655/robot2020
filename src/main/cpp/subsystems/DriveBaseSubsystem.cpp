@@ -116,7 +116,7 @@ void DriveBaseSubsystem::driveTankVelocity(double lVel, double rVel) {
 	}
 	
 	else {
-		rightMaster.Set(rightPID.Calculate(rightEncoder.GetRate(), rVel));
+		rightMaster.Set(rightPID.Calculate(rightEncoder.GetRate(), -rVel));
 	}
 }
 

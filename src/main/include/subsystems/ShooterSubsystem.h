@@ -5,6 +5,7 @@
 #include "RobotMap.h"
 #include "commands/RunShooterCommand.h"
 #include <ctre/Phoenix.h>
+#include <frc/Timer.h>
 
 using MotorType = rev::CANSparkMax::MotorType;
 
@@ -25,11 +26,11 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   rev::CANSparkMax shooter1 {Shooter1ID, MotorType::kBrushless};
   rev::CANSparkMax shooter2 {Shooter2ID, MotorType::kBrushless};
 
-  WPI_TalonSRX kicker {KickerID};
+  WPI_VictorSPX kicker {KickerID};
 
   WPI_TalonSRX leftBelt {BeltLeft};
   WPI_TalonSRX rightBelt {BeltRight};
-  WPI_TalonSRX bottomBelt {BeltBottom};
+  WPI_VictorSPX bottomBelt {BeltBottom};
 
   double shooterSpeed;
 };

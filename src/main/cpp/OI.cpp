@@ -19,7 +19,11 @@ OI::OI() : odometry(Robot::driveBase.getIMUAngle()) {
 
 void OI::runButtons() {
   xBtn = new frc2::JoystickButton(js0, 2);
+  squareBtn = new frc2::JoystickButton(js0, 1);
+  triangleBtn = new frc2::JoystickButton(js0, 4);
   xBtn->WhileHeld(rsCommand);
+  squareBtn->WhileHeld(rbCommand);
+  triangleBtn->WhileHeld(invertrbCommand);
 }
 
 frc2::Command* OI::getAutonomousCommand() {

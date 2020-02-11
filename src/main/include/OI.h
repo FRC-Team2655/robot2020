@@ -21,6 +21,7 @@
 
 #include "commands/RunShooterCommand.h"
 #include "subsystems/ShooterSubsystem.h"
+#include "commands/RunBeltsCommand.h"
 
 #include <frc/Joystick.h>
 
@@ -30,9 +31,13 @@ class OI {
 public:
   OI();
   frc::Joystick *js0;
-  frc2::JoystickButton *xBtn;  
+  frc2::JoystickButton *xBtn;
+  frc2::JoystickButton *squareBtn;  
+  frc2::JoystickButton *triangleBtn;
 
-  RunShooterCommand rsCommand {0, 0.5};
+  RunShooterCommand rsCommand {0};
+  RunBeltsCommand rbCommand {0.45};
+  RunBeltsCommand invertrbCommand {-0.25};
 
   // Configurations for the joystick deadband and cubic function.
   jshelper::AxisConfig driveAxisConfig = jshelper::createAxisConfig(.1, 0, .5);

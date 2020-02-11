@@ -6,6 +6,9 @@ using NeutralMode = ctre::phoenix::motorcontrol::NeutralMode;
 ShooterSubsystem::ShooterSubsystem() {
     shooter1.SetInverted(false);
     shooter2.SetInverted(false);
+
+    leftBelt.SetInverted(true);
+    bottomBelt.SetInverted(true);
 }
 
 void ShooterSubsystem::Periodic() {}
@@ -44,13 +47,31 @@ void ShooterSubsystem::setCoastMode() {
 }
 
 void ShooterSubsystem::runBelts(double speed) {
-    leftBelt.Set(speed);
+    static double firstSwitchTime = 0.0;
+    static double secondSwitchTime = 2.0;
+    if(frc::Timer::GetFPGATimestamp() < firstSwitchTime)
+    {
+        leftBelt.Set(speed);
+        rightBelt.Set(-speed);
+    }
+    else if(frc::Timer::GetFPGATimestamp() < secondSwitchTime)
+    {
+        leftBelt.Set(-speed);
+        rightBelt.Set(speed);
+    }
+    else
+    {
+        firstSwitchTime = frc::Timer::GetFPGATimestamp() + 1;
+        secondSwitchTime = firstSwitchTime + 2;
+    }
+    
     bottomBelt.Set(speed);
-    rightBelt.Set(-0.5 * speed);
+    kicker.Set(speed);
 }
 
 void ShooterSubsystem::stopBelts() {
     leftBelt.Set(0);
     rightBelt.Set(0);
     bottomBelt.Set(0);
+    kicker.Set(0);
 }
