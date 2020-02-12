@@ -48,3 +48,5 @@ const extern int KickerID;
 const extern int BeltLeft;
 const extern int BeltRight;
 const extern int BeltBottom;
+
+const extern int RollerShooters;

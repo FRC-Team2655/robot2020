@@ -20,11 +20,21 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   void runBelts(double speed);
   void stopBelts();
 
+  double getRPM();
+
   void Periodic();
+
+  rev::CANPIDController shooter1PID = shooter1.GetPIDController();
+  rev::CANPIDController shooter2PID = shooter2.GetPIDController();
+
+  double kVelocity_ = 5200;
 
  private:
   rev::CANSparkMax shooter1 {Shooter1ID, MotorType::kBrushless};
   rev::CANSparkMax shooter2 {Shooter2ID, MotorType::kBrushless};
+
+  rev::CANEncoder shooterEncoder1 = shooter1.GetEncoder();
+  rev::CANEncoder shooterEncoder2 = shooter2.GetEncoder();
 
   WPI_VictorSPX kicker {KickerID};
 

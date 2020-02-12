@@ -9,12 +9,15 @@ ShooterSubsystem::ShooterSubsystem() {
 
     leftBelt.SetInverted(true);
     bottomBelt.SetInverted(true);
+
+    shooter1.SetSmartCurrentLimit(30);
+    shooter2.SetSmartCurrentLimit(30);
 }
 
 void ShooterSubsystem::Periodic() {}
 
 void ShooterSubsystem::runShooter(double startingSpeed) {
-    if (shooterSpeed < startingSpeed) {
+    /*if (shooterSpeed < startingSpeed) {
         shooterSpeed = startingSpeed;
     }else{
         shooterSpeed += incrementShooterSpeed;
@@ -27,7 +30,9 @@ void ShooterSubsystem::runShooter(double startingSpeed) {
     shooter1.Set(shooterSpeed);
     shooter2.Set(-shooterSpeed);
 
-    std::cout << "Speed: " << shooterSpeed<< std::endl;
+    std::cout << "Speed: " << shooterSpeed<< std::endl;*/
+    shooter1PID.SetReference(kVelocity_, rev::ControlType::kVelocity);
+    shooter2PID.SetReference(-kVelocity_, rev::ControlType::kVelocity);
 }
 
 void ShooterSubsystem::stopShooter() {
@@ -74,4 +79,8 @@ void ShooterSubsystem::stopBelts() {
     rightBelt.Set(0);
     bottomBelt.Set(0);
     kicker.Set(0);
+}
+
+double ShooterSubsystem::getRPM() {
+    return ((shooterEncoder1.GetVelocity() + -shooterEncoder2.GetVelocity()) / 2.0);
 }

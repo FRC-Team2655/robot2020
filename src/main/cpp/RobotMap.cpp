@@ -44,3 +44,5 @@ const int KickerID = 13;
 const int BeltLeft = 10;
 const int BeltRight = 11;
 const int BeltBottom = 12;
+
+const int RollerShooters = 14;

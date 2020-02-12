@@ -14,12 +14,14 @@
 #include "OI.h"
 #include "commands/DriveJoystickCommand.h"
 #include "subsystems/ShooterSubsystem.h"
+#include "subsystems/IntakeSubsystem.h"
 
 class Robot : public frc::TimedRobot {
  public:
   static OI oi;
   static DriveBaseSubsystem driveBase;
   static ShooterSubsystem shooter;
+  static IntakeSubsystem intake;
 
   void RobotInit() override;
   void RobotPeriodic() override;
@@ -32,4 +34,12 @@ class Robot : public frc::TimedRobot {
   void TestPeriodic() override;
 private:
   frc2::Command* autonomousCommand = nullptr;
+
+  double kP = 6e-5; 
+  double kI = 0; 
+  double kD = 0; 
+  double kFF = 0;
+  double kIz = 0;
+  double kMax = 1;
+  double kMin = -1;
 };

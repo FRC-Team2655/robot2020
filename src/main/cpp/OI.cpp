@@ -21,9 +21,12 @@ void OI::runButtons() {
   xBtn = new frc2::JoystickButton(js0, 2);
   squareBtn = new frc2::JoystickButton(js0, 1);
   triangleBtn = new frc2::JoystickButton(js0, 4);
-  xBtn->WhileHeld(rsCommand);
+  circleBtn = new frc2::JoystickButton(js0, 3);
+
+  xBtn->WhileHeld(new RunShooterCommand(Robot::shooter.kVelocity_));
   squareBtn->WhileHeld(rbCommand);
   triangleBtn->WhileHeld(invertrbCommand);
+  circleBtn->WhileHeld(riRollersCommand);
 }
 
 frc2::Command* OI::getAutonomousCommand() {

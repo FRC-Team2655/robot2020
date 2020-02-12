@@ -22,6 +22,7 @@
 #include "commands/RunShooterCommand.h"
 #include "subsystems/ShooterSubsystem.h"
 #include "commands/RunBeltsCommand.h"
+#include "commands/RunIntakeRollers.h"
 
 #include <frc/Joystick.h>
 
@@ -34,10 +35,12 @@ public:
   frc2::JoystickButton *xBtn;
   frc2::JoystickButton *squareBtn;  
   frc2::JoystickButton *triangleBtn;
+  frc2::JoystickButton *circleBtn;
 
-  RunShooterCommand rsCommand {0};
+  //RunShooterCommand rsCommand {0};
   RunBeltsCommand rbCommand {0.45};
   RunBeltsCommand invertrbCommand {-0.25};
+  RunIntakeRollers riRollersCommand {0.5};
 
   // Configurations for the joystick deadband and cubic function.
   jshelper::AxisConfig driveAxisConfig = jshelper::createAxisConfig(.1, 0, .5);
