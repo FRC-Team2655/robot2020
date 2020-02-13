@@ -3,10 +3,10 @@
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
 
-class RunShooterCommand
-    : public frc2::CommandHelper<frc2::CommandBase, RunShooterCommand> {
+class RunShooterPercentageCommand
+    : public frc2::CommandHelper<frc2::CommandBase, RunShooterPercentageCommand> {
  public:
-  RunShooterCommand(double speed);
+  RunShooterPercentageCommand(double speed);
 
   void Initialize() override;
 

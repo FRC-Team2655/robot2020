@@ -10,6 +10,11 @@
 #include <frc2/command/SubsystemBase.h>
 #include <ctre/Phoenix.h>
 #include "RobotMap.h"
+#include <rev/CANSparkMax.h>
+#include <frc/DutyCycleEncoder.h>
+#include <frc/controller/PIDController.h>
+
+using MotorType = rev::CANSparkMax::MotorType;
 
 class IntakeSubsystem : public frc2::SubsystemBase {
  public:
@@ -17,8 +22,16 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   void runRollers(double speed);
   void stopRollers();
 
+  void moveArm(double position);
+
+  double armPosition();
+
   void Periodic();
 
 private:
   WPI_TalonSRX intakeRollers {RollerShooters};
+
+  rev::CANSparkMax intakeArm {IntakeArm, MotorType::kBrushless};
+  frc::DutyCycleEncoder intakeEnc {IntakePWM};
+  frc2::PIDController intakePID {5e-4, 0, 0};
 };

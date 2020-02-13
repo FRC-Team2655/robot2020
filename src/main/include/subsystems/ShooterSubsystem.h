@@ -3,7 +3,7 @@
 #include <frc2/command/SubsystemBase.h>
 #include <rev/CANSparkMax.h>
 #include "RobotMap.h"
-#include "commands/RunShooterCommand.h"
+#include "commands/RunShooterPercentageCommand.h"
 #include <ctre/Phoenix.h>
 #include <frc/Timer.h>
 
@@ -13,7 +13,8 @@ class ShooterSubsystem : public frc2::SubsystemBase {
  public:
   ShooterSubsystem();
 
-  void runShooter(double speed);
+  void runShooterPercentage(double startingSpeed);
+  void runShooterVelocity();
   void setCoastMode();
   void stopShooter();
 
@@ -21,6 +22,10 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   void stopBelts();
 
   double getRPM();
+  double getShooter1Current();
+  double getShooter2Current();
+  double getShooter1AccumError();
+  double getShooter2AccumError();
 
   void Periodic();
 

@@ -19,3 +19,11 @@ void IntakeSubsystem::runRollers(double speed) {
 void IntakeSubsystem::stopRollers() {
     intakeRollers.Set(0);
 }
+
+void IntakeSubsystem::moveArm(double position) {
+    intakeArm.Set(intakePID.Calculate(armPosition(), position));
+}
+
+double IntakeSubsystem::armPosition() {
+    return (double)(intakeEnc.Get());
+}

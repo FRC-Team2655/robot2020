@@ -10,14 +10,14 @@ ShooterSubsystem::ShooterSubsystem() {
     leftBelt.SetInverted(true);
     bottomBelt.SetInverted(true);
 
-    shooter1.SetSmartCurrentLimit(30);
-    shooter2.SetSmartCurrentLimit(30);
+    shooter1.SetSmartCurrentLimit(65);
+    shooter2.SetSmartCurrentLimit(65);
 }
 
 void ShooterSubsystem::Periodic() {}
 
-void ShooterSubsystem::runShooter(double startingSpeed) {
-    /*if (shooterSpeed < startingSpeed) {
+void ShooterSubsystem::runShooterPercentage(double startingSpeed) {
+    if (shooterSpeed < startingSpeed) {
         shooterSpeed = startingSpeed;
     }else{
         shooterSpeed += incrementShooterSpeed;
@@ -30,7 +30,10 @@ void ShooterSubsystem::runShooter(double startingSpeed) {
     shooter1.Set(shooterSpeed);
     shooter2.Set(-shooterSpeed);
 
-    std::cout << "Speed: " << shooterSpeed<< std::endl;*/
+    std::cout << "Speed: " << shooterSpeed<< std::endl;
+}
+
+void ShooterSubsystem::runShooterVelocity() {
     shooter1PID.SetReference(kVelocity_, rev::ControlType::kVelocity);
     shooter2PID.SetReference(-kVelocity_, rev::ControlType::kVelocity);
 }
@@ -83,4 +86,20 @@ void ShooterSubsystem::stopBelts() {
 
 double ShooterSubsystem::getRPM() {
     return ((shooterEncoder1.GetVelocity() + -shooterEncoder2.GetVelocity()) / 2.0);
+}
+
+double ShooterSubsystem::getShooter1Current() {
+    return shooter1.GetOutputCurrent();
+}
+
+double ShooterSubsystem::getShooter2Current() {
+    return shooter2.GetOutputCurrent();
+}
+
+double ShooterSubsystem::getShooter1AccumError() {
+    shooter1PID.GetIAccum();
+}
+
+double ShooterSubsystem::getShooter2AccumError() {
+    shooter2PID.GetIAccum();
 }

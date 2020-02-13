@@ -19,10 +19,12 @@
 #include <frc2/command/InstantCommand.h>
 #include <frc/trajectory/TrajectoryUtil.h>
 
-#include "commands/RunShooterCommand.h"
+#include "commands/RunShooterPercentageCommand.h"
 #include "subsystems/ShooterSubsystem.h"
 #include "commands/RunBeltsCommand.h"
-#include "commands/RunIntakeRollers.h"
+#include "commands/RunIntakeRollersCommand.h"
+#include "commands/RunShooterVelocityCommand.h"
+#include "commands/MoveIntakeArmCommand.h"
 
 #include <frc/Joystick.h>
 
@@ -36,11 +38,15 @@ public:
   frc2::JoystickButton *squareBtn;  
   frc2::JoystickButton *triangleBtn;
   frc2::JoystickButton *circleBtn;
+  frc2::JoystickButton *leftTrigger;
+  frc2::JoystickButton *rightTrigger;
 
-  //RunShooterCommand rsCommand {0};
+  //RunShooterPercentageCommand rsPercentageCommand {0};
   RunBeltsCommand rbCommand {0.45};
   RunBeltsCommand invertrbCommand {-0.25};
-  RunIntakeRollers riRollersCommand {0.5};
+  RunIntakeRollersCommand riRollersCommand {0.5};
+  MoveIntakeArmCommand miArmOut {-0.23};
+  MoveIntakeArmCommand miArmIn {0.076};
 
   // Configurations for the joystick deadband and cubic function.
   jshelper::AxisConfig driveAxisConfig = jshelper::createAxisConfig(.1, 0, .5);

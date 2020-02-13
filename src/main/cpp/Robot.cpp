@@ -85,6 +85,15 @@ void Robot::RobotPeriodic() {
         shooter.kVelocity_ = frc::SmartDashboard::GetNumber("Shooter Velocity: ", shooter.kVelocity_);
     }
 
+    frc::SmartDashboard::PutNumber("Shooter1 Current Output: ", shooter.getShooter1Current());
+    frc::SmartDashboard::PutNumber("Shooter2 Current Output: ", shooter.getShooter2Current());
+    frc::SmartDashboard::PutNumber("Shooer1 Accum Error: ", shooter.getShooter1AccumError());
+    frc::SmartDashboard::PutNumber("Shooter2 Accum Error: ", shooter.getShooter2AccumError());
+    
+    frc::SmartDashboard::PutNumber("Intake Arm Position: ", intake.armPosition());
+
+    std::cout << shooter.kVelocity_ << std::endl;
+
     frc2::CommandScheduler::GetInstance().Run();
 }
 

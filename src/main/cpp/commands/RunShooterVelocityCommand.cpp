@@ -5,25 +5,26 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-#include "commands/RunIntakeRollers.h"
+#include "commands/RunShooterVelocityCommand.h"
 #include "Robot.h"
 
-RunIntakeRollers::RunIntakeRollers(double speed) : speed(speed) {
-  AddRequirements(&Robot::intake);
+RunShooterVelocityCommand::RunShooterVelocityCommand(){
+  AddRequirements(&Robot::shooter);
 }
 
 // Called when the command is initially scheduled.
-void RunIntakeRollers::Initialize() {}
+void RunShooterVelocityCommand::Initialize() {
+}
 
 // Called repeatedly when this Command is scheduled to run
-void RunIntakeRollers::Execute() {
-  Robot::intake.runRollers(speed);
+void RunShooterVelocityCommand::Execute() {
+  Robot::shooter.runShooterVelocity();
 }
 
 // Called once the command ends or is interrupted.
-void RunIntakeRollers::End(bool interrupted) {
-  Robot::intake.stopRollers();
+void RunShooterVelocityCommand::End(bool interrupted) {
+  Robot::shooter.stopShooter();
 }
 
 // Returns true when the command should end.
-bool RunIntakeRollers::IsFinished() { return false; }
+bool RunShooterVelocityCommand::IsFinished() { return false; }

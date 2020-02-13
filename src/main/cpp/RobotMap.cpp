@@ -46,3 +46,6 @@ const int BeltRight = 11;
 const int BeltBottom = 12;
 
 const int RollerShooters = 14;
+
+const int IntakePWM = 4;
+const int IntakeArm = 9;

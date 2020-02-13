@@ -50,3 +50,6 @@ const extern int BeltRight;
 const extern int BeltBottom;
 
 const extern int RollerShooters;
+
+const extern int IntakePWM;
+const extern int IntakeArm;
