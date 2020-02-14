@@ -13,15 +13,16 @@ MoveIntakeArmCommand::MoveIntakeArmCommand(double position) : position(position)
 }
 
 // Called when the command is initially scheduled.
-void MoveIntakeArmCommand::Initialize() {}
+void MoveIntakeArmCommand::Initialize() {
+  Robot::intake.moveArm(position);
+}
 
 // Called repeatedly when this Command is scheduled to run
 void MoveIntakeArmCommand::Execute() {
-  Robot::intake.moveArm(position);
 }
 
 // Called once the command ends or is interrupted.
 void MoveIntakeArmCommand::End(bool interrupted) {}
 
 // Returns true when the command should end.
-bool MoveIntakeArmCommand::IsFinished() { return false; }
+bool MoveIntakeArmCommand::IsFinished() { return true; }

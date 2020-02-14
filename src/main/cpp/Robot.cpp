@@ -19,17 +19,14 @@ IntakeSubsystem Robot::intake;
 void Robot::RobotInit() {
     frc::SmartDashboard::PutBoolean("Reset Encoders", false);
 
-    frc::SmartDashboard::PutNumber("Shooter P: ", kP);
-    frc::SmartDashboard::PutNumber("Shooter I: ", kI);
-    frc::SmartDashboard::PutNumber("Shooter D: ", kD);
-    frc::SmartDashboard::PutNumber("Shooter Iz: ", kIz);
-    frc::SmartDashboard::PutNumber("Shooter FF: ", kFF);
-    frc::SmartDashboard::PutNumber("Shooter Max: ", kMax);
-    frc::SmartDashboard::PutNumber("Shooter Min: ", kMin);
-    frc::SmartDashboard::PutNumber("Shooter Velocity: ", shooter.kVelocity_);
+    frc::SmartDashboard::PutNumber("Intake P: ", kP);
+    frc::SmartDashboard::PutNumber("Intake I: ", kI);
+    frc::SmartDashboard::PutNumber("Intake D: ", kD);
 
     shooter.setCoastMode();
     driveBase.setCoastMode();
+    intake.setRollersCoastMode();
+    intake.setArmBrakeMode();
 }
 
 /**
@@ -43,56 +40,28 @@ void Robot::RobotInit() {
 void Robot::RobotPeriodic() { 
     frc::SmartDashboard::PutNumber("Left Output: ", driveBase.getLeftEncoderOutput());
     frc::SmartDashboard::PutNumber("Right Output: ", driveBase.getRightEncoderOutput());
-    frc::SmartDashboard::PutNumber("Shooter RPM: ", shooter.getRPM());
 
     if (frc::SmartDashboard::GetBoolean("Reset Encoders", false) == true) {
         driveBase.resetEncoders();
         frc::SmartDashboard::PutBoolean("Reset Encoders", false);
     }
-
-    if (frc::SmartDashboard::GetNumber("Shooter P: ", 0) != kP) {
-        kP = frc::SmartDashboard::GetNumber("Shooter P: ", 0);
-        shooter.shooter1PID.SetP(kP);
-        shooter.shooter2PID.SetP(kP);
+    if (frc::SmartDashboard::GetNumber("Intake P: ", 0) != kP) {
+        kP = frc::SmartDashboard::GetNumber("Intake P: ", 0);
+        intake.intakePID.SetP(kP);
     }
-    if (frc::SmartDashboard::GetNumber("Shooter I: ", 0) != kI) {
-        kI = frc::SmartDashboard::GetNumber("Shooter I: ", 0);
-        shooter.shooter1PID.SetI(kI);
-        shooter.shooter2PID.SetI(kI);
+    if (frc::SmartDashboard::GetNumber("Intake I: ", 0) != kI) {
+        kI = frc::SmartDashboard::GetNumber("Intake I: ", 0);
+        intake.intakePID.SetI(kI);
     }
-    if (frc::SmartDashboard::GetNumber("Shooter D: ", 0) != kD) {
-        kD = frc::SmartDashboard::GetNumber("Shooter D: ", 0);
-        shooter.shooter1PID.SetD(kD);
-        shooter.shooter2PID.SetD(kD);
+    if (frc::SmartDashboard::GetNumber("Intake D: ", 0) != kD) {
+        kD = frc::SmartDashboard::GetNumber("Intake D: ", 0);
+        intake.intakePID.SetD(kD);
     }
-    if (frc::SmartDashboard::GetNumber("Shooter FF: ", 0) != kFF) {
-        kFF = frc::SmartDashboard::GetNumber("Shooter FF: ", 0);
-        shooter.shooter1PID.SetFF(kFF);
-        shooter.shooter2PID.SetFF(kFF);
-    }
-    if (frc::SmartDashboard::GetNumber("Shooter Iz: ", 0) != kIz) {
-        kIz = frc::SmartDashboard::GetNumber("Shooter Iz: ", 0);
-        shooter.shooter1PID.SetIZone(kIz);
-        shooter.shooter2PID.SetIZone(kIz);
-    }
-    if ((frc::SmartDashboard::GetNumber("Shooter Max: ", 0) != kMax) || (frc::SmartDashboard::GetNumber("Shooter Min: ", 0 != kMin))) {
-        kMax = frc::SmartDashboard::GetNumber("Shooter Max: ", 0);
-        kMin = frc::SmartDashboard::GetNumber("Shooter Min: ", 0);
-        shooter.shooter1PID.SetOutputRange(kMin, kMax);
-        shooter.shooter2PID.SetOutputRange(kMin, kMax);
-    }
-    if (frc::SmartDashboard::GetNumber("Shooter Velocity: ", 0) != shooter.kVelocity_) {
-        shooter.kVelocity_ = frc::SmartDashboard::GetNumber("Shooter Velocity: ", shooter.kVelocity_);
+    if (frc::SmartDashboard::GetNumber("Intake Velocity: ", 0) != intake.kVelocity_) {
+        intake.kVelocity_ = frc::SmartDashboard::GetNumber("Intake Velocity: ", intake.kVelocity_);
     }
 
-    frc::SmartDashboard::PutNumber("Shooter1 Current Output: ", shooter.getShooter1Current());
-    frc::SmartDashboard::PutNumber("Shooter2 Current Output: ", shooter.getShooter2Current());
-    frc::SmartDashboard::PutNumber("Shooer1 Accum Error: ", shooter.getShooter1AccumError());
-    frc::SmartDashboard::PutNumber("Shooter2 Accum Error: ", shooter.getShooter2AccumError());
-    
     frc::SmartDashboard::PutNumber("Intake Arm Position: ", intake.armPosition());
-
-    std::cout << shooter.kVelocity_ << std::endl;
 
     frc2::CommandScheduler::GetInstance().Run();
 }

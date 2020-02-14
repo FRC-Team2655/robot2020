@@ -51,5 +51,7 @@ const extern int BeltBottom;
 
 const extern int RollerShooters;
 
-const extern int IntakePWM;
 const extern int IntakeArm;
+const extern int IntakePWM;
+
+const extern int ShooterVelocity;

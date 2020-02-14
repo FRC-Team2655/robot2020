@@ -35,11 +35,7 @@ class Robot : public frc::TimedRobot {
 private:
   frc2::Command* autonomousCommand = nullptr;
 
-  double kP = 6e-5; 
+  double kP = 0.0000001; 
   double kI = 0; 
   double kD = 0; 
-  double kFF = 0;
-  double kIz = 0;
-  double kMax = 1;
-  double kMin = -1;
 };

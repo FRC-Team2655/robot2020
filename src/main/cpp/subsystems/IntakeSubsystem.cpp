@@ -7,7 +7,12 @@
 
 #include "subsystems/IntakeSubsystem.h"
 
-IntakeSubsystem::IntakeSubsystem() {}
+using NeutralMode = ctre::phoenix::motorcontrol::NeutralMode;
+using IdleMode = rev::CANSparkMax::IdleMode;
+
+IntakeSubsystem::IntakeSubsystem() {
+    intakeArm.SetSmartCurrentLimit(20);
+}
 
 // This method will be called once per scheduler run
 void IntakeSubsystem::Periodic() {}
@@ -26,4 +31,12 @@ void IntakeSubsystem::moveArm(double position) {
 
 double IntakeSubsystem::armPosition() {
     return (double)(intakeEnc.Get());
+} 
+
+void IntakeSubsystem::setRollersCoastMode() {
+    intakeRollers.SetNeutralMode(NeutralMode::Coast);
+}
+
+void IntakeSubsystem::setArmBrakeMode() {
+    intakeArm.SetIdleMode(IdleMode::kBrake);
 }

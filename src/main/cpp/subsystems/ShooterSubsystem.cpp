@@ -4,14 +4,20 @@ using IdleMode = rev::CANSparkMax::IdleMode;
 using NeutralMode = ctre::phoenix::motorcontrol::NeutralMode;
 
 ShooterSubsystem::ShooterSubsystem() {
-    shooter1.SetInverted(false);
-    shooter2.SetInverted(false);
+    shooter2.Follow(shooter1, true);
 
     leftBelt.SetInverted(true);
     bottomBelt.SetInverted(true);
 
     shooter1.SetSmartCurrentLimit(65);
     shooter2.SetSmartCurrentLimit(65);
+
+    shooter1PID.SetP(kP);
+    shooter1PID.SetI(kI);
+    shooter1PID.SetD(kD);
+    shooter1PID.SetFF(kFF);
+    shooter1PID.SetIZone(kIz);
+    shooter1PID.SetOutputRange(kMin, kMax);
 }
 
 void ShooterSubsystem::Periodic() {}
@@ -28,14 +34,12 @@ void ShooterSubsystem::runShooterPercentage(double startingSpeed) {
     }
 
     shooter1.Set(shooterSpeed);
-    shooter2.Set(-shooterSpeed);
 
-    std::cout << "Speed: " << shooterSpeed<< std::endl;
+    std::cout << "Speed: " << shooterSpeed << std::endl;
 }
 
 void ShooterSubsystem::runShooterVelocity() {
-    shooter1PID.SetReference(kVelocity_, rev::ControlType::kVelocity);
-    shooter2PID.SetReference(-kVelocity_, rev::ControlType::kVelocity);
+    shooter1PID.SetReference(ShooterVelocity, rev::ControlType::kVelocity);
 }
 
 void ShooterSubsystem::stopShooter() {
@@ -85,21 +89,13 @@ void ShooterSubsystem::stopBelts() {
 }
 
 double ShooterSubsystem::getRPM() {
-    return ((shooterEncoder1.GetVelocity() + -shooterEncoder2.GetVelocity()) / 2.0);
+    return shooterEncoder1.GetVelocity();
 }
 
 double ShooterSubsystem::getShooter1Current() {
     return shooter1.GetOutputCurrent();
 }
 
-double ShooterSubsystem::getShooter2Current() {
-    return shooter2.GetOutputCurrent();
-}
-
 double ShooterSubsystem::getShooter1AccumError() {
     shooter1PID.GetIAccum();
-}
-
-double ShooterSubsystem::getShooter2AccumError() {
-    shooter2PID.GetIAccum();
 }

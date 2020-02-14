@@ -21,17 +21,20 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   IntakeSubsystem();
   void runRollers(double speed);
   void stopRollers();
+  void setRollersCoastMode();
+  void setArmBrakeMode();
 
   void moveArm(double position);
-
   double armPosition();
 
   void Periodic();
+
+  double kVelocity_;
+  frc2::PIDController intakePID {5e-4, 0, 0};
 
 private:
   WPI_TalonSRX intakeRollers {RollerShooters};
 
   rev::CANSparkMax intakeArm {IntakeArm, MotorType::kBrushless};
   frc::DutyCycleEncoder intakeEnc {IntakePWM};
-  frc2::PIDController intakePID {5e-4, 0, 0};
 };

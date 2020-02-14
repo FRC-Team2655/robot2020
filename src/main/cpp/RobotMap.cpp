@@ -47,5 +47,7 @@ const int BeltBottom = 12;
 
 const int RollerShooters = 14;
 
-const int IntakePWM = 4;
 const int IntakeArm = 9;
+const int IntakePWM = 4;
+
+const int ShooterVelocity = 4900;

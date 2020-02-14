@@ -8,13 +8,12 @@
 #include "commands/RunShooterVelocityCommand.h"
 #include "Robot.h"
 
-RunShooterVelocityCommand::RunShooterVelocityCommand(){
+RunShooterVelocityCommand::RunShooterVelocityCommand() {
   AddRequirements(&Robot::shooter);
 }
 
 // Called when the command is initially scheduled.
-void RunShooterVelocityCommand::Initialize() {
-}
+void RunShooterVelocityCommand::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
 void RunShooterVelocityCommand::Execute() {
