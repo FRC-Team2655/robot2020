@@ -16,7 +16,9 @@ void RunBeltsCommand::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
 void RunBeltsCommand::Execute() {
-  Robot::shooter.runBelts(speed);
+  if (!Robot::intake.isIntakeOut) {
+    Robot::shooter.runBelts(speed, false);
+  }
 }
 
 // Called once the command ends or is interrupted.

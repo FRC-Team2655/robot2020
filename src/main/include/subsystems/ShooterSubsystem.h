@@ -6,6 +6,8 @@
 #include <ctre/Phoenix.h>
 #include <frc/Timer.h>
 
+#include <frc/DigitalInput.h>
+
 using MotorType = rev::CANSparkMax::MotorType;
 
 class ShooterSubsystem : public frc2::SubsystemBase {
@@ -20,7 +22,9 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   double getShooter1Current();
   double getShooter1AccumError();
 
-  void runBelts(double speed);
+  bool isProximSensor1Triggered();
+
+  void runBelts(double speed, bool useProximitySensor);
   void stopBelts();
 
   double getRPM();
@@ -34,6 +38,8 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   rev::CANSparkMax shooter2 {Shooter2ID, MotorType::kBrushless};
 
   rev::CANEncoder shooterEncoder1 = shooter1.GetEncoder();
+
+  frc::DigitalInput proximSensor1 {proximitySensor1Channel};
 
   WPI_VictorSPX kicker {KickerID};
 

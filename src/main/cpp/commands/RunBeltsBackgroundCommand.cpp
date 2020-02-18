@@ -5,24 +5,25 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-#include "commands/RunIntakeRollersCommand.h"
+#include "commands/RunBeltsBackgroundCommand.h"
 #include "Robot.h"
 
-RunIntakeRollersCommand::RunIntakeRollersCommand(double speed) : speed(speed) {
+RunBeltsBackgroundCommand::RunBeltsBackgroundCommand(double speed) : speed(speed) {
 }
 
 // Called when the command is initially scheduled.
-void RunIntakeRollersCommand::Initialize() {}
+void RunBeltsBackgroundCommand::Initialize() {
+}
 
 // Called repeatedly when this Command is scheduled to run
-void RunIntakeRollersCommand::Execute() {
-  Robot::intake.runRollers(speed);
+void RunBeltsBackgroundCommand::Execute() {
+  Robot::shooter.runBelts(speed, true);
 }
 
 // Called once the command ends or is interrupted.
-void RunIntakeRollersCommand::End(bool interrupted) {
-  Robot::intake.stopRollers();
+void RunBeltsBackgroundCommand::End(bool interrupted) {
+  Robot::shooter.stopBelts();
 }
 
 // Returns true when the command should end.
-bool RunIntakeRollersCommand::IsFinished() { return false; }
+bool RunBeltsBackgroundCommand::IsFinished() { return !Robot::intake.isIntakeOut; }

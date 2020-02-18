@@ -24,13 +24,14 @@ void OI::runButtons() {
   circleBtn = new frc2::JoystickButton(js0, 3);
   l2Btn = new frc2::JoystickButton(js0, 7);
   r2Btn = new frc2::JoystickButton(js0, 8);
+  r1Btn = new frc2::JoystickButton(js0, 6);
 
   xBtn->WhileHeld(rsVelocityCommand);
-  squareBtn->WhileHeld(rbCommand);
+  r2Btn->WhileHeld(rbCommand);
   triangleBtn->WhileHeld(invertrbCommand);
-  circleBtn->WhileHeld(riRollersCommand);
-  l2Btn->WhenPressed(miOutCommand);
-  r2Btn->WhenPressed(miInCommand);
+  r1Btn->WhileHeld(riRollersCommand);
+  circleBtn->WhenPressed(frc2::SequentialCommandGroup(MoveIntakeOutArmCommand(-0.3), RunBeltsBackgroundCommand(0.5)));
+  squareBtn->WhenPressed(miInCommand);
 }
 
 frc2::Command* OI::getAutonomousCommand() {
@@ -45,8 +46,6 @@ frc2::Command* OI::getAutonomousCommand() {
 
   frc::Trajectory m_test = frc::TrajectoryUtil::FromPathweaverJson("/home/lvuser/deploy/Path1.wpilib.json");
 
-  std::cout << "generated" << std::endl;
-
   frc2::RamseteCommand ramseteCommand(
     m_test,
     [this]() {return odometry.GetPose();}, 
@@ -58,8 +57,6 @@ frc2::Command* OI::getAutonomousCommand() {
     [this](auto left, auto right) {Robot::driveBase.tankDriveVolts(left, right);}, 
     {&Robot::driveBase}
   );
-
-  std::cout << "RamseteCommand over" << std::endl;
 
   return new frc2::SequentialCommandGroup(
      std::move(ramseteCommand),

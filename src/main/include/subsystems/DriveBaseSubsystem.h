@@ -40,9 +40,14 @@ class DriveBaseSubsystem : public frc2::SubsystemBase {
   
   void setBrakeMode();
 
+  void maxSpeed();
+
   double getRightEncoderOutput();
   double getLeftEncoderOutput();
   frc::DifferentialDriveWheelSpeeds getEncoderOutputs();
+
+  double leftCurrent();
+  double rightCurrent();
 
   void resetEncoders();
 
@@ -52,9 +57,10 @@ class DriveBaseSubsystem : public frc2::SubsystemBase {
 
  private:
   rev::CANSparkMax leftMaster {LMaster, MotorType::kBrushless};
+  rev::CANSparkMax rightMaster {RMaster, MotorType::kBrushless};
+
   rev::CANSparkMax leftSlave1 {LSlave1, MotorType::kBrushless};
   rev::CANSparkMax leftSlave2 {LSlave2, MotorType::kBrushless};
-  rev::CANSparkMax rightMaster {RMaster, MotorType::kBrushless};
   rev::CANSparkMax rightSlave1 {RSlave1, MotorType::kBrushless};
   rev::CANSparkMax rightSlave2 {RSlave2, MotorType::kBrushless};
 

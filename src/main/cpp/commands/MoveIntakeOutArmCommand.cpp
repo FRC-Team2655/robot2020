@@ -5,24 +5,38 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-#include "commands/MoveIntakeArmCommand.h"
+#include "commands/MoveIntakeOutArmCommand.h"
 #include "Robot.h"
 
-MoveIntakeArmCommand::MoveIntakeArmCommand(double position) : position(position) {
+MoveIntakeOutArmCommand::MoveIntakeOutArmCommand(double position) : position(position) {
   AddRequirements(&Robot::intake);
 }
 
 // Called when the command is initially scheduled.
-void MoveIntakeArmCommand::Initialize() {
-  Robot::intake.moveArm(position);
+void MoveIntakeOutArmCommand::Initialize() {
+  Robot::intake.isIntakeLocked = false;
+
+  Robot::intake.setCurrent40();
+
+  Robot::intake.intakeOutPID.SetSetpoint(position);
+  Robot::intake.intakeOutPID.SetTolerance(armTolerance);
 }
 
 // Called repeatedly when this Command is scheduled to run
-void MoveIntakeArmCommand::Execute() {
+void MoveIntakeOutArmCommand::Execute() {
+  Robot::intake.moveArmOut();
 }
 
 // Called once the command ends or is interrupted.
-void MoveIntakeArmCommand::End(bool interrupted) {}
+void MoveIntakeOutArmCommand::End(bool interrupted) {
+  Robot::intake.stopArm();
+
+  Robot::intake.setCurrent15();
+
+  Robot::intake.isIntakeOut = true;
+}
 
 // Returns true when the command should end.
-bool MoveIntakeArmCommand::IsFinished() { return true; }
+bool MoveIntakeOutArmCommand::IsFinished() {  
+  return Robot::intake.intakeOutPID.AtSetpoint();
+}

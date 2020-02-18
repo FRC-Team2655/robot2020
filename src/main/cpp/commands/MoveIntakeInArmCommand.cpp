@@ -5,24 +5,37 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-#include "commands/RunIntakeRollersCommand.h"
+#include "commands/MoveIntakeInArmCommand.h"
 #include "Robot.h"
 
-RunIntakeRollersCommand::RunIntakeRollersCommand(double speed) : speed(speed) {
+MoveIntakeInArmCommand::MoveIntakeInArmCommand(double position) : position(position) {
+  AddRequirements(&Robot::intake);
 }
 
 // Called when the command is initially scheduled.
-void RunIntakeRollersCommand::Initialize() {}
+void MoveIntakeInArmCommand::Initialize() {
+  Robot::intake.setCurrent40();
+
+  Robot::intake.intakeInPID.SetSetpoint(position);
+  Robot::intake.intakeInPID.SetTolerance(armTolerance);
+}
 
 // Called repeatedly when this Command is scheduled to run
-void RunIntakeRollersCommand::Execute() {
-  Robot::intake.runRollers(speed);
+void MoveIntakeInArmCommand::Execute() {
+  Robot::intake.moveArmIn();
 }
 
 // Called once the command ends or is interrupted.
-void RunIntakeRollersCommand::End(bool interrupted) {
-  Robot::intake.stopRollers();
+void MoveIntakeInArmCommand::End(bool interrupted) {
+  Robot::intake.stopArm();
+
+  Robot::intake.setCurrent15();
+
+  Robot::intake.isIntakeOut = false;
+  Robot::intake.isIntakeLocked = true;
 }
 
 // Returns true when the command should end.
-bool RunIntakeRollersCommand::IsFinished() { return false; }
+bool MoveIntakeInArmCommand::IsFinished() { 
+  return Robot::intake.intakeInPID.AtSetpoint();
+}

@@ -170,3 +170,11 @@ void DriveBaseSubsystem::resetEncoders() {
 frc::Rotation2d DriveBaseSubsystem::getIMUAngle() {
 	return frc::Rotation2d((units::radian_t)(imu.GetAngle() * 3.141592 / 180.0));
 }
+
+double DriveBaseSubsystem::leftCurrent() {
+	return leftMaster.GetOutputCurrent();
+}
+
+double DriveBaseSubsystem::rightCurrent() {
+	return rightMaster.GetOutputCurrent();
+}

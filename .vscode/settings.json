@@ -16,6 +16,10 @@
   },
   "C_Cpp.default.configurationProvider": "vscode-wpilib",
   "files.associations": {
-    "*.inc": "cpp"
+    "*.inc": "cpp",
+    "chrono": "cpp",
+    "complex": "cpp",
+    "cstdlib": "cpp",
+    "cmath": "cpp"
   }
 }

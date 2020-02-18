@@ -5,8 +5,6 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-#pragma once
-
 #include "RobotMap.h"
 
 const int LMaster = 1;
@@ -51,3 +49,12 @@ const int IntakeArm = 9;
 const int IntakePWM = 4;
 
 const int ShooterVelocity = 4900;
+
+const double intakeInPosition = 0;
+const double intakeOutPosition = -0.3;
+
+const double armTolerance = 0.006;
+
+const int proximitySensor1Channel = 3;
+
+const double beltsSpeed = 0.5;

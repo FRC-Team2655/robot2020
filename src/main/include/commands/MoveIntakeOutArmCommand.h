@@ -17,10 +17,10 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class MoveIntakeArmCommand
-    : public frc2::CommandHelper<frc2::CommandBase, MoveIntakeArmCommand> {
+class MoveIntakeOutArmCommand
+    : public frc2::CommandHelper<frc2::CommandBase, MoveIntakeOutArmCommand> {
  public:
-  MoveIntakeArmCommand(double position);
+  MoveIntakeOutArmCommand(double position);
 
   void Initialize() override;
 

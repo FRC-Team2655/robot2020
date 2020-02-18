@@ -55,3 +55,12 @@ const extern int IntakeArm;
 const extern int IntakePWM;
 
 const extern int ShooterVelocity;
+
+const extern double intakeInPosition;
+const extern double intakeOutPosition;
+
+const extern double armTolerance;
+
+const extern int proximitySensor1Channel;
+
+const extern double beltsSpeed;
