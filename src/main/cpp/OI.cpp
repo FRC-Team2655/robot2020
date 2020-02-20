@@ -27,8 +27,12 @@ void OI::runButtons() {
   r1Btn = new frc2::JoystickButton(js0, 6);
 
   xBtn->WhileHeld(rsVelocityCommand);
-  r2Btn->WhileHeld(rbCommand);
-  triangleBtn->WhileHeld(invertrbCommand);
+  //r2Btn->WhileHeld(rbCommand);
+  //triangleBtn->WhileHeld(invertrbCommand);
+  triangleBtn->WhileHeld(rkBeltCommand);
+  r2Btn->WhileHeld(rsBeltsCommand);
+  l2Btn->WhileHeld(rbBeltsCommand);
+
   r1Btn->WhileHeld(riRollersCommand);
   circleBtn->WhenPressed(frc2::SequentialCommandGroup(MoveIntakeOutArmCommand(-0.3), RunBeltsBackgroundCommand(0.5)));
   squareBtn->WhenPressed(miInCommand);

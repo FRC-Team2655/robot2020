@@ -7,6 +7,7 @@
 
 #include "commands/MoveIntakeInArmCommand.h"
 #include "Robot.h"
+#include "RobotMap.h"
 
 MoveIntakeInArmCommand::MoveIntakeInArmCommand(double position) : position(position) {
   AddRequirements(&Robot::intake);
@@ -29,7 +30,7 @@ void MoveIntakeInArmCommand::Execute() {
 void MoveIntakeInArmCommand::End(bool interrupted) {
   Robot::intake.stopArm();
 
-  Robot::intake.setCurrent15();
+  Robot::intake.setCurrent(armRestCurrent);
 
   Robot::intake.isIntakeOut = false;
   Robot::intake.isIntakeLocked = true;

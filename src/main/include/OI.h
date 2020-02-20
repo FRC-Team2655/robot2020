@@ -29,6 +29,10 @@
 #include "commands/RunBeltsBackgroundCommand.h"
 #include <frc2/command/SequentialCommandGroup.h>
 
+#include "commands/RunBottomBeltCommand.h"
+#include "commands/RunKickerBeltCommand.h"
+#include "commands/RunSideBeltsCommand.h"
+
 #include <frc/Joystick.h>
 
 using namespace team2655;
@@ -46,15 +50,18 @@ public:
   frc2::JoystickButton *r1Btn;
 
   RunShooterVelocityCommand rsVelocityCommand {};
-  RunBeltsCommand rbCommand {0.4};
+  RunBeltsCommand rbCommand {beltsSpeed};
   RunBeltsCommand invertrbCommand {-0.5 * beltsSpeed};
-  RunIntakeRollersCommand riRollersCommand {beltsSpeed};
+  RunIntakeRollersCommand riRollersCommand {rollersSpeed};
   MoveIntakeInArmCommand miInCommand {intakeInPosition};
   MoveIntakeOutArmCommand  miOutCommand {intakeOutPosition};
-  //IntakeDownCommandGroup intakeDownCG {};
+
+  RunKickerBeltCommand rkBeltCommand {};
+  RunSideBeltsCommand rsBeltsCommand {};
+  RunBottomBeltCommand rbBeltsCommand {};
 
   // Configurations for the joystick deadband and cubic function.
-  jshelper::AxisConfig driveAxisConfig = jshelper::createAxisConfig(.1, 0, 1.3);
+  jshelper::AxisConfig driveAxisConfig = jshelper::createAxisConfig(.1, 0, 0.5);
   jshelper::AxisConfig rotateAxisConfig = jshelper::createAxisConfig(0.1);
 
   frc::DifferentialDriveOdometry odometry;

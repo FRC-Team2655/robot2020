@@ -22,11 +22,6 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   double getShooter1Current();
   double getShooter1AccumError();
 
-  bool isProximSensor1Triggered();
-
-  void runBelts(double speed, bool useProximitySensor);
-  void stopBelts();
-
   double getRPM();
 
   void Periodic();
@@ -38,14 +33,6 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   rev::CANSparkMax shooter2 {Shooter2ID, MotorType::kBrushless};
 
   rev::CANEncoder shooterEncoder1 = shooter1.GetEncoder();
-
-  frc::DigitalInput proximSensor1 {proximitySensor1Channel};
-
-  WPI_VictorSPX kicker {KickerID};
-
-  WPI_TalonSRX leftBelt {BeltLeft};
-  WPI_TalonSRX rightBelt {BeltRight};
-  WPI_VictorSPX bottomBelt {BeltBottom};
 
   double shooterSpeed;
 

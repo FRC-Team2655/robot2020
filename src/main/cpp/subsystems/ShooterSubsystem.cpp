@@ -7,9 +7,6 @@ using NeutralMode = ctre::phoenix::motorcontrol::NeutralMode;
 ShooterSubsystem::ShooterSubsystem() {
     shooter2.Follow(shooter1, true);
 
-    leftBelt.SetInverted(true);
-    bottomBelt.SetInverted(true);
-
     shooter1.SetSmartCurrentLimit(65);
     shooter2.SetSmartCurrentLimit(65);
 
@@ -52,67 +49,6 @@ void ShooterSubsystem::stopShooter() {
 void ShooterSubsystem::setCoastMode() {
     shooter1.SetIdleMode(IdleMode::kCoast);
     shooter2.SetIdleMode(IdleMode::kCoast);
-
-    kicker.SetNeutralMode(NeutralMode::Coast);
-    leftBelt.SetNeutralMode(NeutralMode::Coast);
-    rightBelt.SetNeutralMode(NeutralMode::Coast);
-    bottomBelt.SetNeutralMode(NeutralMode::Coast);
-}
-
-void ShooterSubsystem::runBelts(double speed, bool useProximitySensor) {
-    static double firstSwitchTime = 0.0;
-    static double secondSwitchTime = 1.0;
-    if (useProximitySensor) {
-        if (isProximSensor1Triggered()) {
-            leftBelt.Set(0);
-            rightBelt.Set(0);
-            bottomBelt.Set(0);
-            kicker.Set(0);
-        }else{
-            if(frc::Timer::GetFPGATimestamp() < firstSwitchTime)
-            {
-                leftBelt.Set(speed);
-                rightBelt.Set(-speed);
-            }
-            else if(frc::Timer::GetFPGATimestamp() < secondSwitchTime)
-            {
-                leftBelt.Set(-speed);
-                rightBelt.Set(speed);
-            }
-            else
-            {
-               firstSwitchTime = frc::Timer::GetFPGATimestamp() + 1;
-               secondSwitchTime = firstSwitchTime + 1;
-            }
-            bottomBelt.Set(speed);
-            kicker.Set(speed);
-        }
-    }else{
-        if(frc::Timer::GetFPGATimestamp() < firstSwitchTime)
-        {
-            leftBelt.Set(speed);
-            rightBelt.Set(-speed);
-        }
-        else if(frc::Timer::GetFPGATimestamp() < secondSwitchTime)
-        {
-            leftBelt.Set(-speed);
-            rightBelt.Set(speed);
-        }
-        else
-        {
-            firstSwitchTime = frc::Timer::GetFPGATimestamp() + 1;
-            secondSwitchTime = firstSwitchTime + 1;
-        }
-        bottomBelt.Set(speed);
-        kicker.Set(speed);
-    }
-}
-
-void ShooterSubsystem::stopBelts() {
-    leftBelt.Set(0);
-    rightBelt.Set(0);
-    bottomBelt.Set(0);
-    kicker.Set(0);
 }
 
 double ShooterSubsystem::getRPM() {
@@ -125,8 +61,4 @@ double ShooterSubsystem::getShooter1Current() {
 
 double ShooterSubsystem::getShooter1AccumError() {
     return shooter1PID.GetIAccum();
-}
-
-bool ShooterSubsystem::isProximSensor1Triggered() {
-    return !proximSensor1.Get();
 }

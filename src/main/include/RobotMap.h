@@ -61,6 +61,15 @@ const extern double intakeOutPosition;
 
 const extern double armTolerance;
 
-const extern int proximitySensor1Channel;
+const extern int proximitySensorTopChannel;
+const extern int proximitySensorMiddleChannel;
+const extern int proximitySensorBottomChannel;
 
 const extern double beltsSpeed;
+const extern double rollersSpeed;
+
+const extern double beltsSwitchTime;
+
+const extern int GearRatio;
+
+const extern double armRestCurrent;

@@ -5,25 +5,25 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-#include "commands/RunBeltsBackgroundCommand.h"
+#include "commands/RunBottomBeltCommand.h"
 #include "Robot.h"
 
-RunBeltsBackgroundCommand::RunBeltsBackgroundCommand(double speed) : speed(speed) {
+RunBottomBeltCommand::RunBottomBeltCommand() {
+  // Use addRequirements() here to declare subsystem dependencies.
 }
 
 // Called when the command is initially scheduled.
-void RunBeltsBackgroundCommand::Initialize() {
-}
+void RunBottomBeltCommand::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
-void RunBeltsBackgroundCommand::Execute() {
-  Robot::belts.runBelts(speed, true);
+void RunBottomBeltCommand::Execute() {
+  Robot::belts.runBottomBelt();
 }
 
 // Called once the command ends or is interrupted.
-void RunBeltsBackgroundCommand::End(bool interrupted) {
+void RunBottomBeltCommand::End(bool interrupted) {
   Robot::belts.stopBelts();
 }
 
 // Returns true when the command should end.
-bool RunBeltsBackgroundCommand::IsFinished() { return !Robot::intake.isIntakeOut; }
+bool RunBottomBeltCommand::IsFinished() { return false; }

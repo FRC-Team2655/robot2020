@@ -15,6 +15,7 @@ DriveBaseSubsystem Robot::driveBase;
 OI Robot::oi;
 ShooterSubsystem Robot::shooter;
 IntakeSubsystem Robot::intake;
+BeltsSubsystem Robot::belts;
 
 void Robot::RobotInit() {
     frc::SmartDashboard::PutBoolean("Reset Encoders", false);
@@ -30,6 +31,7 @@ void Robot::RobotInit() {
     frc::SmartDashboard::PutNumber("Intake Lock D: ", kLockD);
 
     shooter.setCoastMode();
+    belts.setCoastMode();
     driveBase.setCoastMode();
     intake.setArmBrakeMode();
     intake.setRollersCoastMode();
@@ -45,13 +47,8 @@ void Robot::RobotInit() {
  */
 void Robot::RobotPeriodic() { 
     if (intake.isIntakeLocked) {
-        if (intake.armPosition() >= (intakeInPosition - 0.006)) {
-            intake.setLockPID();
-            std::cout << "Lock PID" << std::endl;
-        }else{
-            intake.setInPID();
-            std::cout << "In PID" << std::endl;
-        }
+        intake.setLockPID();
+        std::cout << "Lock PID" << std::endl;
     }
 
     intake.setRollersCoastMode();

@@ -9,6 +9,7 @@
 #include "Robot.h"
 
 RunBeltsCommand::RunBeltsCommand(double speed) : speed(speed) {
+  AddRequirements(&Robot::belts);
 }
 
 // Called when the command is initially scheduled.
@@ -16,14 +17,12 @@ void RunBeltsCommand::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
 void RunBeltsCommand::Execute() {
-  if (!Robot::intake.isIntakeOut) {
-    Robot::shooter.runBelts(speed, false);
-  }
+  Robot::belts.runBelts(speed, false);
 }
 
 // Called once the command ends or is interrupted.
 void RunBeltsCommand::End(bool interrupted) {
-  Robot::shooter.stopBelts();
+  Robot::belts.stopBelts();
 }
 
 // Returns true when the command should end.

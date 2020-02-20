@@ -32,7 +32,7 @@ class IntakeSubsystem : public frc2::SubsystemBase {
 
   void updateOffset();
 
-  void setCurrent15();
+  void setCurrent(double current);
   void setCurrent40();
 
   void setLockPID();
@@ -47,7 +47,7 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   double kVelocity_;
   frc2::PIDController intakeInPID {2.0, 0, 0.1};
   frc2::PIDController intakeOutPID {0.85, 0, 0.001};
-  frc2::PIDController intakeLockPID {0.000001, 0.000001, 0};
+  frc2::PIDController intakeLockPID {1.0, 0.001, 0};
   
   double intakePositionOffset;
   double intakeMotorValue = 0;

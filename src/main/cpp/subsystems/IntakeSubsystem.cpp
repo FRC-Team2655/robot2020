@@ -73,8 +73,8 @@ void IntakeSubsystem::updateOffset() {
     std::cout << intakePositionOffset << std::endl;
 }
 
-void IntakeSubsystem::setCurrent15() {
-    intakeArm.SetSmartCurrentLimit(15);
+void IntakeSubsystem::setCurrent(double current) {
+    intakeArm.SetSmartCurrentLimit(current);
 }
 
 void IntakeSubsystem::setCurrent40() {
@@ -82,12 +82,16 @@ void IntakeSubsystem::setCurrent40() {
 }
 
 void IntakeSubsystem::setLockPID() {
+    intakeLockPID.SetSetpoint(intakeInPosition);
+
     intakeMotorValue = intakeLockPID.Calculate(armPosition());
 
     intakeArm.Set(intakeMotorValue);
 }
 
 void IntakeSubsystem::setInPID() {
+    intakeLockPID.SetSetpoint(intakeInPosition);
+
     intakeMotorValue = intakeInPID.Calculate(armPosition());
 
     intakeArm.Set(intakeMotorValue);

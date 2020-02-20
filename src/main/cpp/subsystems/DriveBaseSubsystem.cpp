@@ -12,13 +12,26 @@
 using IdleMode = rev::CANSparkMax::IdleMode;
 
 DriveBaseSubsystem::DriveBaseSubsystem() {
-  leftEncoder.SetDistancePerPulse(0);
-  rightEncoder.SetDistancePerPulse(0);
 
   leftSlave1.Follow(leftMaster);
   leftSlave2.Follow(leftMaster);
   rightSlave1.Follow(rightMaster);
   rightSlave2.Follow(rightMaster);
+
+  leftPID.SetP(1e-4);
+  leftPID.SetI(0);
+  leftPID.SetD(0);
+  leftPID.SetFF(1/LMaxVelocity);
+  leftPID.SetIZone(0);
+  leftPID.SetOutputRange(-1, 1);
+
+  rightPID.SetP(1e-4);
+  rightPID.SetI(0);
+  rightPID.SetD(0);
+  rightPID.SetFF(1/RMaxVelocity);
+  rightPID.SetIZone(0);
+  rightPID.SetOutputRange(-1, 1);
+
 
   leftMaster.SetClosedLoopRampRate(DriveRampRate);
   rightMaster.SetClosedLoopRampRate(DriveRampRate);
@@ -108,7 +121,7 @@ void DriveBaseSubsystem::driveTankVelocity(double lVel, double rVel) {
 		leftMaster.Set(0);
 	}else {
 		// Drive the left side in velocity closed loop mode (set pid reference = setpoint for PID)
-		leftMaster.Set(leftPID.Calculate(leftEncoder.GetRate(), lVel));
+		leftPID.SetReference(lVel, rev::ControlType::kVelocity);
 	}
 
 	if (rVel == 0) {
@@ -116,7 +129,7 @@ void DriveBaseSubsystem::driveTankVelocity(double lVel, double rVel) {
 	}
 	
 	else {
-		rightMaster.Set(rightPID.Calculate(rightEncoder.GetRate(), -rVel));
+		rightPID.SetReference(-rVel, rev::ControlType::kVelocity);
 	}
 }
 
@@ -141,16 +154,16 @@ void DriveBaseSubsystem::setCoastMode() {
 }
 
 double DriveBaseSubsystem::getLeftEncoderOutput() {
-	return (leftEncoder.GetRaw() / 8192.0);
+	return (leftAutoEncoder.GetRaw() / 8192.0);
 }
 
 double DriveBaseSubsystem::getRightEncoderOutput() {
-	return (rightEncoder.GetRaw() / 8192.0);
+	return (rightAutoEncoder.GetRaw() / 8192.0);
 }
 
 frc::DifferentialDriveWheelSpeeds DriveBaseSubsystem::getEncoderOutputs() {
-	return {units::meters_per_second_t(leftEncoder.GetRate()),
-			units::meters_per_second_t(rightEncoder.GetRate())};
+	return {units::meters_per_second_t(leftAutoEncoder.GetRate()),
+			units::meters_per_second_t(rightAutoEncoder.GetRate())};
 }
 
 void DriveBaseSubsystem::tankDriveVolts(units::volt_t left, units::volt_t right) {
@@ -163,8 +176,8 @@ void DriveBaseSubsystem::tankDriveVolts(units::volt_t left, units::volt_t right)
 }
 
 void DriveBaseSubsystem::resetEncoders() {
-	leftEncoder.Reset();
-	rightEncoder.Reset();
+	leftAutoEncoder.Reset();
+	rightAutoEncoder.Reset();
 }
 
 frc::Rotation2d DriveBaseSubsystem::getIMUAngle() {

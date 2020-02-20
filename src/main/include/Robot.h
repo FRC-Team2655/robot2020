@@ -15,6 +15,7 @@
 #include "commands/DriveJoystickCommand.h"
 #include "subsystems/ShooterSubsystem.h"
 #include "subsystems/IntakeSubsystem.h"
+#include "subsystems/BeltsSubsystem.h"
 
 class Robot : public frc::TimedRobot {
  public:
@@ -22,6 +23,7 @@ class Robot : public frc::TimedRobot {
   static DriveBaseSubsystem driveBase;
   static ShooterSubsystem shooter;
   static IntakeSubsystem intake;
+  static BeltsSubsystem belts;
 
   void RobotInit() override;
   void RobotPeriodic() override;
@@ -41,7 +43,7 @@ private:
   double kOutP = 0.85;
   double kOutI = 0.0;
   double kOutD = 0.001;
-  double kLockP = 0.000001;
-  double kLockI = 0.000001;
+  double kLockP = 1.0;
+  double kLockI = 0.001;
   double kLockD = 0.0;
 };

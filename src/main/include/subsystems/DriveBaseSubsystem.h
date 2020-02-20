@@ -64,11 +64,17 @@ class DriveBaseSubsystem : public frc2::SubsystemBase {
   rev::CANSparkMax rightSlave1 {RSlave1, MotorType::kBrushless};
   rev::CANSparkMax rightSlave2 {RSlave2, MotorType::kBrushless};
 
-  frc::Encoder rightEncoder {REncA, REncB, true};
-  frc::Encoder leftEncoder {LEncA, LEncB, true};
+  frc::Encoder rightAutoEncoder {REncA, REncB, true};
+  frc::Encoder leftAutoEncoder {LEncA, LEncB, true};
 
-  frc2::PIDController leftPID {1e-4, 0, 0};
-  frc2::PIDController rightPID {1e-4, 0, 0};
+  rev::CANEncoder leftEncoder = leftMaster.GetEncoder();
+  rev::CANEncoder rightEncoder = rightMaster.GetEncoder();
+
+  rev::CANPIDController leftPID = leftMaster.GetPIDController();
+  rev::CANPIDController rightPID = rightMaster.GetPIDController();
+
+  frc2::PIDController leftAutoPID {1e-4, 0, 0};
+  frc2::PIDController rightAutoPID {1e-4, 0, 0};
 
   DriveJoystickCommand driveJoystick;
 

@@ -16,7 +16,7 @@ const int RSlave1 = 5;
 const int RSlave2 = 4;
 
 const double MaxVelocity = 5500;    // This is capped at the slowest velocity on ANY robot to ensure that paths work the same
-const double LMaxVelocity = 5700.0;
+const double LMaxVelocity = 5800.0;
 const double RMaxVelocity = 5800.0;
 
 const double DriveRampRate = 0.23;  // Minimum time (sec) to go from 0 to full
@@ -48,13 +48,22 @@ const int RollerShooters = 14;
 const int IntakeArm = 9;
 const int IntakePWM = 4;
 
-const int ShooterVelocity = 4900;
+const int ShooterVelocity = 4000;     //5200
 
 const double intakeInPosition = 0;
 const double intakeOutPosition = -0.3;
 
 const double armTolerance = 0.006;
 
-const int proximitySensor1Channel = 3;
+const int proximitySensorTopChannel = 3;
+const int proximitySensorMiddleChannel = 4;
+const int proximitySensorBottomChannel = 5;
 
 const double beltsSpeed = 0.5;
+const double rollersSpeed = 0.7;
+
+const int GearRatio = 0.25;
+
+const double armRestCurrent = 25;
+
+const double beltsSwitchTime = 0.6;
