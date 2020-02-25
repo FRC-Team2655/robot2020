@@ -71,8 +71,8 @@ const double intakeOutPosition = -0.7;
 
 const double armTolerance = 0.006;
 
-const int proximitySensorTopChannel = 9;
-const int proximitySensorMiddleChannel = 7;
+const int proximitySensorTopChannel = 7;
+const int proximitySensorMiddleChannel = 9;
 const int proximitySensorBottomChannel = 8;
 
 const double beltsSpeed = 0.7;
