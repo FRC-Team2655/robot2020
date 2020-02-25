@@ -37,9 +37,9 @@ class Robot : public frc::TimedRobot {
 private:
   frc2::Command* autonomousCommand = nullptr;
 
-  double kInP = 2.0; 
+  double kInP = 1.0; 
   double kInI = 0.0; 
-  double kInD = 0.1; 
+  double kInD = 0.1;
   double kOutP = 0.85;
   double kOutI = 0.0;
   double kOutD = 0.001;

@@ -14,7 +14,7 @@ using IdleMode = rev::CANSparkMax::IdleMode;
 IntakeSubsystem::IntakeSubsystem() {
     std::cout << intakePositionOffset << std::endl;
 
-    intakeArm.SetSmartCurrentLimit(15);
+    intakeArm.SetSmartCurrentLimit(armRestCurrent);
 }
 
 // This method will be called once per scheduler run
@@ -41,11 +41,29 @@ void IntakeSubsystem::moveArmOut() {
 }
 
 double IntakeSubsystem::armRawPosition() {
-    return (double)(intakeEnc.Get());
+    static double lastArmVal = 0;
+    double read0, read1;
+    int count = 0;
+    read0 = 0;
+    read1 = 1;
+    while(count < 10 && read0 != read1)
+    {
+        read0 = intakeEnc.GetOutput();
+        count++;
+        read1 = intakeEnc.GetOutput();
+    }
+    if(count < 10)
+    {
+        //update arm value if they were equal
+        lastArmVal = read0;
+    }
+
+    //invert output
+    return -1 * lastArmVal;
 } 
 
 double IntakeSubsystem::armPosition() {
-    return (armRawPosition() - intakePositionOffset);
+    return (double)(armRawPosition() - intakePositionOffset);
 }
 
 void IntakeSubsystem::setRollersCoastMode() {
@@ -62,10 +80,6 @@ double IntakeSubsystem::intakeArmCurrent() {
 
 void IntakeSubsystem::stopArm() {
     intakeArm.Set(0);
-}
-
-void IntakeSubsystem::resetArmEnc() {
-    intakeEnc.Reset();
 }
 
 void IntakeSubsystem::updateOffset() {
@@ -95,4 +109,12 @@ void IntakeSubsystem::setInPID() {
     intakeMotorValue = intakeInPID.Calculate(armPosition());
 
     intakeArm.Set(intakeMotorValue);
+}
+
+void IntakeSubsystem::moveArmManual() {
+    intakeArm.Set(0.2);
+}
+
+void IntakeSubsystem::resetArmEnc() {
+    //intakeEnc.Reset();
 }

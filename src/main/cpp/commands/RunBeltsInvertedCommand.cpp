@@ -5,29 +5,25 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-#include "commands/RunBeltsBackgroundCommand.h"
+#include "commands/RunBeltsInvertedCommand.h"
 #include "Robot.h"
 
-RunBeltsBackgroundCommand::RunBeltsBackgroundCommand(double speed) : speed(speed) {
+RunBeltsInvertedCommand::RunBeltsInvertedCommand(double speed) : speed(speed) {
   AddRequirements(&Robot::belts);
 }
 
 // Called when the command is initially scheduled.
-void RunBeltsBackgroundCommand::Initialize() {
-}
+void RunBeltsInvertedCommand::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
-void RunBeltsBackgroundCommand::Execute() {
-  if (Robot::belts.shouldRunBelts) {
-    Robot::belts.runBelts(speed, true);
-  }
+void RunBeltsInvertedCommand::Execute() {
+  Robot::belts.runBeltsInverted(speed);
 }
 
 // Called once the command ends or is interrupted.
-void RunBeltsBackgroundCommand::End(bool interrupted) {
-  Robot::belts.shouldRunBelts = true;
+void RunBeltsInvertedCommand::End(bool interrupted) {
   Robot::belts.stopBelts();
 }
 
 // Returns true when the command should end.
-bool RunBeltsBackgroundCommand::IsFinished() { return !Robot::intake.isIntakeOut; }
+bool RunBeltsInvertedCommand::IsFinished() { return false; }

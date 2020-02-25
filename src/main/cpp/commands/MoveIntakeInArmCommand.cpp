@@ -34,9 +34,11 @@ void MoveIntakeInArmCommand::End(bool interrupted) {
 
   Robot::intake.isIntakeOut = false;
   Robot::intake.isIntakeLocked = true;
+
+  Robot::intake.resetArmEnc();
 }
 
 // Returns true when the command should end.
 bool MoveIntakeInArmCommand::IsFinished() { 
-  return Robot::intake.intakeInPID.AtSetpoint();
+  return ((Robot::intake.armPosition() >= intakeInPosition) || Robot::intake.intakeInPID.AtSetpoint());
 }

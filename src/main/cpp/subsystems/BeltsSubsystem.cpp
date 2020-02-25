@@ -20,10 +20,11 @@ void BeltsSubsystem::runBelts(double speed, bool useProximitySensor) {
     if (useProximitySensor) {
         if (isProximSensorTopTriggered()) {
             runBeltsSpeeds(0, 0, 0);
+            shouldRunBelts = false;
         }else if (isProximSensorMiddleTriggered() && !isProximSensorBottomTriggered()) {
             runBeltsSpeeds(beltsSpeed, beltsSpeed, 0);
         }else if (isProximSensorMiddleTriggered() && isProximSensorBottomTriggered()) {
-            runBeltsSpeeds(0, beltsSpeed, beltsSpeed);
+            runBeltsSpeeds(0, bottomBeltSpeed, kickerSpeed);
         }else{
             runBeltsSpeeds(beltsSpeed, beltsSpeed, beltsSpeed);
         }
@@ -84,6 +85,13 @@ void BeltsSubsystem::runBeltsSpeeds(double sidesSpeed, double bottomSpeed, doubl
     }
     bottomBelt.Set(bottomSpeed);
     kicker.Set(kickerSpeed);
+}
+
+void BeltsSubsystem::runBeltsInverted(double speed) {
+    leftBelt.Set(-speed);
+    rightBelt.Set(-speed);
+    bottomBelt.Set(-speed);
+    kicker.Set(-speed);
 }
 
 void BeltsSubsystem::runSideBelts() {

@@ -5,29 +5,20 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-#include "commands/RunBeltsBackgroundCommand.h"
-#include "Robot.h"
+#include "commands/RotateDegreesCommand.h"
 
-RunBeltsBackgroundCommand::RunBeltsBackgroundCommand(double speed) : speed(speed) {
-  AddRequirements(&Robot::belts);
+RotateDegreesCommand::RotateDegreesCommand(double degrees) : degrees(degrees) {
+  // Use addRequirements() here to declare subsystem dependencies.
 }
 
 // Called when the command is initially scheduled.
-void RunBeltsBackgroundCommand::Initialize() {
-}
+void RotateDegreesCommand::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
-void RunBeltsBackgroundCommand::Execute() {
-  if (Robot::belts.shouldRunBelts) {
-    Robot::belts.runBelts(speed, true);
-  }
-}
+void RotateDegreesCommand::Execute() {}
 
 // Called once the command ends or is interrupted.
-void RunBeltsBackgroundCommand::End(bool interrupted) {
-  Robot::belts.shouldRunBelts = true;
-  Robot::belts.stopBelts();
-}
+void RotateDegreesCommand::End(bool interrupted) {}
 
 // Returns true when the command should end.
-bool RunBeltsBackgroundCommand::IsFinished() { return !Robot::intake.isIntakeOut; }
+bool RotateDegreesCommand::IsFinished() { return false; }

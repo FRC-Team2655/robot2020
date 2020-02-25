@@ -69,9 +69,9 @@ void DriveBaseSubsystem::driveTankPercentage(double leftPercentage, double right
 	leftSlave1.Set(leftPercentage);
 	leftSlave2.Set(leftPercentage);
 
-	rightMaster.Set(rightPercentage);
-	rightSlave1.Set(rightPercentage);
-	rightSlave2.Set(rightPercentage);
+	rightMaster.Set(-rightPercentage);
+	rightSlave1.Set(-rightPercentage);
+	rightSlave2.Set(-rightPercentage);
 }
 
 std::array<double, 2> DriveBaseSubsystem::arcadeDrive(double xSpeed, double zRotation) {
@@ -153,12 +153,20 @@ void DriveBaseSubsystem::setCoastMode() {
 	rightSlave2.SetIdleMode(IdleMode::kCoast);
 }
 
-double DriveBaseSubsystem::getLeftEncoderOutput() {
+double DriveBaseSubsystem::getLeftEncoderRotations() {
 	return (leftAutoEncoder.GetRaw() / 8192.0);
 }
 
-double DriveBaseSubsystem::getRightEncoderOutput() {
-	return (rightAutoEncoder.GetRaw() / 8192.0);
+double DriveBaseSubsystem::getRightEncoderRotations() {
+	return (-1 * (rightAutoEncoder.GetRaw() / 8192.0));
+}
+
+double DriveBaseSubsystem::getRightEncoderRate() {
+	return leftAutoEncoder.GetRate();
+}
+
+double DriveBaseSubsystem::getLeftEncoderRate() {
+	return rightAutoEncoder.GetRate();
 }
 
 frc::DifferentialDriveWheelSpeeds DriveBaseSubsystem::getEncoderOutputs() {

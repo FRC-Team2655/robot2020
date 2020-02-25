@@ -5,11 +5,14 @@ using namespace team2655;
 
 const auto kMaxSpeed = 3_mps;
 const auto kMaxAcceleration = 3_mps_sq;
-const auto kTrackwidth = 0.69_m;
+const auto kTrackwidth = 0.226_m;
 const frc::DifferentialDriveKinematics kDriveKinematics(kTrackwidth);
 const auto ka = 0.2 * 1_V * 1_s * 1_s / 1_m;
 const auto kv = 1.98 * 1_V * 1_s / 1_m;
 const auto ks = 0.22_V;
+const double kRamseteB = 2;
+const double kRamseteZeta = 0.7;
+const double kPDriveVel = 8.5;
 
 OI::OI() : odometry(Robot::driveBase.getIMUAngle()) {
   js0 = new frc::Joystick(0);
@@ -25,16 +28,14 @@ void OI::runButtons() {
   l2Btn = new frc2::JoystickButton(js0, 7);
   r2Btn = new frc2::JoystickButton(js0, 8);
   r1Btn = new frc2::JoystickButton(js0, 6);
+  shareBtn = new frc2::JoystickButton(js0, 9);
 
   xBtn->WhileHeld(rsVelocityCommand);
-  //r2Btn->WhileHeld(rbCommand);
-  //triangleBtn->WhileHeld(invertrbCommand);
-  triangleBtn->WhileHeld(rkBeltCommand);
-  r2Btn->WhileHeld(rsBeltsCommand);
-  l2Btn->WhileHeld(rbBeltsCommand);
+  r2Btn->WhileHeld(rbCommand, false);
+  triangleBtn->WhileHeld(invertrbCommand);
 
   r1Btn->WhileHeld(riRollersCommand);
-  circleBtn->WhenPressed(frc2::SequentialCommandGroup(MoveIntakeOutArmCommand(-0.3), RunBeltsBackgroundCommand(0.5)));
+  circleBtn->WhenPressed(frc2::SequentialCommandGroup(MoveIntakeOutArmCommand(-0.3), RunBeltsBackgroundCommand(0.5)), true);
   squareBtn->WhenPressed(miInCommand);
 }
 
@@ -48,7 +49,16 @@ frc2::Command* OI::getAutonomousCommand() {
   config.SetKinematics(kDriveKinematics);
   config.AddConstraint(autoVoltageConstraint);
 
-  frc::Trajectory m_test = frc::TrajectoryUtil::FromPathweaverJson("/home/lvuser/deploy/Path1.wpilib.json");
+  std::cout << "config" << std::endl;
+
+  //frc::Trajectory m_test = frc::TrajectoryUtil::FromPathweaverJson("/home/lvuser/deploy/Path1.wpilib.json");
+  auto m_test = frc::TrajectoryGenerator::GenerateTrajectory(
+      frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_deg)),
+      {},
+      frc::Pose2d(1_m, 0_m, frc::Rotation2d(0_deg)),
+      config);
+
+    std::cout << "Trajectory Generated!" << std::endl;
 
   frc2::RamseteCommand ramseteCommand(
     m_test,

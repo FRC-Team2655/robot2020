@@ -10,6 +10,7 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/CommandScheduler.h>
 #include <frc2/command/RunCommand.h>
+#include "commands/DriveDistanceCommand.h"
 
 DriveBaseSubsystem Robot::driveBase;
 OI Robot::oi;
@@ -48,15 +49,21 @@ void Robot::RobotInit() {
 void Robot::RobotPeriodic() { 
     if (intake.isIntakeLocked) {
         intake.setLockPID();
-        std::cout << "Lock PID" << std::endl;
     }
 
     intake.setRollersCoastMode();
-    frc::SmartDashboard::PutNumber("Left Output: ", driveBase.getLeftEncoderOutput());
-    frc::SmartDashboard::PutNumber("Right Output: ", driveBase.getRightEncoderOutput());
+    frc::SmartDashboard::PutNumber("Left Output: ", driveBase.getLeftEncoderRotations());
+    frc::SmartDashboard::PutNumber("Right Output: ", driveBase.getRightEncoderRotations());
 
     frc::SmartDashboard::PutNumber("Left Current: ", driveBase.leftCurrent());
     frc::SmartDashboard::PutNumber("Right Current: ", driveBase.rightCurrent());
+
+    frc::SmartDashboard::PutNumber("Left Rotations: ", driveBase.getLeftEncoderRotations());
+    frc::SmartDashboard::PutNumber("Right Rotations: ", driveBase.getRightEncoderRotations());
+
+    frc::SmartDashboard::PutNumber("Top Sensor: ", belts.isProximSensorTopTriggered());
+    frc::SmartDashboard::PutNumber("Middle Sensor: ", belts.isProximSensorMiddleTriggered());
+    frc::SmartDashboard::PutNumber("Bottom Sensor: ", belts.isProximSensorBottomTriggered());
 
     if (frc::SmartDashboard::GetBoolean("Reset Encoders", false) == true) {
         driveBase.resetEncoders();
@@ -130,7 +137,10 @@ void Robot::AutonomousInit() {
     driveBase.setCoastMode();
     intake.updateOffset();
 
-   /* autonomousCommand = oi.getAutonomousCommand();
+    frc2::Command* autonCmd = new DriveDistanceCommand(3);
+    autonCmd->Schedule();
+
+   /*autonomousCommand = oi.getAutonomousCommand();
 
     if (autonomousCommand != nullptr) {
         autonomousCommand->Schedule();

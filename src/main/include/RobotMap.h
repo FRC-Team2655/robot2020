@@ -11,6 +11,15 @@
 #include <units/units.h>
 #include <wpi/math>
 
+
+
+
+#define COMPBOT false
+
+
+
+
+
 const extern int LMaster;
 const extern int LSlave1;
 const extern int LSlave2;
@@ -25,17 +34,11 @@ const extern double RMaxVelocity;
 
 const extern double DriveRampRate;
 
-const extern frc::DifferentialDriveKinematics kDriveKinematics;
-
-const extern double kRamseteB;
-const extern double kRamseteZeta;
-
-const extern double kPDriveVel;
-
 const extern int LEncA;
 const extern int LEncB;
 const extern int REncA;
 const extern int REncB;
+const extern int IntakePWM;
 
 const extern int Shooter1ID;
 const extern int Shooter2ID;
@@ -52,7 +55,6 @@ const extern int BeltBottom;
 const extern int RollerShooters;
 
 const extern int IntakeArm;
-const extern int IntakePWM;
 
 const extern int ShooterVelocity;
 
@@ -66,6 +68,8 @@ const extern int proximitySensorMiddleChannel;
 const extern int proximitySensorBottomChannel;
 
 const extern double beltsSpeed;
+const extern double kickerSpeed;
+const extern double bottomBeltSpeed;
 const extern double rollersSpeed;
 
 const extern double beltsSwitchTime;

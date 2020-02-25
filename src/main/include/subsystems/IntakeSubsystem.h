@@ -12,7 +12,9 @@
 #include "RobotMap.h"
 #include <rev/CANSparkMax.h>
 #include <frc/DutyCycleEncoder.h>
+#include <frc/DutyCycle.h>
 #include <frc/controller/PIDController.h>
+#include <frc/DigitalInput.h>
 
 using MotorType = rev::CANSparkMax::MotorType;
 
@@ -27,6 +29,7 @@ class IntakeSubsystem : public frc2::SubsystemBase {
 
   void moveArmIn();
   void moveArmOut();
+  void moveArmManual();
   double armRawPosition();
   double armPosition();
 
@@ -45,7 +48,7 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   void Periodic();
 
   double kVelocity_;
-  frc2::PIDController intakeInPID {2.0, 0, 0.1};
+  frc2::PIDController intakeInPID {1.0, 0, 0.1};
   frc2::PIDController intakeOutPID {0.85, 0, 0.001};
   frc2::PIDController intakeLockPID {1.0, 0.001, 0};
   
@@ -58,5 +61,6 @@ private:
   WPI_TalonSRX intakeRollers {RollerShooters};
   rev::CANSparkMax intakeArm {IntakeArm, MotorType::kBrushless};
 
-  frc::DutyCycleEncoder intakeEnc {IntakePWM};
+  //frc::DutyCycleEncoder intakeEnc {IntakePWM};
+  frc::DutyCycle intakeEnc {new frc::DigitalInput(IntakePWM)};
 };

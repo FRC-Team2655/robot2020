@@ -42,8 +42,10 @@ class DriveBaseSubsystem : public frc2::SubsystemBase {
 
   void maxSpeed();
 
-  double getRightEncoderOutput();
-  double getLeftEncoderOutput();
+  double getRightEncoderRotations();
+  double getLeftEncoderRotations();
+  double getRightEncoderRate();
+  double getLeftEncoderRate();
   frc::DifferentialDriveWheelSpeeds getEncoderOutputs();
 
   double leftCurrent();

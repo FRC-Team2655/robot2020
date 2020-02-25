@@ -5,29 +5,25 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-#include "commands/RunBeltsBackgroundCommand.h"
+#include "commands/MoveArmManualCommand.h"
 #include "Robot.h"
 
-RunBeltsBackgroundCommand::RunBeltsBackgroundCommand(double speed) : speed(speed) {
-  AddRequirements(&Robot::belts);
+MoveArmManualCommand::MoveArmManualCommand() {
+  AddRequirements(&Robot::intake);
 }
 
 // Called when the command is initially scheduled.
-void RunBeltsBackgroundCommand::Initialize() {
-}
+void MoveArmManualCommand::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
-void RunBeltsBackgroundCommand::Execute() {
-  if (Robot::belts.shouldRunBelts) {
-    Robot::belts.runBelts(speed, true);
-  }
+void MoveArmManualCommand::Execute() {
+  Robot::intake.moveArmManual();
 }
 
 // Called once the command ends or is interrupted.
-void RunBeltsBackgroundCommand::End(bool interrupted) {
-  Robot::belts.shouldRunBelts = true;
-  Robot::belts.stopBelts();
+void MoveArmManualCommand::End(bool interrupted) {
+  Robot::intake.stopArm();
 }
 
 // Returns true when the command should end.
-bool RunBeltsBackgroundCommand::IsFinished() { return !Robot::intake.isIntakeOut; }
+bool MoveArmManualCommand::IsFinished() { return false; }

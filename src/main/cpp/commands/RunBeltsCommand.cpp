@@ -13,7 +13,9 @@ RunBeltsCommand::RunBeltsCommand(double speed) : speed(speed) {
 }
 
 // Called when the command is initially scheduled.
-void RunBeltsCommand::Initialize() {}
+void RunBeltsCommand::Initialize() {
+  Robot::belts.shouldRunBelts = true;
+}
 
 // Called repeatedly when this Command is scheduled to run
 void RunBeltsCommand::Execute() {

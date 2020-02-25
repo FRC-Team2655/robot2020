@@ -39,5 +39,5 @@ void MoveIntakeOutArmCommand::End(bool interrupted) {
 
 // Returns true when the command should end.
 bool MoveIntakeOutArmCommand::IsFinished() {  
-  return Robot::intake.intakeOutPID.AtSetpoint();
+  return ((Robot::intake.armPosition() <= intakeOutPosition) || Robot::intake.intakeOutPID.AtSetpoint());
 }

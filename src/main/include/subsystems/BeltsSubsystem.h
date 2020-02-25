@@ -13,6 +13,8 @@
 #include <ctre/Phoenix.h>
 
 #include <frc/DigitalInput.h>
+#include <hal/PWM.h>
+#include <hal/DIO.h>
 
 class BeltsSubsystem : public frc2::SubsystemBase {
  public:
@@ -32,10 +34,13 @@ class BeltsSubsystem : public frc2::SubsystemBase {
   bool isProximSensorBottomTriggered();
 
   void runBeltsSpeeds(double sides, double bottom, double kicker);
+  void runBeltsInverted(double speed);
 
   int getBeltsState();
 
   void Periodic();
+
+  bool shouldRunBelts = true;
 
  private:
   WPI_VictorSPX kicker {KickerID};
