@@ -46,6 +46,8 @@ class DriveBaseSubsystem : public frc2::SubsystemBase {
   double getLeftEncoderRotations();
   double getRightEncoderRate();
   double getLeftEncoderRate();
+  double getLeftSMRate();
+  double getRightSMRate();
   frc::DifferentialDriveWheelSpeeds getEncoderOutputs();
 
   double leftCurrent();
@@ -53,11 +55,19 @@ class DriveBaseSubsystem : public frc2::SubsystemBase {
 
   void resetEncoders();
 
-  frc::Rotation2d getIMUAngle();
+  frc::Rotation2d getAutoIMUAngle();
+
+  double getIMUAngle();
 
   void tankDriveVolts(units::volt_t left, units::volt_t right);
 
+  double kPLeft, kPRight, kILeft, kIRight;
+
+  rev::CANPIDController leftPID = leftMaster.GetPIDController();
+  rev::CANPIDController rightPID = rightMaster.GetPIDController();
+
  private:
+
   rev::CANSparkMax leftMaster {LMaster, MotorType::kBrushless};
   rev::CANSparkMax rightMaster {RMaster, MotorType::kBrushless};
 
@@ -71,9 +81,6 @@ class DriveBaseSubsystem : public frc2::SubsystemBase {
 
   rev::CANEncoder leftEncoder = leftMaster.GetEncoder();
   rev::CANEncoder rightEncoder = rightMaster.GetEncoder();
-
-  rev::CANPIDController leftPID = leftMaster.GetPIDController();
-  rev::CANPIDController rightPID = rightMaster.GetPIDController();
 
   frc2::PIDController leftAutoPID {1e-4, 0, 0};
   frc2::PIDController rightAutoPID {1e-4, 0, 0};

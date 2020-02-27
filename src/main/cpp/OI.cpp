@@ -14,7 +14,7 @@ const double kRamseteB = 2;
 const double kRamseteZeta = 0.7;
 const double kPDriveVel = 8.5;
 
-OI::OI() : odometry(Robot::driveBase.getIMUAngle()) {
+OI::OI() : odometry(Robot::driveBase.getAutoIMUAngle()) {
   js0 = new frc::Joystick(0);
   
   runButtons();
@@ -30,7 +30,7 @@ void OI::runButtons() {
   r1Btn = new frc2::JoystickButton(js0, 6);
   shareBtn = new frc2::JoystickButton(js0, 9);
 
-  xBtn->WhileHeld(rsVelocityCommand);
+  l2Btn->WhileHeld(rsVelocityCommand);
   r2Btn->WhileHeld(rbCommand, false);
   triangleBtn->WhileHeld(invertrbCommand);
 

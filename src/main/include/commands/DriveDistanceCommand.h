@@ -29,13 +29,25 @@ class DriveDistanceCommand
   void End(bool interrupted) override;
 
   bool IsFinished() override;
+
+  /* P term for P feedback loop from encoders */
+  double P_encoders = 0.001;
+
+  /* P term for P feedback loop from gyro for angle correction */
+  double P_gyro = 0.01;
+
+  /* Angle read from current axis of interest on the gyro */
+  double gyroAngle;
+
 private:
 
   double GetCurrentDistance();
-  double P = 0.001;
+  double gyroStartAngle;
   double distance;
   double currentDistance, currentSpeed;
   double maxSpeed = 0.4;
   double minSpeed = 0.1;
   double speedStep = 0.01;
+  double gyroSpeedCompensation = 0;
+  double rampDownDistance = 1.0;
 };

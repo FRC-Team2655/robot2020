@@ -18,20 +18,25 @@ void DriveDistanceCommand::Initialize() {
   Robot::driveBase.resetEncoders();
   currentDistance = 0;
   currentSpeed = 0;
+  gyroStartAngle = Robot::driveBase.getIMUAngle();
+  gyroAngle = gyroStartAngle;
+  gyroSpeedCompensation = 0;
 }
 
 // Called repeatedly when this Command is scheduled to run
 void DriveDistanceCommand::Execute() {
   double remainingDistance;
+  double gyroError;
+  double leftSpeed, rightSpeed;
   //get travelled distance
   currentDistance = GetCurrentDistance();
   //calculate remaining distance
   remainingDistance = distance - currentDistance;
 
-  if(remainingDistance < 1.0)
+  if(remainingDistance < rampDownDistance)
   {
     /* Slowing down. Want to go from maxspeed to 0 over 1 meter */
-    currentSpeed -= (P * remainingDistance);
+    currentSpeed -= (P_encoders * (rampDownDistance - remainingDistance));
     if(currentSpeed < minSpeed)
       currentSpeed = minSpeed;
   }
@@ -52,10 +57,36 @@ void DriveDistanceCommand::Execute() {
     }
   }
   
-  std::cout << currentDistance << std::endl;
+  /* handle gyro compensation */
 
-  //todo: Apply gyro compensation
-  Robot::driveBase.driveTankPercentage(currentSpeed, currentSpeed);
+  /* Resample the gyro */
+  gyroAngle = Robot::driveBase.getIMUAngle();
+  /* Calculate the error (in degrees) */
+  gyroError = gyroAngle - gyroStartAngle;
+  
+  /* Accumulate (feedback error * gyro P value) into gyro speed compensation value */
+  gyroSpeedCompensation = (P_gyro * gyroError);
+
+  /* Apply gyro compensation */
+  leftSpeed = currentSpeed + gyroSpeedCompensation;
+  rightSpeed = currentSpeed - gyroSpeedCompensation;
+
+  /* Check speed capping */
+  if(leftSpeed > maxSpeed)
+  {
+    rightSpeed *= (maxSpeed / leftSpeed);
+    leftSpeed = maxSpeed;
+  }
+  if(rightSpeed > maxSpeed)
+  {
+    leftSpeed *= (maxSpeed / rightSpeed);
+    rightSpeed = maxSpeed;
+  }
+
+  /* Apply to drive base */
+  Robot::driveBase.driveTankPercentage(leftSpeed, rightSpeed);
+
+  std::cout << "Left: " << leftSpeed << ", " << "Right: " << rightSpeed << ", " << "Gyro Error: " << gyroError << std::endl;
 }
 
 // Called once the command ends or is interrupted.

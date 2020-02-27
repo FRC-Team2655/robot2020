@@ -34,6 +34,8 @@ class Robot : public frc::TimedRobot {
   void TeleopInit() override;
   void TeleopPeriodic() override;
   void TestPeriodic() override;
+
+  double autoDistance;
 private:
   frc2::Command* autonomousCommand = nullptr;
 

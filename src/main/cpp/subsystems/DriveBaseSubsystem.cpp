@@ -12,26 +12,26 @@
 using IdleMode = rev::CANSparkMax::IdleMode;
 
 DriveBaseSubsystem::DriveBaseSubsystem() {
+  imu.SetYawAxis(frc::ADIS16470_IMU::IMUAxis::kZ);
 
   leftSlave1.Follow(leftMaster);
   leftSlave2.Follow(leftMaster);
   rightSlave1.Follow(rightMaster);
   rightSlave2.Follow(rightMaster);
 
-  leftPID.SetP(1e-4);
-  leftPID.SetI(0);
+  leftPID.SetP(kPLeft);
+  leftPID.SetI(kILeft);
   leftPID.SetD(0);
   leftPID.SetFF(1/LMaxVelocity);
   leftPID.SetIZone(0);
   leftPID.SetOutputRange(-1, 1);
 
-  rightPID.SetP(1e-4);
-  rightPID.SetI(0);
+  rightPID.SetP(kPRight);
+  rightPID.SetI(kIRight);
   rightPID.SetD(0);
   rightPID.SetFF(1/RMaxVelocity);
   rightPID.SetIZone(0);
   rightPID.SetOutputRange(-1, 1);
-
 
   leftMaster.SetClosedLoopRampRate(DriveRampRate);
   rightMaster.SetClosedLoopRampRate(DriveRampRate);
@@ -188,8 +188,12 @@ void DriveBaseSubsystem::resetEncoders() {
 	rightAutoEncoder.Reset();
 }
 
-frc::Rotation2d DriveBaseSubsystem::getIMUAngle() {
+frc::Rotation2d DriveBaseSubsystem::getAutoIMUAngle() {
 	return frc::Rotation2d((units::radian_t)(imu.GetAngle() * 3.141592 / 180.0));
+}
+
+double DriveBaseSubsystem::getIMUAngle() {
+	return imu.GetAngle();
 }
 
 double DriveBaseSubsystem::leftCurrent() {
@@ -198,4 +202,12 @@ double DriveBaseSubsystem::leftCurrent() {
 
 double DriveBaseSubsystem::rightCurrent() {
 	return rightMaster.GetOutputCurrent();
+}
+
+double DriveBaseSubsystem::getLeftSMRate() {
+	return leftEncoder.GetVelocity();
+}
+
+double DriveBaseSubsystem::getRightSMRate() {
+	return leftEncoder.GetVelocity();
 }

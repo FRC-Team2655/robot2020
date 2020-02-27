@@ -31,4 +31,7 @@ class RotateDegreesCommand
   bool IsFinished() override;
 private:
   double degrees;
+  /* Start angle for the robot */
+  double startAngle;
+  
 };

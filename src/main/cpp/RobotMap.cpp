@@ -32,7 +32,7 @@ const int Shooter2ID = 8;
 #endif
 
 const double MaxVelocity = 5500;    // This is capped at the slowest velocity on ANY robot to ensure that paths work the same
-const double LMaxVelocity = 5800.0;
+const double LMaxVelocity = 5850.0;
 const double RMaxVelocity = 5800.0;
 
 const double DriveRampRate = 0.23;  // Minimum time (sec) to go from 0 to full

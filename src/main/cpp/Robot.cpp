@@ -18,6 +18,8 @@ ShooterSubsystem Robot::shooter;
 IntakeSubsystem Robot::intake;
 BeltsSubsystem Robot::belts;
 
+double penc, pgyro;
+
 void Robot::RobotInit() {
     frc::SmartDashboard::PutBoolean("Reset Encoders", false);
 
@@ -30,6 +32,14 @@ void Robot::RobotInit() {
     frc::SmartDashboard::PutNumber("Intake Lock P: ", kLockP);
     frc::SmartDashboard::PutNumber("Intake Lock I: ", kLockI);
     frc::SmartDashboard::PutNumber("Intake Lock D: ", kLockD);
+    frc::SmartDashboard::PutNumber("Left P: ", driveBase.kPLeft);
+    frc::SmartDashboard::PutNumber("Right P: ", driveBase.kPRight);
+    frc::SmartDashboard::PutNumber("Left I: ", driveBase.kILeft);
+    frc::SmartDashboard::PutNumber("Right I: ", driveBase.kIRight);
+    frc::SmartDashboard::PutNumber("Auto Distance: ", autoDistance);
+    frc::SmartDashboard::PutNumber("Encoder Auto P: ", penc);
+    frc::SmartDashboard::PutNumber("Gyro Auto P: ", pgyro);
+
 
     shooter.setCoastMode();
     belts.setCoastMode();
@@ -52,18 +62,23 @@ void Robot::RobotPeriodic() {
     }
 
     intake.setRollersCoastMode();
-    frc::SmartDashboard::PutNumber("Left Output: ", driveBase.getLeftEncoderRotations());
-    frc::SmartDashboard::PutNumber("Right Output: ", driveBase.getRightEncoderRotations());
 
     frc::SmartDashboard::PutNumber("Left Current: ", driveBase.leftCurrent());
     frc::SmartDashboard::PutNumber("Right Current: ", driveBase.rightCurrent());
 
     frc::SmartDashboard::PutNumber("Left Rotations: ", driveBase.getLeftEncoderRotations());
     frc::SmartDashboard::PutNumber("Right Rotations: ", driveBase.getRightEncoderRotations());
+    frc::SmartDashboard::PutNumber("Left Rate: ", driveBase.getLeftEncoderRate());
+    frc::SmartDashboard::PutNumber("Right Rate: ", driveBase.getRightEncoderRate());
+    frc::SmartDashboard::PutNumber("Right SM Rate: ", driveBase.getRightSMRate());
+    frc::SmartDashboard::PutNumber("Left SM Rate: ", driveBase.getLeftSMRate());
+
 
     frc::SmartDashboard::PutNumber("Top Sensor: ", belts.isProximSensorTopTriggered());
     frc::SmartDashboard::PutNumber("Middle Sensor: ", belts.isProximSensorMiddleTriggered());
     frc::SmartDashboard::PutNumber("Bottom Sensor: ", belts.isProximSensorBottomTriggered());
+
+    frc::SmartDashboard::PutNumber("Gyro Angle: ", driveBase.getIMUAngle());
 
     if (frc::SmartDashboard::GetBoolean("Reset Encoders", false) == true) {
         driveBase.resetEncoders();
@@ -108,11 +123,35 @@ void Robot::RobotPeriodic() {
         kLockD = frc::SmartDashboard::GetNumber("Intake Lock D: ", 0);
         intake.intakeLockPID.SetD(kLockD);
     }
+    if (frc::SmartDashboard::GetNumber("Left P: ", 0) != driveBase.kPLeft) {
+        driveBase.kPLeft = frc::SmartDashboard::GetNumber("Left P: ", 0);
+        driveBase.leftPID.SetP(driveBase.kPLeft);
+    }
+    if (frc::SmartDashboard::GetNumber("Right P: ", 0) != driveBase.kPRight) {
+        driveBase.kPRight = frc::SmartDashboard::GetNumber("Right P: ", 0);
+        driveBase.rightPID.SetP(driveBase.kPRight);
+    }
+    if (frc::SmartDashboard::GetNumber("Left I: ", 0) != driveBase.kILeft) {
+        driveBase.kILeft = frc::SmartDashboard::GetNumber("Left I: ", 0);
+        driveBase.leftPID.SetI(driveBase.kILeft);
+    }
+    if (frc::SmartDashboard::GetNumber("Right I: ", 0) != driveBase.kIRight) {
+        driveBase.kIRight = frc::SmartDashboard::GetNumber("Right I: ", 0);
+        driveBase.rightPID.SetI(driveBase.kIRight);
+    }
+    if (frc::SmartDashboard::GetNumber("Auto Distance: ", 0) != autoDistance) {
+        autoDistance = frc::SmartDashboard::GetNumber("Auto Distance: ", 0);
+    }
+    if (frc::SmartDashboard::GetNumber("Encoder Auto P: ", 0) != penc) {
+        penc = frc::SmartDashboard::GetNumber("Encoder Auto P: ", 0);
+    }
+    if (frc::SmartDashboard::GetNumber("Gyro Auto P: ", 0) != pgyro) {
+        pgyro = frc::SmartDashboard::GetNumber("Gyro Auto P: ", 0);
+    }
 
     frc::SmartDashboard::PutNumber("Intake Arm Current: ", intake.intakeArmCurrent());
     frc::SmartDashboard::PutNumber("Intake Arm Position: ", intake.armPosition());
     frc::SmartDashboard::PutNumber("Intake Arm Percentage: ", intake.intakeMotorValue);
-    frc::SmartDashboard::PutNumber("Intake Setpoint: ", intake.intakeInPID.GetSetpoint());
 
     frc2::CommandScheduler::GetInstance().Run();
 }
@@ -123,7 +162,7 @@ void Robot::RobotPeriodic() {
  * robot is disabled.
  */
 void Robot::DisabledInit() {
-    driveBase.setCoastMode();
+    driveBase.setBrakeMode();
 }
 
 void Robot::DisabledPeriodic() {
@@ -134,10 +173,12 @@ void Robot::DisabledPeriodic() {
  * RobotContainer} class.
  */
 void Robot::AutonomousInit() {
-    driveBase.setCoastMode();
+    driveBase.setBrakeMode();
     intake.updateOffset();
 
-    frc2::Command* autonCmd = new DriveDistanceCommand(3);
+    DriveDistanceCommand* autonCmd = new DriveDistanceCommand(autoDistance);
+    autonCmd->P_gyro = pgyro;
+    autonCmd->P_encoders = penc;
     autonCmd->Schedule();
 
    /*autonomousCommand = oi.getAutonomousCommand();
