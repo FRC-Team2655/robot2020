@@ -37,7 +37,8 @@ class LEDSubsystem : public frc2::SubsystemBase {
     White,
     Gray,
     DarkGray,
-    Black
+    Black,
+    LED_COLOR_COUNT
   }LEDColors;
 
   LEDSubsystem();

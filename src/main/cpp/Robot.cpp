@@ -62,6 +62,18 @@ void Robot::RobotPeriodic() {
         intake.setLockPID();
     }
 
+    static double lastTime = 0;
+    static int color = 0;
+    if(frc::Timer::GetFPGATimestamp() > lastTime)
+    {
+        std::cout <<"Color: " << color << std::endl;
+        color++;
+        if(color == LEDSubsystem::LEDColors::LED_COLOR_COUNT)
+            color = 0;
+        lastTime = frc::Timer::GetFPGATimestamp() + 1;
+        leds.setLEDColor((LEDSubsystem::LEDColors) color);
+    }
+
     intake.setRollersCoastMode();
 
     frc::SmartDashboard::PutNumber("Left Current: ", driveBase.leftCurrent());
@@ -165,6 +177,7 @@ void Robot::RobotPeriodic() {
  */
 void Robot::DisabledInit() {
     driveBase.setBrakeMode();
+    intake.isIntakeLocked = false;
 }
 
 void Robot::DisabledPeriodic() {
@@ -179,6 +192,8 @@ void Robot::AutonomousInit() {
     driveBase.setBrakeMode();
     /* Zero the intake encoder */
     intake.updateOffset();
+    /* Start applying lock PID */
+    intake.isIntakeLocked = true;
 
     /* Get the auto command to run (from smart dash) */
 
@@ -191,7 +206,7 @@ void Robot::AutonomousInit() {
     DriveDistanceCommand* autonCmd = new DriveDistanceCommand(autoDistance);
     autonCmd->P_gyro = pgyro;
     autonCmd->P_encoders = penc;
-    autonCmd->Schedule();
+    //autonCmd->Schedule();
 
     
 

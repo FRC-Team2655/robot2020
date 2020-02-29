@@ -56,7 +56,7 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   double intakeMotorValue = 0;
 
   bool isIntakeOut = false;
-  bool isIntakeLocked = true;
+  bool isIntakeLocked = false;
 private:
   WPI_TalonSRX intakeRollers {RollerShooters};
   rev::CANSparkMax intakeArm {IntakeArm, MotorType::kBrushless};
