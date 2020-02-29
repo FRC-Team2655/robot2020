@@ -14,11 +14,11 @@
 
 
 
-#define COMPBOT false
+#define COMPBOT true
 
 
 
-
+const extern int LEDPWMPort;
 
 const extern int LMaster;
 const extern int LSlave1;

@@ -63,6 +63,7 @@ const int LEncB = 1;
 const int REncA = 2;
 const int REncB = 3;
 const int IntakePWM = 4;
+const int LEDPWMPort = 9;
 #else
 const int LEncA = 5;
 const int LEncB = 0;
