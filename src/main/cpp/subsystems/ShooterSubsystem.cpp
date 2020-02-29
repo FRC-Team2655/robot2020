@@ -62,3 +62,8 @@ double ShooterSubsystem::getShooter1Current() {
 double ShooterSubsystem::getShooter1AccumError() {
     return shooter1PID.GetIAccum();
 }
+
+double ShooterSubsystem::getAvgCurrent()
+{
+    return (shooter1.GetOutputCurrent() + shooter2.GetOutputCurrent()) / 2.0;
+}

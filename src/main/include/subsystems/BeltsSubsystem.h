@@ -11,10 +11,7 @@
 #include <rev/CANSparkMax.h>
 #include "RobotMap.h"
 #include <ctre/Phoenix.h>
-
 #include <frc/DigitalInput.h>
-#include <hal/PWM.h>
-#include <hal/DIO.h>
 
 class BeltsSubsystem : public frc2::SubsystemBase {
  public:

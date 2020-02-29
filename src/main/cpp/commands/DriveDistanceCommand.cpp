@@ -20,18 +20,22 @@ void DriveDistanceCommand::Initialize() {
   currentSpeed = 0;
   gyroStartAngle = Robot::driveBase.getIMUAngle();
   gyroAngle = gyroStartAngle;
-  gyroSpeedCompensation = 0;
+  /* Determine direction */
+  goingForward = true;
+  if(distance < 0)
+    goingForward = false;
 }
 
 // Called repeatedly when this Command is scheduled to run
 void DriveDistanceCommand::Execute() {
   double remainingDistance;
-  double gyroError;
+  double gyroError, gyroSpeedCompensation;
   double leftSpeed, rightSpeed;
-  //get travelled distance
+
+  //get travelled distance from encoders
   currentDistance = GetCurrentDistance();
-  //calculate remaining distance
-  remainingDistance = distance - currentDistance;
+  //calculate remaining distance (absolute value)
+  remainingDistance = std::abs(distance - currentDistance);
 
   if(remainingDistance < rampDownDistance)
   {
@@ -61,15 +65,24 @@ void DriveDistanceCommand::Execute() {
 
   /* Resample the gyro */
   gyroAngle = Robot::driveBase.getIMUAngle();
+
   /* Calculate the error (in degrees) */
   gyroError = gyroAngle - gyroStartAngle;
   
-  /* Accumulate (feedback error * gyro P value) into gyro speed compensation value */
+  /* Set gyro speed compensation value (gyro P term * error) */
   gyroSpeedCompensation = (P_gyro * gyroError);
 
   /* Apply gyro compensation */
-  leftSpeed = currentSpeed + gyroSpeedCompensation;
-  rightSpeed = currentSpeed - gyroSpeedCompensation;
+  if(goingForward)
+  {
+    leftSpeed = currentSpeed + gyroSpeedCompensation;
+    rightSpeed = currentSpeed - gyroSpeedCompensation;
+  }
+  else
+  {
+    leftSpeed = currentSpeed - gyroSpeedCompensation;
+    rightSpeed = currentSpeed + gyroSpeedCompensation;
+  }
 
   /* Check speed capping */
   if(leftSpeed > maxSpeed)
@@ -83,26 +96,32 @@ void DriveDistanceCommand::Execute() {
     rightSpeed = maxSpeed;
   }
 
-  /* Apply to drive base */
-  Robot::driveBase.driveTankPercentage(leftSpeed, rightSpeed);
+  /* Apply to drive base (update velocity set point) */
+  if(goingForward)
+      Robot::driveBase.driveTankVelocity(leftSpeed, rightSpeed);
+  else
+      Robot::driveBase.driveTankVelocity(-leftSpeed, -rightSpeed);
 
   std::cout << "Left: " << leftSpeed << ", " << "Right: " << rightSpeed << ", " << "Gyro Error: " << gyroError << std::endl;
 }
 
 // Called once the command ends or is interrupted.
 void DriveDistanceCommand::End(bool interrupted) {
-  Robot::driveBase.driveTankPercentage(0, 0);
+  Robot::driveBase.driveTankVelocity(0, 0);
 }
 
 // Returns true when the command should end.
 bool DriveDistanceCommand::IsFinished() {
-  return (currentDistance >= distance);
+  if(goingForward)
+    return currentDistance >= distance;
+  else
+    return currentDistance <= distance;
  }
 
  double DriveDistanceCommand::GetCurrentDistance()
  {
    double averageRotations;
-   averageRotations = Robot::driveBase.getRightEncoderRotations()+ Robot::driveBase.getLeftEncoderRotations();
+   averageRotations = Robot::driveBase.getRightEncoderRotations() + Robot::driveBase.getLeftEncoderRotations();
    averageRotations *= 0.5;
    //scale to meters. Wheels are 6" (15cm) diameter
    return averageRotations * 3.141592 * 0.1524;

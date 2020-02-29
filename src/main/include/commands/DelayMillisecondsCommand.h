@@ -9,6 +9,7 @@
 
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
+#include <frc/Timer.h>
 
 /**
  * An example command.
@@ -17,10 +18,10 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class RotateDegreesCommand
-    : public frc2::CommandHelper<frc2::CommandBase, RotateDegreesCommand> {
+class DelayMillisecondsCommand
+    : public frc2::CommandHelper<frc2::CommandBase, DelayMillisecondsCommand> {
  public:
-  RotateDegreesCommand(double degrees);
+  DelayMillisecondsCommand(double time_ms);
 
   void Initialize() override;
 
@@ -30,27 +31,8 @@ class RotateDegreesCommand
 
   bool IsFinished() override;
 
-  /* Maximum speed to run at while turning (motor rpm) */
-  double maxMotorRPM = 1500;
-  /* Minimum speed to run while turning (motor rpm) */
-  double minMotorRPM = 300;
-  /* delta from target angle at which to start ramp down (degrees) */
-  double rampdownStartAngle = 10;
-  /* P term for gyro feedback while ramping down */
-  double P_gyro = 10;
-  /* ramp up increment */
-  double rampUpIncrement = 100;
 private:
-  /* degrees to turn by */
-  double degrees;
-  /* Start angle for the robot */
-  double startAngle;
-  /*Target angle to reach*/
-  double targetAngle;
-  /* Track if need to turn right or not */
-  bool turnRight;
-  /* current robot angle */
-  double currentAngle;
-  /* Current motor speed (RPM) */
-  double currentSpeed;
+  double time_ms;
+  double stopTime;
+  double currentTime;
 };

@@ -26,6 +26,8 @@ class ShooterSubsystem : public frc2::SubsystemBase {
 
   void Periodic();
 
+  double getAvgCurrent();
+
   rev::CANPIDController shooter1PID = shooter1.GetPIDController();
 
  private:

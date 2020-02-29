@@ -31,10 +31,10 @@ class DriveDistanceCommand
   bool IsFinished() override;
 
   /* P term for P feedback loop from encoders */
-  double P_encoders = 0.001;
+  double P_encoders = 100.0;
 
   /* P term for P feedback loop from gyro for angle correction */
-  double P_gyro = 0.01;
+  double P_gyro = 10.0;
 
   /* Angle read from current axis of interest on the gyro */
   double gyroAngle;
@@ -42,12 +42,23 @@ class DriveDistanceCommand
 private:
 
   double GetCurrentDistance();
+
+  /* Initial starting angle from gyro */
   double gyroStartAngle;
+  /* Target distance to travel */
   double distance;
-  double currentDistance, currentSpeed;
-  double maxSpeed = 0.4;
-  double minSpeed = 0.1;
-  double speedStep = 0.01;
-  double gyroSpeedCompensation = 0;
+  /* Current distance travelled */
+  double currentDistance;
+  /* Current "uncompensated" speed */
+  double currentSpeed;
+  /* max speed during movement. In units of motor RPM (0 - 5800) */
+  double maxSpeed = 2500;
+  /* min speed during movement. In units of motor RPM (0 - 5800) */
+  double minSpeed = 1000;
+  /* Amount to step up speed per iteration when accelerating */
+  double speedStep = 100;
+  /* distance to start ramp down PID (meters) */
   double rampDownDistance = 1.0;
+  /* travel direction */
+  bool goingForward;
 };

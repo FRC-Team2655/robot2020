@@ -11,6 +11,7 @@
 #include <frc2/command/CommandScheduler.h>
 #include <frc2/command/RunCommand.h>
 #include "commands/DriveDistanceCommand.h"
+#include "commands/RotateDegreesCommand.h"
 
 DriveBaseSubsystem Robot::driveBase;
 OI Robot::oi;
@@ -39,7 +40,6 @@ void Robot::RobotInit() {
     frc::SmartDashboard::PutNumber("Auto Distance: ", autoDistance);
     frc::SmartDashboard::PutNumber("Encoder Auto P: ", penc);
     frc::SmartDashboard::PutNumber("Gyro Auto P: ", pgyro);
-
 
     shooter.setCoastMode();
     belts.setCoastMode();
@@ -73,6 +73,7 @@ void Robot::RobotPeriodic() {
     frc::SmartDashboard::PutNumber("Right SM Rate: ", driveBase.getRightSMRate());
     frc::SmartDashboard::PutNumber("Left SM Rate: ", driveBase.getLeftSMRate());
 
+    frc::SmartDashboard::PutNumber("Shooter Current: ", shooter.getAvgCurrent());
 
     frc::SmartDashboard::PutNumber("Top Sensor: ", belts.isProximSensorTopTriggered());
     frc::SmartDashboard::PutNumber("Middle Sensor: ", belts.isProximSensorMiddleTriggered());
@@ -173,13 +174,25 @@ void Robot::DisabledPeriodic() {
  * RobotContainer} class.
  */
 void Robot::AutonomousInit() {
+    /* Put drive base in brake mode for auto*/
     driveBase.setBrakeMode();
+    /* Zero the intake encoder */
     intake.updateOffset();
 
+    /* Get the auto command to run (from smart dash) */
+
+    /* schedule the command */
+
+    /* Set up initial commands */
+    RotateDegreesCommand* rotateCommand = new RotateDegreesCommand(10);
+
+    /* Sequential command for auto */
     DriveDistanceCommand* autonCmd = new DriveDistanceCommand(autoDistance);
     autonCmd->P_gyro = pgyro;
     autonCmd->P_encoders = penc;
     autonCmd->Schedule();
+
+    
 
    /*autonomousCommand = oi.getAutonomousCommand();
 
