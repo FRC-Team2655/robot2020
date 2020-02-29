@@ -16,6 +16,7 @@
 #include "subsystems/ShooterSubsystem.h"
 #include "subsystems/IntakeSubsystem.h"
 #include "subsystems/BeltsSubsystem.h"
+#include "subsystems/LEDSubsystem.h"
 
 class Robot : public frc::TimedRobot {
  public:
@@ -24,6 +25,7 @@ class Robot : public frc::TimedRobot {
   static ShooterSubsystem shooter;
   static IntakeSubsystem intake;
   static BeltsSubsystem belts;
+  static LEDSubsystem leds;
 
   void RobotInit() override;
   void RobotPeriodic() override;

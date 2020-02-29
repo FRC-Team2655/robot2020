@@ -18,6 +18,7 @@ OI Robot::oi;
 ShooterSubsystem Robot::shooter;
 IntakeSubsystem Robot::intake;
 BeltsSubsystem Robot::belts;
+LEDSubsystem Robot::leds;
 
 double penc, pgyro;
 
