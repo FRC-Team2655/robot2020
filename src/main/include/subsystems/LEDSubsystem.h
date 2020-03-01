@@ -38,7 +38,8 @@ class LEDSubsystem : public frc2::SubsystemBase {
     Gray,
     DarkGray,
     Black,
-    LED_COLOR_COUNT
+    LED_COLOR_COUNT,
+    LED_DUAL_COLOR_MODE
   }LEDColors;
 
   LEDSubsystem();
@@ -53,6 +54,9 @@ class LEDSubsystem : public frc2::SubsystemBase {
 
   /* Get the current LED color setting*/
   LEDColors getLEDColor();
+
+  /* Set dual pattern idle mode (purple + gold)*/
+  void setDualColorMode();
 
  private:
   frc::Spark LEDController {LEDPWMPort};

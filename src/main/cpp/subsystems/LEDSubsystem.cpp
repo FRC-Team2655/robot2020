@@ -13,6 +13,11 @@ LEDSubsystem::LEDSubsystem() {
 
 void LEDSubsystem::setLEDColor(LEDSubsystem::LEDColors color)
 {
+    /* Validate input */
+    if(color >= LEDSubsystem::LEDColors::LED_COLOR_COUNT)
+    {
+        color = (LEDSubsystem::LEDColors) 0;
+    }
     double LEDPower = 0.57;
     /* Doing some scuffed math here*/
     LEDPower += (0.02) * (double) color;
@@ -25,6 +30,12 @@ void LEDSubsystem::setLEDColor(LEDSubsystem::LEDColors color)
 LEDSubsystem::LEDColors LEDSubsystem::getLEDColor()
 {
     return currentColor;
+}
+
+void LEDSubsystem::setDualColorMode()
+{
+    /* Dual colors, wave mode */
+    LEDController.Set(0.53);
 }
 
 
