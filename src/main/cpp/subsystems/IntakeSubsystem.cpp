@@ -12,9 +12,16 @@ using NeutralMode = ctre::phoenix::motorcontrol::NeutralMode;
 using IdleMode = rev::CANSparkMax::IdleMode;
 
 IntakeSubsystem::IntakeSubsystem() {
-    std::cout << intakePositionOffset << std::endl;
+    isIntakeLocked = true;
+    isIntakeOut = false;
 
     intakeArm.SetSmartCurrentLimit(armRestCurrent);
+
+    #if COMPBOT
+    intakeRollers.SetInverted(true);
+    #else
+    intakeRollers.SetInverted(false);
+    #endif
 }
 
 // This method will be called once per scheduler run
@@ -63,7 +70,7 @@ double IntakeSubsystem::armRawPosition() {
 } 
 
 double IntakeSubsystem::armPosition() {
-    return (double)(armRawPosition() - intakePositionOffset);
+    return (double)(intakePositionOffset - armRawPosition());
 }
 
 void IntakeSubsystem::setRollersCoastMode() {
@@ -72,6 +79,10 @@ void IntakeSubsystem::setRollersCoastMode() {
 
 void IntakeSubsystem::setArmBrakeMode() {
     intakeArm.SetIdleMode(IdleMode::kBrake);
+}
+
+void IntakeSubsystem::setArmCoastMode() {
+    intakeArm.SetIdleMode(IdleMode::kCoast);
 }
 
 double IntakeSubsystem::intakeArmCurrent() {
@@ -87,6 +98,11 @@ void IntakeSubsystem::updateOffset() {
     std::cout << intakePositionOffset << std::endl;
 }
 
+void IntakeSubsystem::updateOffsetDown() {
+    intakePositionOffset = (armRawPosition() - 0.29);
+    std::cout << intakePositionOffset << std::endl;
+}
+
 void IntakeSubsystem::setCurrent(double current) {
     intakeArm.SetSmartCurrentLimit(current);
 }
@@ -96,10 +112,10 @@ void IntakeSubsystem::setCurrent40() {
 }
 
 void IntakeSubsystem::setLockPID() {
+    setCurrent40();
+
     intakeLockPID.SetSetpoint(intakeInPosition);
-
     intakeMotorValue = intakeLockPID.Calculate(armPosition());
-
     intakeArm.Set(intakeMotorValue);
 }
 

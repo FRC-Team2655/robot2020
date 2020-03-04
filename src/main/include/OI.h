@@ -6,19 +6,6 @@
 #include "RobotMap.h"
 #include "team2655/joystick.hpp"
 
-#include <frc/kinematics/DifferentialDriveKinematics.h>
-#include <frc/trajectory/constraint/DifferentialDriveVoltageConstraint.h>
-#include <frc/controller/SimpleMotorFeedforward.h>
-#include <frc/trajectory/Trajectory.h>
-#include <frc/trajectory/TrajectoryGenerator.h>
-#include <frc2/command/RamseteCommand.h>
-#include <frc/controller/RamseteController.h>
-#include <frc/controller/PIDController.h>
-#include <frc/kinematics/DifferentialDriveOdometry.h>
-#include <frc2/command/SequentialCommandGroup.h>
-#include <frc2/command/InstantCommand.h>
-#include <frc/trajectory/TrajectoryUtil.h>
-
 #include "commands/RunShooterPercentageCommand.h"
 #include "commands/RunShooterVelocityCommand.h"
 #include "subsystems/ShooterSubsystem.h"
@@ -30,6 +17,9 @@
 #include <frc2/command/SequentialCommandGroup.h>
 #include "commands/RunBeltsInvertedCommand.h"
 #include "commands/MoveArmManualCommand.h"
+#include "commands/IntakeArmLockPIDCommand.h"
+#include "commands/UpdateIntakeOffsetDownCommand.h"
+#include "commands/UpdateIntakeOffsetUpCommand.h"
 
 #include "commands/RunBottomBeltCommand.h"
 #include "commands/RunKickerBeltCommand.h"
@@ -51,6 +41,7 @@ public:
   frc2::JoystickButton *r2Btn;
   frc2::JoystickButton *r1Btn;
   frc2::JoystickButton *shareBtn;
+  frc2::JoystickButton *optionsBtn;
  
   RunShooterVelocityCommand rsVelocityCommand {};
   RunBeltsCommand rbCommand {beltsSpeed};
@@ -64,12 +55,12 @@ public:
   RunSideBeltsCommand rsBeltsCommand {};
   RunBottomBeltCommand rbBeltsCommand {};
 
+  UpdateIntakeOffsetUpCommand updateIntakeOffsetUp {};
+  UpdateIntakeOffsetDownCommand updateIntakeOffsetDown {};
+
   // Configurations for the joystick deadband and cubic function.
   jshelper::AxisConfig driveAxisConfig = jshelper::createAxisConfig(.1, 0, 0.5);
   jshelper::AxisConfig rotateAxisConfig = jshelper::createAxisConfig(0.1);
-
-  frc::DifferentialDriveOdometry odometry;
   
   void runButtons();
-  frc2::Command* getAutonomousCommand();
 };

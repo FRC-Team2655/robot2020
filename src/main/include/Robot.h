@@ -42,12 +42,16 @@ class Robot : public frc::TimedRobot {
 private:
   frc2::Command* autonomousCommand = nullptr;
 
+  #if COMPBOT
+  double kInP = 1.7; 
+  #else
   double kInP = 1.0; 
+  #endif
   double kInI = 0.0; 
   double kInD = 0.1;
-  double kOutP = 0.85;
+  double kOutP = 0.83;
   double kOutI = 0.0;
-  double kOutD = 0.001;
+  double kOutD = 0.005;
   double kLockP = 1.0;
   double kLockI = 0.001;
   double kLockD = 0.0;

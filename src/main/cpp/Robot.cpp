@@ -12,6 +12,7 @@
 #include <frc2/command/RunCommand.h>
 #include "commands/DriveDistanceCommand.h"
 #include "commands/RotateDegreesCommand.h"
+#include "commands/IntakeArmLockPIDCommand.h"
 
 DriveBaseSubsystem Robot::driveBase;
 OI Robot::oi;
@@ -41,11 +42,16 @@ void Robot::RobotInit() {
     frc::SmartDashboard::PutNumber("Auto Distance: ", autoDistance);
     frc::SmartDashboard::PutNumber("Encoder Auto P: ", penc);
     frc::SmartDashboard::PutNumber("Gyro Auto P: ", pgyro);
+    frc::SmartDashboard::PutNumber("Shooter P: ", shooter.kP);
+    frc::SmartDashboard::PutNumber("Shooter I: ", shooter.kI);
+    frc::SmartDashboard::PutNumber("Shooter D: ", shooter.kD);
+    frc::SmartDashboard::PutNumber("Shooter FF: ", shooter.kFF);
 
     shooter.setCoastMode();
     belts.setCoastMode();
     driveBase.setCoastMode();
     intake.setArmBrakeMode();
+    intake.setRollersCoastMode();
     intake.setRollersCoastMode();
 }
 
@@ -58,11 +64,7 @@ void Robot::RobotInit() {
  * LiveWindow and SmartDashboard integrated updating.
  */
 void Robot::RobotPeriodic() { 
-    if (intake.isIntakeLocked) {
-        intake.setLockPID();
-    }
-
-    static double lastTime = 0;
+    /*static double lastTime = 0;
     static int color = 0;
     if(frc::Timer::GetFPGATimestamp() > lastTime)
     {
@@ -72,9 +74,7 @@ void Robot::RobotPeriodic() {
             color = 0;
         lastTime = frc::Timer::GetFPGATimestamp() + 1;
         leds.setLEDColor((LEDSubsystem::LEDColors) color);
-    }
-
-    intake.setRollersCoastMode();
+    }*/
 
     frc::SmartDashboard::PutNumber("Left Current: ", driveBase.leftCurrent());
     frc::SmartDashboard::PutNumber("Right Current: ", driveBase.rightCurrent());
@@ -162,10 +162,22 @@ void Robot::RobotPeriodic() {
     if (frc::SmartDashboard::GetNumber("Gyro Auto P: ", 0) != pgyro) {
         pgyro = frc::SmartDashboard::GetNumber("Gyro Auto P: ", 0);
     }
-
+    if (frc::SmartDashboard::GetNumber("Shooter P: ", 0) != shooter.kP) {
+        shooter.kP = frc::SmartDashboard::GetNumber("Shooter P: ", 0);
+    }
+    if (frc::SmartDashboard::GetNumber("Shooter I: ", 0) != shooter.kI) {
+        shooter.kI = frc::SmartDashboard::GetNumber("Shooter I: ", 0);
+    }
+    if (frc::SmartDashboard::GetNumber("Shooter D: ", 0) != shooter.kD) {
+        shooter.kD = frc::SmartDashboard::GetNumber("Shooter D: ", 0);
+    }
+    if (frc::SmartDashboard::GetNumber("Shooter FF: ", 0) != shooter.kFF) {
+        shooter.kFF = frc::SmartDashboard::GetNumber("Shooter FF: ", 0);
+    }
     frc::SmartDashboard::PutNumber("Intake Arm Current: ", intake.intakeArmCurrent());
     frc::SmartDashboard::PutNumber("Intake Arm Position: ", intake.armPosition());
     frc::SmartDashboard::PutNumber("Intake Arm Percentage: ", intake.intakeMotorValue);
+    frc::SmartDashboard::PutNumber("Shooter Rate: ", shooter.getRPM());
 
     frc2::CommandScheduler::GetInstance().Run();
 }
@@ -200,12 +212,12 @@ void Robot::AutonomousInit() {
     /* schedule the command */
 
     /* Set up initial commands */
-    RotateDegreesCommand* rotateCommand = new RotateDegreesCommand(10);
+    //RotateDegreesCommand* rotateCommand = new RotateDegreesCommand(10);
 
     /* Sequential command for auto */
-    DriveDistanceCommand* autonCmd = new DriveDistanceCommand(autoDistance);
+    /*DriveDistanceCommand* autonCmd = new DriveDistanceCommand(autoDistance);
     autonCmd->P_gyro = pgyro;
-    autonCmd->P_encoders = penc;
+    autonCmd->P_encoders = penc;*/
     //autonCmd->Schedule();
 
     
@@ -233,6 +245,9 @@ void Robot::TeleopInit() {
  * This function is called periodically during operator control.
  */
 void Robot::TeleopPeriodic() {
+    if (intake.isIntakeLocked) {
+        intake.setLockPID();
+    }
 }
 
 /**

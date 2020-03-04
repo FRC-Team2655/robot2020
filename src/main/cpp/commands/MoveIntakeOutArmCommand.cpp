@@ -15,7 +15,10 @@ MoveIntakeOutArmCommand::MoveIntakeOutArmCommand(double position) : position(pos
 
 // Called when the command is initially scheduled.
 void MoveIntakeOutArmCommand::Initialize() {
+  Robot::intake.setArmCoastMode();
+
   Robot::intake.isIntakeLocked = false;
+  Robot::intake.isIntakeOut = true;
 
   Robot::intake.setCurrent40();
 
@@ -26,6 +29,7 @@ void MoveIntakeOutArmCommand::Initialize() {
 // Called repeatedly when this Command is scheduled to run
 void MoveIntakeOutArmCommand::Execute() {
   Robot::intake.moveArmOut();
+  std::cout << "Arm Out" << std::endl;
 }
 
 // Called once the command ends or is interrupted.
@@ -34,7 +38,7 @@ void MoveIntakeOutArmCommand::End(bool interrupted) {
 
   Robot::intake.setCurrent(armRestCurrent);
 
-  Robot::intake.isIntakeOut = true;
+  Robot::intake.setArmBrakeMode();
 }
 
 // Returns true when the command should end.

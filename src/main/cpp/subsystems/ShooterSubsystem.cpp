@@ -5,6 +5,11 @@ using IdleMode = rev::CANSparkMax::IdleMode;
 using NeutralMode = ctre::phoenix::motorcontrol::NeutralMode;
 
 ShooterSubsystem::ShooterSubsystem() {
+    #if COMPBOT
+    shooter1.SetInverted(true);
+    #else
+    shooter1.SetInverted(false);
+    #endif
     shooter2.Follow(shooter1, true);
 
     shooter1.SetSmartCurrentLimit(65);

@@ -28,6 +28,9 @@ const int BeltRight = 14;
 const int BeltBottom = 13;
 
 const int RollerShooters = 16;
+
+const int ClimbMotor1 = 9;
+const int ClimbMotor2 = 10;
 #else
 const int LMaster = 1;
 const int LSlave1 = 2;
@@ -51,9 +54,28 @@ const int BeltBottom = 12;
 const int RollerShooters = 14;
 #endif
 
+
+#if COMPBOT
+const double MaxVelocity = 5500;    // This is capped at the slowest velocity on ANY robot to ensure that paths work the same
+const double LMaxVelocity = 5600.0;
+const double RMaxVelocity = 6000.0;
+const double ShooterVelocity = 5100.0;
+
+const double rollersSpeed = 0.55;
+const double kickerSpeed = 0.35;
+const double beltsSpeed = 0.7;
+const double bottomBeltSpeed = 0.7;
+#else
 const double MaxVelocity = 5500;    // This is capped at the slowest velocity on ANY robot to ensure that paths work the same
 const double LMaxVelocity = 5850.0;
 const double RMaxVelocity = 5800.0;
+const double ShooterVelocity = 5200.0;
+
+const double rollersSpeed = 0.7;
+const double kickerSpeed = 0.35;
+const double beltsSpeed = 0.7;
+const double bottomBeltSpeed = 0.7;
+#endif
 
 const double DriveRampRate = 0.23;  // Minimum time (sec) to go from 0 to full
 
@@ -64,32 +86,29 @@ const int REncA = 2;
 const int REncB = 3;
 const int IntakePWM = 4;
 const int LEDPWMPort = 9;
+
+const int proximitySensorTopChannel = 7;
+const int proximitySensorMiddleChannel = 8;
+const int proximitySensorBottomChannel = 9;
 #else
 const int LEncA = 5;
 const int LEncB = 0;
 const int REncA = 1;
 const int REncB = 2;
 const int IntakePWM = 4;
+
+const int proximitySensorTopChannel = 7;
+const int proximitySensorMiddleChannel = 9;
+const int proximitySensorBottomChannel = 8;
 #endif
 
 const double incrementShooterSpeed = 0.05;
 const double maxShooterSpeed = 0.9;
 
-const int ShooterVelocity = 5200;     //5200
-
 const double intakeInPosition = 0;
 const double intakeOutPosition = -0.7;
 
 const double armTolerance = 0.006;
-
-const int proximitySensorTopChannel = 7;
-const int proximitySensorMiddleChannel = 9;
-const int proximitySensorBottomChannel = 8;
-
-const double beltsSpeed = 0.7;
-const double kickerSpeed = 0.35;
-const double bottomBeltSpeed = 0.7;
-const double rollersSpeed = 0.7;
 
 const int GearRatio = 0.25;
 

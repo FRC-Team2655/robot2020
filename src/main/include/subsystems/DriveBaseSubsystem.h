@@ -61,7 +61,9 @@ class DriveBaseSubsystem : public frc2::SubsystemBase {
 
   void tankDriveVolts(units::volt_t left, units::volt_t right);
 
-  double kPLeft, kPRight, kILeft, kIRight;
+  double kPLeft = 1e-4;
+  double kPRight = 1e-4; 
+  double kILeft, kIRight;
 
   rev::CANPIDController leftPID = leftMaster.GetPIDController();
   rev::CANPIDController rightPID = rightMaster.GetPIDController();

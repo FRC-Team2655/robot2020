@@ -40,11 +40,16 @@ class BeltsSubsystem : public frc2::SubsystemBase {
   bool shouldRunBelts = true;
 
  private:
-  WPI_VictorSPX kicker {KickerID};
-
   WPI_TalonSRX leftBelt {BeltLeft};
   WPI_TalonSRX rightBelt {BeltRight};
+
+  #if COMPBOT
+  WPI_TalonSRX bottomBelt {BeltBottom};
+  WPI_TalonSRX kicker {KickerID};
+  #else
   WPI_VictorSPX bottomBelt {BeltBottom};
+  WPI_VictorSPX kicker {KickerID};
+  #endif
 
   frc::DigitalInput proximSensorTop {proximitySensorTopChannel};
   frc::DigitalInput proximSensorMiddle {proximitySensorMiddleChannel};

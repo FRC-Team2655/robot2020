@@ -30,6 +30,18 @@ class ShooterSubsystem : public frc2::SubsystemBase {
 
   rev::CANPIDController shooter1PID = shooter1.GetPIDController();
 
+  #if COMPBOT
+  double kP = 0.00001; 
+  double kI = 0; 
+  double kD = 0; 
+  double kFF = 0.0005;
+  #else
+  double kP = 0.0000001; 
+  double kI = 0; 
+  double kD = 0; 
+  double kFF = 0.000176;
+  #endif
+
  private:
   rev::CANSparkMax shooter1 {Shooter1ID, MotorType::kBrushless};
   rev::CANSparkMax shooter2 {Shooter2ID, MotorType::kBrushless};
@@ -38,10 +50,6 @@ class ShooterSubsystem : public frc2::SubsystemBase {
 
   double shooterSpeed;
 
-  double kP = 0.0000001; 
-  double kI = 0; 
-  double kD = 0; 
-  double kFF = 0.000176;
   double kIz = 0;
   double kMax = 1;
   double kMin = 0;

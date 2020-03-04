@@ -10,8 +10,12 @@
 using NeutralMode = ctre::phoenix::motorcontrol::NeutralMode;
 
 BeltsSubsystem::BeltsSubsystem() {
-    leftBelt.SetInverted(true);
+    #if COMPBOT
+    bottomBelt.SetInverted(false);
+    #else
     bottomBelt.SetInverted(true);
+    #endif
+    leftBelt.SetInverted(true);
 }
 
 void BeltsSubsystem::Periodic() {}
@@ -22,14 +26,14 @@ void BeltsSubsystem::runBelts(double speed, bool useProximitySensor) {
             runBeltsSpeeds(0, 0, 0);
             shouldRunBelts = false;
         }else if (isProximSensorMiddleTriggered() && !isProximSensorBottomTriggered()) {
-            runBeltsSpeeds(beltsSpeed, beltsSpeed, 0);
+            runBeltsSpeeds(beltsSpeed, bottomBeltSpeed, 0);
         }else if (isProximSensorMiddleTriggered() && isProximSensorBottomTriggered()) {
             runBeltsSpeeds(0, bottomBeltSpeed, kickerSpeed);
         }else{
-            runBeltsSpeeds(beltsSpeed, beltsSpeed, beltsSpeed);
+            runBeltsSpeeds(beltsSpeed, bottomBeltSpeed, kickerSpeed);
         }
     }else{
-        runBeltsSpeeds(beltsSpeed, beltsSpeed, beltsSpeed);
+        runBeltsSpeeds(beltsSpeed, bottomBeltSpeed, kickerSpeed);
     }
 }
 

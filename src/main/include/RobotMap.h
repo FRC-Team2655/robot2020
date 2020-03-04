@@ -43,6 +43,9 @@ const extern int IntakePWM;
 const extern int Shooter1ID;
 const extern int Shooter2ID;
 
+const extern int ClimbMotor1;
+const extern int ClimbMotor2;
+
 const extern double incrementShooterSpeed;
 const extern double maxShooterSpeed;
 
@@ -56,7 +59,7 @@ const extern int RollerShooters;
 
 const extern int IntakeArm;
 
-const extern int ShooterVelocity;
+const extern double ShooterVelocity;
 
 const extern double intakeInPosition;
 const extern double intakeOutPosition;

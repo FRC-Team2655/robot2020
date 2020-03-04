@@ -26,6 +26,7 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   void stopArm();
   void setRollersCoastMode();
   void setArmBrakeMode();
+  void setArmCoastMode();
 
   void moveArmIn();
   void moveArmOut();
@@ -34,6 +35,7 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   double armPosition();
 
   void updateOffset();
+  void updateOffsetDown();
 
   void setCurrent(double current);
   void setCurrent40();
@@ -48,15 +50,22 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   void Periodic();
 
   double kVelocity_;
-  frc2::PIDController intakeInPID {1.0, 0, 0.1};
-  frc2::PIDController intakeOutPID {0.85, 0, 0.001};
+
+  #if COMPBOT
+  double kP_ = 1.7;
+  #else
+  double kP_ = 1.0;
+  #endif
+
+  frc2::PIDController intakeInPID {kP_, 0, 0.1};
+  frc2::PIDController intakeOutPID {0.83, 0, 0.005};
   frc2::PIDController intakeLockPID {1.0, 0.001, 0};
   
   double intakePositionOffset;
   double intakeMotorValue = 0;
 
   bool isIntakeOut = false;
-  bool isIntakeLocked = false;
+  bool isIntakeLocked = true;
 private:
   WPI_TalonSRX intakeRollers {RollerShooters};
   rev::CANSparkMax intakeArm {IntakeArm, MotorType::kBrushless};
