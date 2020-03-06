@@ -57,9 +57,9 @@ const int RollerShooters = 14;
 
 #if COMPBOT
 const double MaxVelocity = 5500;    // This is capped at the slowest velocity on ANY robot to ensure that paths work the same
-const double LMaxVelocity = 5600.0;
-const double RMaxVelocity = 6000.0;
-const double ShooterVelocity = 5100.0;
+const double LMaxVelocity = 5400.0;
+const double RMaxVelocity = 5800.0;
+const double ShooterVelocity = 4900.0;
 
 const double rollersSpeed = 0.55;
 const double kickerSpeed = 0.35;

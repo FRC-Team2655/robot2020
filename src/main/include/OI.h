@@ -33,13 +33,19 @@ class OI {
 public:
   OI();
   frc::Joystick *js0;
+  frc::Joystick *js1;
   frc2::JoystickButton *xBtn;
+  frc2::JoystickButton *xBtn1;
   frc2::JoystickButton *squareBtn;  
   frc2::JoystickButton *triangleBtn;
+  frc2::JoystickButton *triangleBtn1;
   frc2::JoystickButton *circleBtn;
   frc2::JoystickButton *l2Btn;
+  frc2::JoystickButton *l2Btn1;
   frc2::JoystickButton *r2Btn;
+  frc2::JoystickButton *r2Btn1;
   frc2::JoystickButton *r1Btn;
+  frc2::JoystickButton *r1Btn1;
   frc2::JoystickButton *shareBtn;
   frc2::JoystickButton *optionsBtn;
  

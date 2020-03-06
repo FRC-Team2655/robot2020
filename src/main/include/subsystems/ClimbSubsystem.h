@@ -21,5 +21,5 @@ class ClimbSubsystem : public frc2::SubsystemBase {
 
  private:
   rev::CANSparkMax climMotor1 {ClimbMotor1, MotorType::kBrushless};
-  rev::CANSparkMax climbMotor2 {ClimbMotor2, MotorType::kBrushless};
+  //rev::CANSparkMax climbMotor2 {ClimbMotor2, MotorType::kBrushless};
 };

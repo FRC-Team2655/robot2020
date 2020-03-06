@@ -39,6 +39,7 @@ class Robot : public frc::TimedRobot {
   void TestPeriodic() override;
 
   double autoDistance;
+  double autoDegrees;
 private:
   frc2::Command* autonomousCommand = nullptr;
 

@@ -34,7 +34,7 @@ class DriveDistanceCommand
   double P_encoders = 100.0;
 
   /* P term for P feedback loop from gyro for angle correction */
-  double P_gyro = 10.0;
+  double P_gyro = 85.0;
 
   /* Angle read from current axis of interest on the gyro */
   double gyroAngle;
@@ -56,7 +56,7 @@ private:
   /* min speed during movement. In units of motor RPM (0 - 5800) */
   double minSpeed = 1000;
   /* Amount to step up speed per iteration when accelerating */
-  double speedStep = 100;
+  double speedStep = 85;
   /* distance to start ramp down PID (meters) */
   double rampDownDistance = 1.0;
   /* travel direction */

@@ -13,6 +13,11 @@
 #include "commands/DriveDistanceCommand.h"
 #include "commands/RotateDegreesCommand.h"
 #include "commands/IntakeArmLockPIDCommand.h"
+#include "commands/DelayMillisecondsCommand.h"
+#include <frc2/command/SequentialCommandGroup.h>
+#include <frc2/command/ParallelRaceGroup.h>
+#include "commands/RunShooterVelocityCommand.h"
+#include "commands/RunBeltsCommand.h"
 
 DriveBaseSubsystem Robot::driveBase;
 OI Robot::oi;
@@ -21,7 +26,7 @@ IntakeSubsystem Robot::intake;
 BeltsSubsystem Robot::belts;
 LEDSubsystem Robot::leds;
 
-double penc, pgyro;
+double penc, pgyro, rotatePGyro;
 
 void Robot::RobotInit() {
     frc::SmartDashboard::PutBoolean("Reset Encoders", false);
@@ -42,10 +47,12 @@ void Robot::RobotInit() {
     frc::SmartDashboard::PutNumber("Auto Distance: ", autoDistance);
     frc::SmartDashboard::PutNumber("Encoder Auto P: ", penc);
     frc::SmartDashboard::PutNumber("Gyro Auto P: ", pgyro);
+    frc::SmartDashboard::PutNumber("Rotate Gyro P: ", rotatePGyro);
     frc::SmartDashboard::PutNumber("Shooter P: ", shooter.kP);
     frc::SmartDashboard::PutNumber("Shooter I: ", shooter.kI);
     frc::SmartDashboard::PutNumber("Shooter D: ", shooter.kD);
     frc::SmartDashboard::PutNumber("Shooter FF: ", shooter.kFF);
+    frc::SmartDashboard::PutNumber("Auto Degrees: ", autoDegrees);
 
     shooter.setCoastMode();
     belts.setCoastMode();
@@ -162,6 +169,9 @@ void Robot::RobotPeriodic() {
     if (frc::SmartDashboard::GetNumber("Gyro Auto P: ", 0) != pgyro) {
         pgyro = frc::SmartDashboard::GetNumber("Gyro Auto P: ", 0);
     }
+    if (frc::SmartDashboard::GetNumber("Rotate Gyro P: ", 0) != rotatePGyro) {
+        rotatePGyro = frc::SmartDashboard::GetNumber("Rotate Gyro P: ", 0);
+    }
     if (frc::SmartDashboard::GetNumber("Shooter P: ", 0) != shooter.kP) {
         shooter.kP = frc::SmartDashboard::GetNumber("Shooter P: ", 0);
     }
@@ -173,6 +183,9 @@ void Robot::RobotPeriodic() {
     }
     if (frc::SmartDashboard::GetNumber("Shooter FF: ", 0) != shooter.kFF) {
         shooter.kFF = frc::SmartDashboard::GetNumber("Shooter FF: ", 0);
+    }
+    if (frc::SmartDashboard::GetNumber("Auto Degrees: ", 0) != autoDegrees) {
+        autoDegrees = frc::SmartDashboard::GetNumber("Auto Degrees: ", 0);
     }
     frc::SmartDashboard::PutNumber("Intake Arm Current: ", intake.intakeArmCurrent());
     frc::SmartDashboard::PutNumber("Intake Arm Position: ", intake.armPosition());
@@ -193,6 +206,7 @@ void Robot::DisabledInit() {
 }
 
 void Robot::DisabledPeriodic() {
+    leds.setLEDColor(LEDSubsystem::LEDColors::BlueViolet);
 }
 
 /**
@@ -212,32 +226,27 @@ void Robot::AutonomousInit() {
     /* schedule the command */
 
     /* Set up initial commands */
-    //RotateDegreesCommand* rotateCommand = new RotateDegreesCommand(10);
+    RotateDegreesCommand* rotateCommand = new RotateDegreesCommand(autoDegrees);
+    rotateCommand->P_gyro = rotatePGyro;
+    //rotateCommand->Schedule();
 
     /* Sequential command for auto */
-    /*DriveDistanceCommand* autonCmd = new DriveDistanceCommand(autoDistance);
+    DriveDistanceCommand* autonCmd = new DriveDistanceCommand(autoDistance);
     autonCmd->P_gyro = pgyro;
-    autonCmd->P_encoders = penc;*/
+    autonCmd->P_encoders = penc;
     //autonCmd->Schedule();
 
-    
-
-   /*autonomousCommand = oi.getAutonomousCommand();
-
-    if (autonomousCommand != nullptr) {
-        autonomousCommand->Schedule();
-    }*/
+    frc2::SequentialCommandGroup* autoStraightCmd = new frc2::SequentialCommandGroup(
+            frc2::ParallelRaceGroup(DriveDistanceCommand(2.95), RunShooterVelocityCommand()),
+            frc2::ParallelRaceGroup(RunShooterVelocityCommand(), RunBeltsCommand(beltsSpeed), DelayMillisecondsCommand(4000)),
+            DriveDistanceCommand(-2.95));
+    autoStraightCmd->Schedule();
 }
 
 void Robot::AutonomousPeriodic() {
 }
 
 void Robot::TeleopInit() {
-    /*if (autonomousCommand != nullptr) {
-        autonomousCommand->Cancel();
-        autonomousCommand = nullptr;
-    }*/
-
     driveBase.setCoastMode();
 }
 
@@ -247,6 +256,40 @@ void Robot::TeleopInit() {
 void Robot::TeleopPeriodic() {
     if (intake.isIntakeLocked) {
         intake.setLockPID();
+    }
+
+
+    ////////LED Control//////////////
+
+    // Shooter not running
+    if (!shooter.isShooterRunning) {
+        // Intake in
+        if (!intake.isIntakeOut) {
+            leds.setLEDColor(LEDSubsystem::LEDColors::Black);
+        // Intake out
+        }else{
+            leds.setLEDColor(LEDSubsystem::LEDColors::Red);
+        }
+
+    // Shooter ramping up
+    }else if (!shooter.isShooterAtMax && shooter.isShooterRunning) {
+        // Intake in
+        if (!intake.isIntakeOut) {
+            leds.setLEDColor(LEDSubsystem::LEDColors::Yellow);
+        // Intake out
+        }else{
+            leds.setDualColorMode();
+        }
+
+    // Shooter at max speed
+    }else if (shooter.isShooterAtMax) {
+        // Intake in
+        if (!intake.isIntakeOut) {
+            leds.setLEDColor(LEDSubsystem::LEDColors::Green);
+        // Intake out
+        }else{
+            leds.setLEDColor(LEDSubsystem::LEDColors::Blue);
+        }
     }
 }
 

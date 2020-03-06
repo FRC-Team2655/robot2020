@@ -37,7 +37,7 @@ void RotateDegreesCommand::Initialize() {
     turnRight = false;
 
   /* Init the current RPM value to min */
-  currentSpeed = minMotorRPM;
+  currentSpeed = minSpeed;
 }
 
 // Called repeatedly when this Command is scheduled to run
@@ -60,7 +60,7 @@ void RotateDegreesCommand::Execute() {
   }
   else
   {
-    if(currentSpeed < maxMotorRPM)
+    if(currentSpeed < maxSpeed)
     {
       /* Ramp up motor speed */
       currentSpeed += rampUpIncrement;
@@ -68,21 +68,29 @@ void RotateDegreesCommand::Execute() {
     else
     {
       /* Cap at max */
-      currentSpeed = maxMotorRPM;
+      currentSpeed = maxSpeed;
     }
   }
 
   /* Apply speed clamping */
-  if(currentSpeed < minMotorRPM)
-    currentSpeed = minMotorRPM;
-  if(currentSpeed > maxMotorRPM)
-    currentSpeed = maxMotorRPM;
+  if(currentSpeed < minSpeed)
+    currentSpeed = minSpeed;
+  if(currentSpeed > maxSpeed)
+    currentSpeed = maxSpeed;
+
+  std::cout << "Current Speed: " << currentSpeed << " Remaining Angle: " << remainingAngle << std::endl;
 
   /* Apply the current speed value to motors */
   if(turnRight)
-      Robot::driveBase.driveTankVelocity(currentSpeed, -currentSpeed);
+  {
+    std::cout << "right" << std::endl;
+    Robot::driveBase.driveTankPercentage(currentSpeed, -currentSpeed);
+  }
   else
-    Robot::driveBase.driveTankVelocity(-currentSpeed, currentSpeed);
+  {
+    std::cout << "left" << std::endl;
+    Robot::driveBase.driveTankPercentage(-currentSpeed, currentSpeed);
+  }
 }
 
 // Called once the command ends or is interrupted.

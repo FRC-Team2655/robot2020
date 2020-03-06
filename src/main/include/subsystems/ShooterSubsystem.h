@@ -42,6 +42,9 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   double kFF = 0.000176;
   #endif
 
+  bool isShooterAtMax = false;
+  bool isShooterRunning = false;
+
  private:
   rev::CANSparkMax shooter1 {Shooter1ID, MotorType::kBrushless};
   rev::CANSparkMax shooter2 {Shooter2ID, MotorType::kBrushless};

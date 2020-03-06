@@ -154,11 +154,19 @@ void DriveBaseSubsystem::setCoastMode() {
 }
 
 double DriveBaseSubsystem::getLeftEncoderRotations() {
+	#if COMPBOT
+	return (-1 * (leftAutoEncoder.GetRaw() / 8192.0));
+	#else
 	return (leftAutoEncoder.GetRaw() / 8192.0);
+	#endif
 }
 
 double DriveBaseSubsystem::getRightEncoderRotations() {
+	#if COMPBOT
+	return (rightAutoEncoder.GetRaw() / 8192.0);
+	#else
 	return (-1 * (rightAutoEncoder.GetRaw() / 8192.0));
+	#endif
 }
 
 double DriveBaseSubsystem::getRightEncoderRate() {

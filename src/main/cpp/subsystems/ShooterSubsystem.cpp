@@ -23,7 +23,18 @@ ShooterSubsystem::ShooterSubsystem() {
     shooter1PID.SetOutputRange(kMin, kMax);
 }
 
-void ShooterSubsystem::Periodic() {}
+void ShooterSubsystem::Periodic() {
+    if ((getRPM() <= ShooterVelocity) && (getRPM() <= 0)) {
+        isShooterAtMax = false;
+        isShooterRunning = false;
+    }else if ((getRPM() <= ShooterVelocity) && (getRPM() > 0)) {
+        isShooterAtMax = false;
+        isShooterRunning = true;
+    }else{
+        isShooterAtMax = true;
+        isShooterRunning = true;
+    }
+}
 
 void ShooterSubsystem::runShooterPercentage(double startingSpeed) {
     if (shooterSpeed < startingSpeed) {
