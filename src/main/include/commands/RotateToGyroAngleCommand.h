@@ -30,9 +30,8 @@ class RotateToGyroAngleCommand
   void End(bool interrupted) override;
 
   bool IsFinished() override;
-
-  double initialGyroAngle;
+  
   double TargetAngle;
 
-  //RotateDegreesCommand baseCmd;
+  RotateDegreesCommand baseCmd {0};
 };
