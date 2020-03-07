@@ -30,14 +30,14 @@ class RotateDegreesCommand
 
   bool IsFinished() override;
 
-  /* Maximum speed to run at while turning (motor rpm) */
-  double maxSpeed = 0.3;
-  /* Minimum speed to run while turning (motor rpm) */
+  /* Maximum speed to run at while turning (motor perent) */
+  double maxSpeed = 0.25;
+  /* Minimum speed to run while turning (motor percent) */
   double minSpeed = 0.05;
   /* delta from target angle at which to start ramp down (degrees) */
   double rampdownStartAngle = 15;
   /* P term for gyro feedback while ramping down */
-  double P_gyro = 0.01;
+  double P_gyro = 0.09;
   /* ramp up increment */
   double rampUpIncrement = 0.01;
 private:

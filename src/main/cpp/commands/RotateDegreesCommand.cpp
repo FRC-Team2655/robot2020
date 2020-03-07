@@ -77,18 +77,31 @@ void RotateDegreesCommand::Execute() {
     currentSpeed = minSpeed;
   if(currentSpeed > maxSpeed)
     currentSpeed = maxSpeed;
+  
+  /* Change direction (if needed) */
+  if(turnRight)
+  {
+    /* Negative angle provided */
+    if(currentAngle < targetAngle)
+      turnRight = false;
+  }
+  else
+  {
+    /* Positive angle provided */
+    if( currentAngle > targetAngle)
+      turnRight = true;
+  }
+  
 
-  std::cout << "Current Speed: " << currentSpeed << " Remaining Angle: " << remainingAngle << std::endl;
+  std::cout << "Current Speed: " << currentSpeed << " Remaining Angle: " << remainingAngle << "Turning Right: " << turnRight << std::endl;
 
   /* Apply the current speed value to motors */
   if(turnRight)
   {
-    std::cout << "right" << std::endl;
     Robot::driveBase.driveTankPercentage(currentSpeed, -currentSpeed);
   }
   else
   {
-    std::cout << "left" << std::endl;
     Robot::driveBase.driveTankPercentage(-currentSpeed, currentSpeed);
   }
 }
@@ -100,8 +113,7 @@ void RotateDegreesCommand::End(bool interrupted) {
 
 // Returns true when the command should end.
 bool RotateDegreesCommand::IsFinished() {
-  if(turnRight) /* negative angle */
-    return (currentAngle <= targetAngle);
-  else /* Postive angle */
-    return (currentAngle >= targetAngle);
+  /* Get the error */
+  double angleError = std::abs(currentAngle - targetAngle);
+  return (angleError < 1.0);
 }
