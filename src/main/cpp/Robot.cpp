@@ -17,6 +17,8 @@
 #include "commands/RunShooterVelocityCommand.h"
 #include "commands/RunBeltsCommand.h"
 
+#include <iostream>
+
 DriveBaseSubsystem Robot::driveBase;
 OI Robot::oi;
 ShooterSubsystem Robot::shooter;
@@ -26,8 +28,10 @@ LEDSubsystem Robot::leds;
 AutonomousRoutines Robot::autoRoutines;
 
 void Robot::RobotInit() {
-    autoChooser.SetDefaultOption("Shoot Preloads Center", 0);
+    autoChooser.SetDefaultOption("No Auto", -1);
+    autoChooser.AddOption("Shoot Preloads Center", 0);
     autoChooser.AddOption("Test Auto Routine", 1);
+    autoChooser.AddOption("5 Ball Auto", 2);
 
     /* Apply auto chooser to smart dash*/
     frc::SmartDashboard::PutData("Choose Auto: ", &autoChooser);
@@ -60,6 +64,7 @@ void Robot::RobotInit() {
     frc::SmartDashboard::PutNumber("Shooter I: ", shooter.kI);
     frc::SmartDashboard::PutNumber("Shooter D: ", shooter.kD);
     frc::SmartDashboard::PutNumber("Shooter FF: ", shooter.kFF);
+    frc::SmartDashboard::PutNumber("Simple Auto Buddy: ", buddyDrive);
 
     shooter.setCoastMode();
     belts.setCoastMode();
@@ -181,6 +186,8 @@ void Robot::RobotPeriodic() {
     autoDegrees = frc::SmartDashboard::GetNumber("Auto Degrees: ", 0);
     preloadStartOffset = frc::SmartDashboard::GetNumber("Preload Auto Offset (inches): ", 0);
     rotatePGyro = frc::SmartDashboard::GetNumber("Rotate Gyro P: ", 0);
+    frc::SmartDashboard::PutData("Choose Auto: ", &autoChooser);
+    buddyDrive = frc::SmartDashboard::GetNumber("Simple Auto Buddy: ", 0);
 
     frc2::CommandScheduler::GetInstance().Run();
 }
@@ -225,14 +232,24 @@ void Robot::AutonomousInit() {
 
     /* Choose auto routine based on the index */
     switch(index) {
+        case -1:
+            autonomousCommand = nullptr;
+            break;
         case 0:
-            autonomousCommand = autoRoutines.ShootPreloads(0, 0);
+            if (buddyDrive == 0) {
+                autonomousCommand = autoRoutines.ShootPreloads(0, 0, false);
+            }else{
+                autonomousCommand = autoRoutines.ShootPreloads(0, 0, true);
+            }
             break;
         case 1:
             autonomousCommand = autoRoutines.TestAuto(autoDistance, autoDegrees);
             break;
+        case 2:
+            autonomousCommand = autoRoutines.PickupFromTrechAndShoot(driveBase.getIMUAngle());
+            break;
         default:
-            autonomousCommand = autoRoutines.ShootPreloads(0, 0);
+            autonomousCommand = nullptr;
             break;
     }
 
@@ -294,6 +311,8 @@ void Robot::TeleopPeriodic() {
             leds.setLEDColor(LEDSubsystem::LEDColors::Blue);
         }
     }
+
+    std::cout << "Intake out: " << intake.isIntakeOut << std::endl;
 }
 
 /**

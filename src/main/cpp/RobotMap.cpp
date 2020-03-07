@@ -106,7 +106,7 @@ const double incrementShooterSpeed = 0.05;
 const double maxShooterSpeed = 0.9;
 
 const double intakeInPosition = 0;
-const double intakeOutPosition = -0.7;
+const double intakeOutPosition = -0.27;
 
 const double armTolerance = 0.006;
 

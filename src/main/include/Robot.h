@@ -49,6 +49,7 @@ private:
   double preloadStartOffset = 0;
   double autoStartDelayMs = 0;
   double penc, pgyro, rotatePGyro;
+  int buddyDrive = 0;
 
   #if COMPBOT
   double kInP = 1.7; 

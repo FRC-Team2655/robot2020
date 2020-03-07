@@ -17,8 +17,11 @@ frc2::Command* AutonomousRoutines::PickupFromTrechAndShoot(double gyroStartAngle
     Distance: 78 + 36 + 36 + 12 - 27 = 135 inches (3.43m) */
     routine->AddCommands(frc2::ParallelRaceGroup(RunIntakeRollersCommand(rollersSpeed), DriveDistanceCommand(3.43, 1500)));
 
+    /* Half second delay for balls to settle */
+    routine->AddCommands(DelayMillisecondsCommand(500));
+    
     /* Bring intake in */
-    routine->AddCommands(MoveIntakeInArmCommand(intakeInPosition));
+    routine->AddCommands(frc2::ParallelRaceGroup(MoveIntakeInArmCommand(intakeInPosition), DelayMillisecondsCommand(1500)));
 
     /* Rotate to point where robot *should* end up 1.5 meters from goal */
     routine->AddCommands(RotateDegreesCommand(-164.6));
@@ -30,7 +33,7 @@ frc2::Command* AutonomousRoutines::PickupFromTrechAndShoot(double gyroStartAngle
     routine->AddCommands(RotateToGyroAngleCommand(gyroStartAngle + 180));
 
     /* Drive 1.7m while revving shooter (want to bump wall) */
-    routine->AddCommands(frc2::ParallelRaceGroup(DriveDistanceCommand(1.7), RunShooterVelocityCommand()));
+    routine->AddCommands(frc2::ParallelRaceGroup(DriveDistanceCommand(1.7), RunShooterVelocityCommand(), DelayMillisecondsCommand(2000)));
 
     /* Run belts while running shooter wheel */
     routine->AddCommands(frc2::ParallelRaceGroup(RunShooterVelocityCommand(), RunBeltsCommand(beltsSpeed), DelayMillisecondsCommand(5000)));
@@ -38,16 +41,24 @@ frc2::Command* AutonomousRoutines::PickupFromTrechAndShoot(double gyroStartAngle
     /* Back up to the start line */
     routine->AddCommands(DriveDistanceCommand(-2.95));
 
+    /* Turn 180 */
+    routine->AddCommands(RotateDegreesCommand(180));
+
     return routine;
 }
 
-frc2::Command* AutonomousRoutines::ShootPreloads(double goalOffsetMeters, double startDelayMs)
+frc2::Command* AutonomousRoutines::ShootPreloads(double goalOffsetMeters, double startDelayMs, bool buddyDrive)
 {
     /* Create the base sequential command group */
     frc2::SequentialCommandGroup* routine = new frc2::SequentialCommandGroup();
 
     /* straight distance to drive (meters) */
     double straightDriveDist = 2.36;
+
+    if (buddyDrive) {
+        routine->AddCommands(frc2::ParallelRaceGroup(DriveDistanceCommand(-0.6), DelayMillisecondsCommand(4000)));
+        straightDriveDist += 0.6;
+    }
 
     /* add start delay */
     if(startDelayMs > 0)
@@ -66,13 +77,16 @@ frc2::Command* AutonomousRoutines::ShootPreloads(double goalOffsetMeters, double
     }
 
     /* Drive remainder of distance to goal while ramping shooter wheel */
-    routine->AddCommands(frc2::ParallelRaceGroup(DriveDistanceCommand(straightDriveDist), RunShooterVelocityCommand()));
+    routine->AddCommands(frc2::ParallelRaceGroup(DriveDistanceCommand(straightDriveDist), RunShooterVelocityCommand(), DelayMillisecondsCommand(5000)));
 
     /* Run belts while running shooter wheel */
     routine->AddCommands(frc2::ParallelRaceGroup(RunShooterVelocityCommand(), RunBeltsCommand(beltsSpeed), DelayMillisecondsCommand(5000)));
 
     /* Back up to the start line */
-    routine->AddCommands(DriveDistanceCommand(-2.95));
+    routine->AddCommands(DriveDistanceCommand(-2.36));
+
+    /*Rotate so were facing the right way*/
+    routine->AddCommands(RotateDegreesCommand(180));
 
     return routine;
 }

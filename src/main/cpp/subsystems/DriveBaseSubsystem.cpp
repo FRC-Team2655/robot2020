@@ -47,7 +47,11 @@ DriveBaseSubsystem::DriveBaseSubsystem() {
 
 
   leftMaster.BurnFlash();
+  leftSlave1.BurnFlash();
+  leftSlave2.BurnFlash();
   rightMaster.BurnFlash();
+  rightSlave1.BurnFlash();
+  rightSlave2.BurnFlash();
 
   SetDefaultCommand(driveJoystick);
 
@@ -70,9 +74,9 @@ void DriveBaseSubsystem::drivePercentage(double speed, double rotation){
 }
 
 void DriveBaseSubsystem::driveTankPercentage(double leftPercentage, double rightPercentage) {
-	leftMaster.Set(leftPercentage);
-	leftSlave1.Set(leftPercentage);
-	leftSlave2.Set(leftPercentage);
+	leftMaster.Set(-leftPercentage);
+	leftSlave1.Set(-leftPercentage);
+	leftSlave2.Set(-leftPercentage);
 
 	rightMaster.Set(-rightPercentage);
 	rightSlave1.Set(-rightPercentage);
@@ -126,7 +130,7 @@ void DriveBaseSubsystem::driveTankVelocity(double lVel, double rVel) {
 		leftMaster.Set(0);
 	}else {
 		// Drive the left side in velocity closed loop mode (set pid reference = setpoint for PID)
-		leftPID.SetReference(lVel, rev::ControlType::kVelocity);
+		leftPID.SetReference(-lVel, rev::ControlType::kVelocity);
 	}
 
 	if (rVel == 0) {

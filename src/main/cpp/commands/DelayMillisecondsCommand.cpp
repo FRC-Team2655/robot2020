@@ -25,7 +25,10 @@ void DelayMillisecondsCommand::Execute() {
 }
 
 // Called once the command ends or is interrupted.
-void DelayMillisecondsCommand::End(bool interrupted) {}
+void DelayMillisecondsCommand::End(bool interrupted) {
+  if (currentTime >= stopTime)
+    std::cout << "Exited DelayMillisecondsCommand due to timeout" << std::endl;
+}
 
 // Returns true when the command should end.
 bool DelayMillisecondsCommand::IsFinished() {

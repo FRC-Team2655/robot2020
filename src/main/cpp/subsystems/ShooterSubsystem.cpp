@@ -21,6 +21,9 @@ ShooterSubsystem::ShooterSubsystem() {
     shooter1PID.SetFF(kFF);
     shooter1PID.SetIZone(kIz);
     shooter1PID.SetOutputRange(kMin, kMax);
+
+    shooter1.BurnFlash();
+    shooter2.BurnFlash();
 }
 
 void ShooterSubsystem::Periodic() {
