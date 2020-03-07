@@ -33,12 +33,12 @@ void OI::runButtons() {
   r2Btn1->WhileHeld(rsVelocityCommand);
   triangleBtn->WhileHeld(invertrbCommand);
   shareBtn->WhenPressed(updateIntakeOffsetUp);
-  xBtn1->WhenPressed(updateIntakeOffsetUp);
-  triangleBtn1->WhenPressed(updateIntakeOffsetDown);
+  xBtn1->WhenPressed(updateIntakeOffsetDown);
+  triangleBtn1->WhenPressed(updateIntakeOffsetUp);
   optionsBtn->WhenPressed(updateIntakeOffsetDown);
 
   r1Btn->WhileHeld(riRollersCommand);
   r1Btn1->WhileHeld(riRollersCommand);
-  circleBtn->WhenPressed(frc2::SequentialCommandGroup(MoveIntakeOutArmCommand(-0.3), RunBeltsBackgroundCommand(0.5)), true);
+  circleBtn->WhenPressed(frc2::SequentialCommandGroup(MoveIntakeOutArmCommand(-0.26), RunBeltsBackgroundCommand(0.5)), true);
   squareBtn->WhenPressed(frc2::SequentialCommandGroup(MoveIntakeInArmCommand(0), IntakeArmLockPIDCommand()), true);
 }
