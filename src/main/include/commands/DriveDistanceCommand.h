@@ -20,6 +20,7 @@
 class DriveDistanceCommand
     : public frc2::CommandHelper<frc2::CommandBase, DriveDistanceCommand> {
  public:
+  DriveDistanceCommand(double distance, double maxSpeed);
   DriveDistanceCommand(double distance);
 
   void Initialize() override;
@@ -43,6 +44,9 @@ private:
 
   double GetCurrentDistance();
 
+  /* max speed during movement. In units of motor RPM (0 - 5800) */
+  double maxSpeed = 2500;
+
   /* Initial starting angle from gyro */
   double gyroStartAngle;
   /* Target distance to travel */
@@ -51,8 +55,6 @@ private:
   double currentDistance;
   /* Current "uncompensated" speed */
   double currentSpeed;
-  /* max speed during movement. In units of motor RPM (0 - 5800) */
-  double maxSpeed = 2500;
   /* min speed during movement. In units of motor RPM (0 - 5800) */
   double minSpeed = 1000;
   /* Amount to step up speed per iteration when accelerating */

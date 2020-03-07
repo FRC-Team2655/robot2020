@@ -8,6 +8,10 @@
 #include "commands/DriveDistanceCommand.h"
 #include "Robot.h"
 
+DriveDistanceCommand::DriveDistanceCommand(double distance, double maxSpeed) : distance(distance), maxSpeed(maxSpeed) {
+  AddRequirements(&Robot::driveBase);
+}
+
 DriveDistanceCommand::DriveDistanceCommand(double distance) : distance(distance) {
   AddRequirements(&Robot::driveBase);
 }

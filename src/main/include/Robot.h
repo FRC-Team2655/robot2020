@@ -18,6 +18,8 @@
 #include "subsystems/IntakeSubsystem.h"
 #include "subsystems/BeltsSubsystem.h"
 #include "subsystems/LEDSubsystem.h"
+#include "AutonomousRoutines.h"
+#include <frc/SmartDashboard/SendableChooser.h>
 
 class Robot : public frc::TimedRobot {
  public:
@@ -27,6 +29,7 @@ class Robot : public frc::TimedRobot {
   static IntakeSubsystem intake;
   static BeltsSubsystem belts;
   static LEDSubsystem leds;
+  static AutonomousRoutines autoRoutines;
 
   void RobotInit() override;
   void RobotPeriodic() override;
@@ -37,11 +40,15 @@ class Robot : public frc::TimedRobot {
   void TeleopInit() override;
   void TeleopPeriodic() override;
   void TestPeriodic() override;
+private:
+  frc2::Command* autonomousCommand = nullptr;
+  frc::SendableChooser<int> autoChooser;
 
   double autoDistance;
   double autoDegrees;
-private:
-  frc2::Command* autonomousCommand = nullptr;
+  double preloadStartOffset = 0;
+  double autoStartDelayMs = 0;
+  double penc, pgyro, rotatePGyro;
 
   #if COMPBOT
   double kInP = 1.7; 

@@ -3,6 +3,8 @@
 #include <vector>
 #include <frc2/command/Command.h>
 #include <frc2/command/SequentialCommandGroup.h>
+#include <frc2/command/ParallelRaceGroup.h>
+#include "RobotMap.h"
 
 /* Auto specific commands */
 #include "commands/DriveDistanceCommand.h"
@@ -20,10 +22,10 @@
 class AutonomousRoutines
 {
 public:
-    std::vector<frc2::Command*> getAutonomousRoutines();
     double driveDistance_P_gyro;
     double driveDistance_P_encoder;
-private:
+    double rotate_P_gyro;
     frc2::Command* ShootPreloads(double goalOffsetMeters, double startDelayMs);
     frc2::Command* TestAuto(double distanceMeters, double turnDegrees);
+private:
 };

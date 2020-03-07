@@ -14,8 +14,6 @@
 #include "commands/RotateDegreesCommand.h"
 #include "commands/IntakeArmLockPIDCommand.h"
 #include "commands/DelayMillisecondsCommand.h"
-#include <frc2/command/SequentialCommandGroup.h>
-#include <frc2/command/ParallelRaceGroup.h>
 #include "commands/RunShooterVelocityCommand.h"
 #include "commands/RunBeltsCommand.h"
 
@@ -25,10 +23,24 @@ ShooterSubsystem Robot::shooter;
 IntakeSubsystem Robot::intake;
 BeltsSubsystem Robot::belts;
 LEDSubsystem Robot::leds;
-
-double penc, pgyro, rotatePGyro;
+AutonomousRoutines Robot::autoRoutines;
 
 void Robot::RobotInit() {
+    autoChooser.SetDefaultOption("Shoot Preloads Center", 0);
+    autoChooser.AddOption("Test Auto Routine", 1);
+
+    /* Apply auto chooser to smart dash*/
+    frc::SmartDashboard::PutData("Choose Auto: ", &autoChooser);
+
+    /* Auto options */
+    frc::SmartDashboard::PutNumber("Auto Distance: ", autoDistance);
+    frc::SmartDashboard::PutNumber("Encoder Auto P: ", penc);
+    frc::SmartDashboard::PutNumber("Gyro Auto P: ", pgyro);
+    frc::SmartDashboard::PutNumber("Rotate Gyro P: ", rotatePGyro);
+    frc::SmartDashboard::PutNumber("Auto Degrees: ", autoDegrees);
+    frc::SmartDashboard::PutNumber("Auto Start Delay(ms): ", autoStartDelayMs);
+    frc::SmartDashboard::PutNumber("Preload Auto Offset (inches): ", preloadStartOffset);
+
     frc::SmartDashboard::PutBoolean("Reset Encoders", false);
 
     frc::SmartDashboard::PutNumber("Intake In P: ", kInP);
@@ -44,15 +56,10 @@ void Robot::RobotInit() {
     frc::SmartDashboard::PutNumber("Right P: ", driveBase.kPRight);
     frc::SmartDashboard::PutNumber("Left I: ", driveBase.kILeft);
     frc::SmartDashboard::PutNumber("Right I: ", driveBase.kIRight);
-    frc::SmartDashboard::PutNumber("Auto Distance: ", autoDistance);
-    frc::SmartDashboard::PutNumber("Encoder Auto P: ", penc);
-    frc::SmartDashboard::PutNumber("Gyro Auto P: ", pgyro);
-    frc::SmartDashboard::PutNumber("Rotate Gyro P: ", rotatePGyro);
     frc::SmartDashboard::PutNumber("Shooter P: ", shooter.kP);
     frc::SmartDashboard::PutNumber("Shooter I: ", shooter.kI);
     frc::SmartDashboard::PutNumber("Shooter D: ", shooter.kD);
     frc::SmartDashboard::PutNumber("Shooter FF: ", shooter.kFF);
-    frc::SmartDashboard::PutNumber("Auto Degrees: ", autoDegrees);
 
     shooter.setCoastMode();
     belts.setCoastMode();
@@ -71,17 +78,6 @@ void Robot::RobotInit() {
  * LiveWindow and SmartDashboard integrated updating.
  */
 void Robot::RobotPeriodic() { 
-    /*static double lastTime = 0;
-    static int color = 0;
-    if(frc::Timer::GetFPGATimestamp() > lastTime)
-    {
-        std::cout <<"Color: " << color << std::endl;
-        color++;
-        if(color == LEDSubsystem::LEDColors::LED_COLOR_COUNT)
-            color = 0;
-        lastTime = frc::Timer::GetFPGATimestamp() + 1;
-        leds.setLEDColor((LEDSubsystem::LEDColors) color);
-    }*/
 
     frc::SmartDashboard::PutNumber("Left Current: ", driveBase.leftCurrent());
     frc::SmartDashboard::PutNumber("Right Current: ", driveBase.rightCurrent());
@@ -100,6 +96,10 @@ void Robot::RobotPeriodic() {
     frc::SmartDashboard::PutNumber("Bottom Sensor: ", belts.isProximSensorBottomTriggered());
 
     frc::SmartDashboard::PutNumber("Gyro Angle: ", driveBase.getIMUAngle());
+    frc::SmartDashboard::PutNumber("Intake Arm Current: ", intake.intakeArmCurrent());
+    frc::SmartDashboard::PutNumber("Intake Arm Position: ", intake.armPosition());
+    frc::SmartDashboard::PutNumber("Intake Arm Percentage: ", intake.intakeMotorValue);
+    frc::SmartDashboard::PutNumber("Shooter Rate: ", shooter.getRPM());
 
     if (frc::SmartDashboard::GetBoolean("Reset Encoders", false) == true) {
         driveBase.resetEncoders();
@@ -160,18 +160,6 @@ void Robot::RobotPeriodic() {
         driveBase.kIRight = frc::SmartDashboard::GetNumber("Right I: ", 0);
         driveBase.rightPID.SetI(driveBase.kIRight);
     }
-    if (frc::SmartDashboard::GetNumber("Auto Distance: ", 0) != autoDistance) {
-        autoDistance = frc::SmartDashboard::GetNumber("Auto Distance: ", 0);
-    }
-    if (frc::SmartDashboard::GetNumber("Encoder Auto P: ", 0) != penc) {
-        penc = frc::SmartDashboard::GetNumber("Encoder Auto P: ", 0);
-    }
-    if (frc::SmartDashboard::GetNumber("Gyro Auto P: ", 0) != pgyro) {
-        pgyro = frc::SmartDashboard::GetNumber("Gyro Auto P: ", 0);
-    }
-    if (frc::SmartDashboard::GetNumber("Rotate Gyro P: ", 0) != rotatePGyro) {
-        rotatePGyro = frc::SmartDashboard::GetNumber("Rotate Gyro P: ", 0);
-    }
     if (frc::SmartDashboard::GetNumber("Shooter P: ", 0) != shooter.kP) {
         shooter.kP = frc::SmartDashboard::GetNumber("Shooter P: ", 0);
     }
@@ -184,13 +172,15 @@ void Robot::RobotPeriodic() {
     if (frc::SmartDashboard::GetNumber("Shooter FF: ", 0) != shooter.kFF) {
         shooter.kFF = frc::SmartDashboard::GetNumber("Shooter FF: ", 0);
     }
-    if (frc::SmartDashboard::GetNumber("Auto Degrees: ", 0) != autoDegrees) {
-        autoDegrees = frc::SmartDashboard::GetNumber("Auto Degrees: ", 0);
-    }
-    frc::SmartDashboard::PutNumber("Intake Arm Current: ", intake.intakeArmCurrent());
-    frc::SmartDashboard::PutNumber("Intake Arm Position: ", intake.armPosition());
-    frc::SmartDashboard::PutNumber("Intake Arm Percentage: ", intake.intakeMotorValue);
-    frc::SmartDashboard::PutNumber("Shooter Rate: ", shooter.getRPM());
+
+    /* Get auto values */
+    autoStartDelayMs = frc::SmartDashboard::GetNumber("Auto Start Delay(ms): ", 0);
+    autoDistance = frc::SmartDashboard::GetNumber("Auto Distance: ", 0);
+    penc = frc::SmartDashboard::GetNumber("Encoder Auto P: ", 0);
+    pgyro = frc::SmartDashboard::GetNumber("Gyro Auto P: ", 0);
+    autoDegrees = frc::SmartDashboard::GetNumber("Auto Degrees: ", 0);
+    preloadStartOffset = frc::SmartDashboard::GetNumber("Preload Auto Offset (inches): ", 0);
+    rotatePGyro = frc::SmartDashboard::GetNumber("Rotate Gyro P: ", 0);
 
     frc2::CommandScheduler::GetInstance().Run();
 }
@@ -214,6 +204,25 @@ void Robot::DisabledPeriodic() {
  * RobotContainer} class.
  */
 void Robot::AutonomousInit() {
+    /* Apply feedback terms */
+    autoRoutines.driveDistance_P_encoder = penc;
+    autoRoutines.driveDistance_P_gyro = pgyro;
+    autoRoutines.rotate_P_gyro = rotatePGyro;
+
+    int index = autoChooser.GetSelected();
+
+    switch(index) {
+        case 0:
+            autonomousCommand = autoRoutines.ShootPreloads(0, 0);
+            break;
+        case 1:
+            autonomousCommand = autoRoutines.TestAuto(autoDistance, autoDegrees);
+            break;
+        default:
+            autonomousCommand = autoRoutines.ShootPreloads(0, 0);
+            break;
+    }
+
     /* Put drive base in brake mode for auto*/
     driveBase.setBrakeMode();
     /* Zero the intake encoder */
@@ -221,32 +230,19 @@ void Robot::AutonomousInit() {
     /* Start applying lock PID */
     intake.isIntakeLocked = true;
 
-    /* Get the auto command to run (from smart dash) */
-
     /* schedule the command */
-
-    /* Set up initial commands */
-    RotateDegreesCommand* rotateCommand = new RotateDegreesCommand(autoDegrees);
-    rotateCommand->P_gyro = rotatePGyro;
-    //rotateCommand->Schedule();
-
-    /* Sequential command for auto */
-    DriveDistanceCommand* autonCmd = new DriveDistanceCommand(autoDistance);
-    autonCmd->P_gyro = pgyro;
-    autonCmd->P_encoders = penc;
-    //autonCmd->Schedule();
-
-    frc2::SequentialCommandGroup* autoStraightCmd = new frc2::SequentialCommandGroup(
-            frc2::ParallelRaceGroup(DriveDistanceCommand(2.95), RunShooterVelocityCommand()),
-            frc2::ParallelRaceGroup(RunShooterVelocityCommand(), RunBeltsCommand(beltsSpeed), DelayMillisecondsCommand(4000)),
-            DriveDistanceCommand(-2.95));
-    autoStraightCmd->Schedule();
+    autonomousCommand->Schedule();
 }
 
 void Robot::AutonomousPeriodic() {
 }
 
 void Robot::TeleopInit() {
+    if (autonomousCommand != nullptr) {
+        autonomousCommand->Cancel();
+        autonomousCommand = nullptr;
+    }
+
     driveBase.setCoastMode();
 }
 
