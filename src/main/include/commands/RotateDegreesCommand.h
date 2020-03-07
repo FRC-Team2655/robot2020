@@ -40,9 +40,9 @@ class RotateDegreesCommand
   double P_gyro = 0.09;
   /* ramp up increment */
   double rampUpIncrement = 0.01;
-private:
   /* degrees to turn by */
   double degrees;
+private:
   /* Start angle for the robot */
   double startAngle;
   /*Target angle to reach*/
