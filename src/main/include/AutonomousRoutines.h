@@ -10,6 +10,7 @@
 #include "commands/DriveDistanceCommand.h"
 #include "commands/RotateDegreesCommand.h"
 #include "commands/DelayMillisecondsCommand.h"
+#include "commands/RotateToGyroAngleCommand.h"
 
 /* Driver commands being used for auto */
 #include "commands/MoveIntakeInArmCommand.h"

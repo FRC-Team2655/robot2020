@@ -59,6 +59,8 @@ class DriveBaseSubsystem : public frc2::SubsystemBase {
 
   double getIMUAngle();
 
+  void resetIMUAngle();
+
   void tankDriveVolts(units::volt_t left, units::volt_t right);
 
   double kPLeft = 1e-4;

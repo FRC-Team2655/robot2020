@@ -204,13 +204,26 @@ void Robot::DisabledPeriodic() {
  * RobotContainer} class.
  */
 void Robot::AutonomousInit() {
-    /* Apply feedback terms */
+
+    /* Put drive base in brake mode for auto*/
+    driveBase.setBrakeMode();
+    /* Zero the intake encoder */
+    intake.updateOffset();
+    /* Start applying lock PID */
+    intake.isIntakeLocked = true;
+
+    /* Clear gyro angle accumulator */
+    driveBase.resetIMUAngle();
+
+    /* Apply feedback terms to auto routines */
     autoRoutines.driveDistance_P_encoder = penc;
     autoRoutines.driveDistance_P_gyro = pgyro;
     autoRoutines.rotate_P_gyro = rotatePGyro;
 
+    /* Get selected index */
     int index = autoChooser.GetSelected();
 
+    /* Choose auto routine based on the index */
     switch(index) {
         case 0:
             autonomousCommand = autoRoutines.ShootPreloads(0, 0);
@@ -223,15 +236,9 @@ void Robot::AutonomousInit() {
             break;
     }
 
-    /* Put drive base in brake mode for auto*/
-    driveBase.setBrakeMode();
-    /* Zero the intake encoder */
-    intake.updateOffset();
-    /* Start applying lock PID */
-    intake.isIntakeLocked = true;
-
     /* schedule the command */
-    autonomousCommand->Schedule();
+    if(autonomousCommand != nullptr)
+        autonomousCommand->Schedule();
 }
 
 void Robot::AutonomousPeriodic() {

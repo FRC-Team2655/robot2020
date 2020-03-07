@@ -27,6 +27,7 @@ frc2::Command* AutonomousRoutines::PickupFromTrechAndShoot(double gyroStartAngle
     routine->AddCommands(DriveDistanceCommand(5.16));
     
     /* Re-orient based on gyro start angle to align to goal (180 - start angle) */
+    routine->AddCommands(RotateToGyroAngleCommand(gyroStartAngle + 180));
 
     /* Drive 1.7m while revving shooter (want to bump wall) */
     routine->AddCommands(frc2::ParallelRaceGroup(DriveDistanceCommand(1.7), RunShooterVelocityCommand()));

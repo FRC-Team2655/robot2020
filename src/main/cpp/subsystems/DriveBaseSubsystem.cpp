@@ -59,6 +59,11 @@ DriveBaseSubsystem::DriveBaseSubsystem() {
 void DriveBaseSubsystem::Periodic() {
 }
 
+void DriveBaseSubsystem::resetIMUAngle()
+{
+	imu.Reset();
+}
+
 void DriveBaseSubsystem::drivePercentage(double speed, double rotation){
 	std::array<double, 2> speeds = arcadeDrive(speed, rotation);
 	driveTankPercentage(speeds[0], speeds[1]);
