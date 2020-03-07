@@ -27,5 +27,6 @@ public:
     double rotate_P_gyro;
     frc2::Command* ShootPreloads(double goalOffsetMeters, double startDelayMs);
     frc2::Command* TestAuto(double distanceMeters, double turnDegrees);
+    frc2::Command* PickupFromTrechAndShoot(double gyroStartAngle);
 private:
 };
