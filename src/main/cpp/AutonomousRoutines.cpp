@@ -47,7 +47,7 @@ frc2::Command* AutonomousRoutines::PickupFromTrechAndShoot(double gyroStartAngle
     return routine;
 }
 
-frc2::Command* AutonomousRoutines::ShootPreloads(double goalOffsetMeters, double startDelayMs, bool buddyDrive)
+frc2::Command* AutonomousRoutines::ShootPreloads(double goalOffsetMeters, double startDelayMs, bool buddyDrive, bool pickupFromTrench, double gyroStartAngle)
 {
     /* Create the base sequential command group */
     frc2::SequentialCommandGroup* routine = new frc2::SequentialCommandGroup();
@@ -82,12 +82,44 @@ frc2::Command* AutonomousRoutines::ShootPreloads(double goalOffsetMeters, double
     /* Run belts while running shooter wheel */
     routine->AddCommands(frc2::ParallelRaceGroup(RunShooterVelocityCommand(), RunBeltsCommand(beltsSpeed), DelayMillisecondsCommand(5000)));
 
-    /* Back up to the start line */
-    routine->AddCommands(DriveDistanceCommand(-2.36));
+    if(pickupFromTrench)
+    {
+        /* Back up 1.5 meters */
+        routine->AddCommands(DriveDistanceCommand(-1.5));
 
-    /*Rotate so were facing the right way*/
-    routine->AddCommands(RotateDegreesCommand(180));
+        /* Rotate 90 degrees right */
+        routine->AddCommands(RotateDegreesCommand(-90));
 
+        /* Drive to the middle of trench line (63 inches) */
+        routine->AddCommands(DriveDistanceCommand(1.6));
+
+        /* Re-orient to 180 degrees from starting position */
+        routine->AddCommands(RotateToGyroAngleCommand(gyroStartAngle + 180));
+
+        /* Move intake out */
+        routine->AddCommands(MoveIntakeOutArmCommand(intakeOutPosition));
+
+        /* Drive while running rollers. Total drive distance: 120 inches + 200 inches (-1.5m (59") initial travel) */
+        routine->AddCommands(frc2::ParallelRaceGroup(RunIntakeRollersCommand(rollersSpeed), DriveDistanceCommand(6.62)));
+
+        /* Half second delay for balls to settle */
+        routine->AddCommands(DelayMillisecondsCommand(500));
+    
+        /* Bring intake in */
+        routine->AddCommands(frc2::ParallelRaceGroup(MoveIntakeInArmCommand(intakeInPosition), DelayMillisecondsCommand(1000)));
+
+        /* Rotate to goal*/
+        routine->AddCommands(RotateDegreesCommand(-165));
+    }
+    else
+    {
+        /* Back up to the start line */
+        routine->AddCommands(DriveDistanceCommand(-2.36));
+
+        /*Rotate so were facing the right way*/
+        routine->AddCommands(RotateDegreesCommand(180));
+    }
+    
     return routine;
 }
 
