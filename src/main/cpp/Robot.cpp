@@ -30,8 +30,10 @@ AutonomousRoutines Robot::autoRoutines;
 void Robot::RobotInit() {
     autoChooser.SetDefaultOption("No Auto", -1);
     autoChooser.AddOption("Shoot Preloads Center", 0);
+    autoChooser.AddOption("Shoot Preloads Center + Trench Pickup", 3);
     autoChooser.AddOption("Test Auto Routine", 1);
     autoChooser.AddOption("5 Ball Auto", 2);
+
 
     /* Apply auto chooser to smart dash*/
     frc::SmartDashboard::PutData("Choose Auto: ", &autoChooser);
@@ -237,9 +239,9 @@ void Robot::AutonomousInit() {
             break;
         case 0:
             if (buddyDrive == 0) {
-                autonomousCommand = autoRoutines.ShootPreloads(0, 0, false);
+                autonomousCommand = autoRoutines.ShootPreloads(0, 0, false, false, 0);
             }else{
-                autonomousCommand = autoRoutines.ShootPreloads(0, 0, true);
+                autonomousCommand = autoRoutines.ShootPreloads(0, 0, true, false, 0);
             }
             break;
         case 1:
@@ -247,6 +249,14 @@ void Robot::AutonomousInit() {
             break;
         case 2:
             autonomousCommand = autoRoutines.PickupFromTrechAndShoot(driveBase.getIMUAngle());
+            break;
+        case 3:
+            /*Shoot preloads + pickup from trench */
+            if (buddyDrive == 0) {
+                autonomousCommand = autoRoutines.ShootPreloads(0, 0, false, true, driveBase.getIMUAngle());
+            }else{
+                autonomousCommand = autoRoutines.ShootPreloads(0, 0, true, true, driveBase.getIMUAngle());
+            }
             break;
         default:
             autonomousCommand = nullptr;
