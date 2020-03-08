@@ -36,7 +36,7 @@ frc2::Command* AutonomousRoutines::PickupFromTrechAndShoot(double gyroStartAngle
     routine->AddCommands(frc2::ParallelRaceGroup(DriveDistanceCommand(1.7), RunShooterVelocityCommand(), DelayMillisecondsCommand(2000)));
 
     /* Run belts while running shooter wheel */
-    routine->AddCommands(frc2::ParallelRaceGroup(RunShooterVelocityCommand(), RunBeltsCommand(beltsSpeed), DelayMillisecondsCommand(5000)));
+    routine->AddCommands(frc2::ParallelRaceGroup(RunShooterVelocityCommand(), RunBeltsCommand(beltsSpeed), AllBallsShotCommand(1500, 3500)));
 
     /* Back up to the start line */
     routine->AddCommands(DriveDistanceCommand(-2.95));
@@ -80,7 +80,7 @@ frc2::Command* AutonomousRoutines::ShootPreloads(double goalOffsetMeters, double
     routine->AddCommands(frc2::ParallelRaceGroup(DriveDistanceCommand(straightDriveDist), RunShooterVelocityCommand(), DelayMillisecondsCommand(5000)));
 
     /* Run belts while running shooter wheel */
-    routine->AddCommands(frc2::ParallelRaceGroup(RunShooterVelocityCommand(), RunBeltsCommand(beltsSpeed), DelayMillisecondsCommand(5000)));
+    routine->AddCommands(frc2::ParallelRaceGroup(RunShooterVelocityCommand(), RunBeltsCommand(beltsSpeed), AllBallsShotCommand(1500, 3500)));
 
     if(pickupFromTrench)
     {

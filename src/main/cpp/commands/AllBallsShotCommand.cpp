@@ -6,8 +6,10 @@
 /*----------------------------------------------------------------------------*/
 
 #include "commands/AllBallsShotCommand.h"
+#include "frc/Timer.h"
+#include "Robot.h"
 
-AllBallsShotCommand::AllBallsShotCommand(double minTimeMs, double maxTimeMs): minEndTime(minTimeMs), maxEndTime(maxTimeMs) {
+AllBallsShotCommand::AllBallsShotCommand(double minTimeMs, double maxTimeMs): minTimeMs(minTimeMs), maxTimeMs(maxTimeMs) {
   // Use addRequirements() here to declare subsystem dependencies.
 }
 
@@ -17,8 +19,10 @@ void AllBallsShotCommand::Initialize() {
   startTime = frc::Timer::GetFPGATimestamp();
   currentTime = startTime;
   /* Find end times */
-  minEndTime = startTime + (minEndTime / 1000.0);
-  maxEndTime = startTime + (maxEndTime / 1000.0);
+  minEndTime = startTime + (minTimeMs / 1000.0);
+  maxEndTime = startTime + (maxTimeMs / 1000.0);
+  
+  lastSensorTriggerTime = currentTime;
 }
 
 // Called repeatedly when this Command is scheduled to run
@@ -30,6 +34,11 @@ void AllBallsShotCommand::Execute() {
   lowSensor = Robot::belts.isProximSensorBottomTriggered();
   midSensor = Robot::belts.isProximSensorMiddleTriggered();
   upperSensor = Robot::belts.isProximSensorTopTriggered();
+
+  if (lowSensor || midSensor || upperSensor)
+  {
+    lastSensorTriggerTime = currentTime; 
+  }
 }
 
 // Called once the command ends or is interrupted.
@@ -44,7 +53,9 @@ bool AllBallsShotCommand::IsFinished() {
   /* Finish if max time has elapsed */
   if(currentTime >= maxEndTime)
     return true;
+
+  if((currentTime - lastSensorTriggerTime) > 0.5)
+    return true;
   
-  /* Return true if none of the proximity sensors are triggered (all balls exited robot) */
-  return !(lowSensor || midSensor || upperSensor);
+  return false;
 }

@@ -9,8 +9,6 @@
 
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
-#include "frc/Timer.h"
-#include "Robot.h"
 
 /**
  * An example command.
@@ -34,6 +32,8 @@ class AllBallsShotCommand
 
 private:
   bool lowSensor, midSensor, upperSensor;
+  double lastSensorTriggerTime;
   double startTime, currentTime;
+  double minTimeMs, maxTimeMs;
   double minEndTime, maxEndTime;
 };

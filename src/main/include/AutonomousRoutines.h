@@ -11,6 +11,7 @@
 #include "commands/RotateDegreesCommand.h"
 #include "commands/DelayMillisecondsCommand.h"
 #include "commands/RotateToGyroAngleCommand.h"
+#include "commands/AllBallsShotCommand.h"
 
 /* Driver commands being used for auto */
 #include "commands/MoveIntakeInArmCommand.h"
