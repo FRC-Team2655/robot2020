@@ -117,7 +117,17 @@ void IntakeSubsystem::setLockPID() {
     setCurrent40();
 
     intakeLockPID.SetSetpoint(intakeInPosition);
+    intakeLockPID.SetTolerance(0.000001);
     intakeMotorValue = intakeLockPID.Calculate(armPosition());
+    intakeArm.Set(intakeMotorValue);
+}
+
+void IntakeSubsystem::setLockDownPID() {
+    setCurrent40();
+
+    intakeLockDownPID.SetSetpoint(intakeOutPosition);
+    intakeLockDownPID.SetTolerance(0.0);
+    intakeMotorValue = intakeLockDownPID.Calculate(armPosition());
     intakeArm.Set(intakeMotorValue);
 }
 

@@ -19,6 +19,8 @@ void MoveIntakeInArmCommand::Initialize() {
 
   Robot::intake.setCurrent40();
 
+  Robot::intake.isIntakeOut = false;
+
   Robot::intake.intakeInPID.SetSetpoint(position);
   Robot::intake.intakeInPID.SetTolerance(armTolerance);
 }
@@ -35,7 +37,6 @@ void MoveIntakeInArmCommand::End(bool interrupted) {
 
   Robot::intake.setCurrent(armRestCurrent);
 
-  Robot::intake.isIntakeOut = false;
   Robot::intake.isIntakeLocked = true;
 
   Robot::intake.setArmBrakeMode();

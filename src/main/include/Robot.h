@@ -61,7 +61,7 @@ private:
   double kOutP = 0.83;
   double kOutI = 0.0;
   double kOutD = 0.005;
-  double kLockP = 1.0;
+  double kLockP = 1.5;
   double kLockI = 0.001;
   double kLockD = 0.0;
 };

@@ -29,21 +29,22 @@ void OI::runButtons() {
   optionsBtn = new frc2::JoystickButton(js0, 10);
 
   l2Btn->WhileHeld(rsVelocityCommand);
-  l2Btn1->WhileHeld(rbCommand);
   
   r2Btn->WhileHeld(rbCommand, false);
-  r2Btn1->WhileHeld(rsVelocityCommand);
-  l1Btn1->WhileHeld(riRollersInvertCommand);
   triangleBtn->WhileHeld(invertrbCommand);
   shareBtn->WhenPressed(updateIntakeOffsetUp);
-  xBtn1->WhenPressed(updateIntakeOffsetDown);
-  triangleBtn1->WhenPressed(updateIntakeOffsetUp);
   optionsBtn->WhenPressed(updateIntakeOffsetDown);
 
-  shareBtn1->WhileHeld(invertrbCommand);
 
   r1Btn->WhileHeld(riRollersCommand);
-  r1Btn1->WhileHeld(riRollersCommand);
   circleBtn->WhenPressed(frc2::SequentialCommandGroup(MoveIntakeOutArmCommand(-0.26), RunBeltsBackgroundCommand(0.5)), true);
   squareBtn->WhenPressed(frc2::SequentialCommandGroup(MoveIntakeInArmCommand(0), IntakeArmLockPIDCommand()), true);
+
+  //r2Btn1->WhileHeld(rsVelocityCommand);
+  //l1Btn1->WhileHeld(riRollersInvertCommand);
+  //r1Btn1->WhileHeld(riRollersCommand);
+  //shareBtn1->WhileHeld(invertrbCommand);
+  //triangleBtn1->WhenPressed(updateIntakeOffsetUp);
+  //xBtn1->WhenPressed(updateIntakeOffsetDown);
+  //l2Btn1->WhileHeld(rbCommand);
 }

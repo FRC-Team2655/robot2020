@@ -18,7 +18,6 @@ void MoveIntakeOutArmCommand::Initialize() {
   Robot::intake.setArmCoastMode();
 
   Robot::intake.isIntakeLocked = false;
-  Robot::intake.isIntakeOut = true;
 
   Robot::intake.setCurrent40();
 
@@ -37,6 +36,7 @@ void MoveIntakeOutArmCommand::End(bool interrupted) {
   Robot::intake.stopArm();
 
   Robot::intake.setCurrent(armRestCurrent);
+  Robot::intake.isIntakeOut = true;
 
   Robot::intake.setArmBrakeMode();
 }

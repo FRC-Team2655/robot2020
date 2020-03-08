@@ -276,6 +276,10 @@ void Robot::TeleopInit() {
 void Robot::TeleopPeriodic() {
     if (intake.isIntakeLocked) {
         intake.setLockPID();
+        std::cout << "Locked in" << std::endl;
+    }else if (intake.isIntakeOut) {
+        intake.setLockDownPID();
+        std::cout << "Locked out" << std::endl;
     }
 
 
