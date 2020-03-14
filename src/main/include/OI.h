@@ -33,7 +33,7 @@ class OI {
 public:
   OI();
   frc::Joystick *js0;
-  frc::Joystick *js1;
+  //frc::Joystick *js1;
   frc2::JoystickButton *xBtn;
   frc2::JoystickButton *xBtn1;
   frc2::JoystickButton *squareBtn;  

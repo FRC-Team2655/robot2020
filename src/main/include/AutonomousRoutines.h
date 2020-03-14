@@ -19,6 +19,8 @@
 #include "commands/RunBeltsCommand.h"
 #include "commands/RunShooterVelocityCommand.h"
 #include "commands/RunIntakeRollersCommand.h"
+#include "commands/RunSideBeltsCommand.h"
+#include "commands/EnableLockPIDCommand.h"
 
 /* Class to hold all defined auto routines */
 class AutonomousRoutines
@@ -31,4 +33,7 @@ public:
     frc2::Command* TestAuto(double distanceMeters, double turnDegrees);
     frc2::Command* PickupFromTrechAndShoot(double gyroStartAngle);
 private:
+    DriveDistanceCommand cmd1 {3.43};
+    DriveDistanceCommand cmd2 {6.62};
+    DriveDistanceCommand cmd3 {DriveDistanceCommand::inchesToMeters(42)};
 };

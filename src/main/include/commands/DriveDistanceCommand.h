@@ -20,7 +20,7 @@
 class DriveDistanceCommand
     : public frc2::CommandHelper<frc2::CommandBase, DriveDistanceCommand> {
  public:
-  DriveDistanceCommand(double distance, double maxSpeed);
+  //DriveDistanceCommand(double distance, double maxSpeed);
   DriveDistanceCommand(double distance);
 
   void Initialize() override;
@@ -31,6 +31,8 @@ class DriveDistanceCommand
 
   bool IsFinished() override;
 
+  static double inchesToMeters(double inches);
+
   /* P term for P feedback loop from encoders */
   double P_encoders = 100.0;
 
@@ -40,12 +42,12 @@ class DriveDistanceCommand
   /* Angle read from current axis of interest on the gyro */
   double gyroAngle;
 
+  /* max speed during movement. In units of motor RPM (0 - 5800) */
+  double maxSpeed;
+
 private:
 
   double GetCurrentDistance();
-
-  /* max speed during movement. In units of motor RPM (0 - 5800) */
-  double maxSpeed = 2500;
 
   /* Initial starting angle from gyro */
   double gyroStartAngle;

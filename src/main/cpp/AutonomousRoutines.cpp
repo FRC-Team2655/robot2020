@@ -15,34 +15,38 @@ frc2::Command* AutonomousRoutines::PickupFromTrechAndShoot(double gyroStartAngle
 
     /* Run rollers and drive distance (~6'6" + 3' + 3' + margin - robot length (27"))
     Distance: 78 + 36 + 36 + 12 - 27 = 135 inches (3.43m) */
-    routine->AddCommands(frc2::ParallelRaceGroup(RunIntakeRollersCommand(rollersSpeed), DriveDistanceCommand(3.43, 1500)));
+    cmd1.maxSpeed = 2500;
+    routine->AddCommands(frc2::ParallelRaceGroup(RunIntakeRollersCommand(rollersSpeed), cmd1, RunSideBeltsCommand()));
 
     /* Half second delay for balls to settle */
     routine->AddCommands(DelayMillisecondsCommand(500));
     
     /* Bring intake in */
-    routine->AddCommands(frc2::ParallelRaceGroup(MoveIntakeInArmCommand(intakeInPosition), DelayMillisecondsCommand(1500)));
+    routine->AddCommands(frc2::ParallelRaceGroup(MoveIntakeInArmCommand(intakeInPosition), DelayMillisecondsCommand(750)));
+    routine->AddCommands(EnableLockPIDCommand());
 
     /* Rotate to point where robot *should* end up 1.5 meters from goal */
-    routine->AddCommands(RotateDegreesCommand(-164.6));
+    routine->AddCommands(RotateDegreesCommand(-164.9));
 
     /* Drive to 1.5m from goal */
-    routine->AddCommands(DriveDistanceCommand(5.16));
+    DriveDistanceCommand driveToGoal(DriveDistanceCommand::inchesToMeters(245));
+    driveToGoal.maxSpeed = 3000;
+    routine->AddCommands(driveToGoal);
     
     /* Re-orient based on gyro start angle to align to goal (180 - start angle) */
     routine->AddCommands(RotateToGyroAngleCommand(gyroStartAngle + 180));
 
-    /* Drive 1.7m while revving shooter (want to bump wall) */
-    routine->AddCommands(frc2::ParallelRaceGroup(DriveDistanceCommand(1.7), RunShooterVelocityCommand(), DelayMillisecondsCommand(2000)));
+    /* Drive 18" while revving shooter (want to bump wall) */
+    routine->AddCommands(frc2::ParallelRaceGroup(DriveDistanceCommand(DriveDistanceCommand::inchesToMeters(18)), RunShooterVelocityCommand(), DelayMillisecondsCommand(2000)));
 
-    /* Run belts while running shooter wheel */
-    routine->AddCommands(frc2::ParallelRaceGroup(RunShooterVelocityCommand(), RunBeltsCommand(beltsSpeed), AllBallsShotCommand(1500, 3500)));
+    /* Run belts while running shooter wheel and rollers */
+    routine->AddCommands(frc2::ParallelRaceGroup(RunShooterVelocityCommand(), RunBeltsCommand(beltsSpeed), AllBallsShotCommand(1500, 3500), RunIntakeRollersCommand(rollersSpeed)));
 
     /* Back up to the start line */
-    routine->AddCommands(DriveDistanceCommand(-2.95));
+    routine->AddCommands(DriveDistanceCommand(-2.6));
 
     /* Turn 180 */
-    routine->AddCommands(RotateDegreesCommand(180));
+    routine->AddCommands(RotateToGyroAngleCommand(gyroStartAngle));
 
     return routine;
 }
@@ -56,7 +60,7 @@ frc2::Command* AutonomousRoutines::ShootPreloads(double goalOffsetMeters, double
     double straightDriveDist = 2.36;
 
     if (buddyDrive) {
-        routine->AddCommands(frc2::ParallelRaceGroup(DriveDistanceCommand(-0.6), DelayMillisecondsCommand(4000)));
+        routine->AddCommands(frc2::ParallelRaceGroup(DriveDistanceCommand(-0.6), DelayMillisecondsCommand(2500)));
         straightDriveDist += 0.6;
     }
 
@@ -84,7 +88,7 @@ frc2::Command* AutonomousRoutines::ShootPreloads(double goalOffsetMeters, double
 
     if(pickupFromTrench)
     {
-        /* Back up 1.5 meters */
+        /* Back up -2 meters */
         routine->AddCommands(DriveDistanceCommand(-1.5));
 
         /* Rotate 90 degrees right */
@@ -100,7 +104,8 @@ frc2::Command* AutonomousRoutines::ShootPreloads(double goalOffsetMeters, double
         routine->AddCommands(MoveIntakeOutArmCommand(intakeOutPosition));
 
         /* Drive while running rollers. Total drive distance: 120 inches + 200 inches (-1.5m (59") initial travel) */
-        routine->AddCommands(frc2::ParallelRaceGroup(RunIntakeRollersCommand(rollersSpeed), DriveDistanceCommand(6.62)));
+        cmd2.maxSpeed = 2000;
+        routine->AddCommands(frc2::ParallelRaceGroup(RunIntakeRollersCommand(rollersSpeed), cmd2));
 
         /* Half second delay for balls to settle */
         routine->AddCommands(DelayMillisecondsCommand(500));

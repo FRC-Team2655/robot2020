@@ -8,12 +8,13 @@
 #include "commands/DriveDistanceCommand.h"
 #include "Robot.h"
 
-DriveDistanceCommand::DriveDistanceCommand(double distance, double maxSpeed) : distance(distance), maxSpeed(maxSpeed) {
+/*DriveDistanceCommand::DriveDistanceCommand(double distance, double maxSpeed) : distance(distance), maxSpeed(maxSpeed) {
   AddRequirements(&Robot::driveBase);
-}
+}*/
 
 DriveDistanceCommand::DriveDistanceCommand(double distance) : distance(distance) {
   AddRequirements(&Robot::driveBase);
+  maxSpeed = 2500;
 }
 
 // Called when the command is initially scheduled.
@@ -130,3 +131,7 @@ bool DriveDistanceCommand::IsFinished() {
    //scale to meters. Wheels are 6" (15cm) diameter
    return averageRotations * 3.141592 * 0.1524;
  }
+
+double DriveDistanceCommand::inchesToMeters(double inches) {
+  return inches / 39.37;
+}

@@ -54,7 +54,7 @@ bool AllBallsShotCommand::IsFinished() {
   if(currentTime >= maxEndTime)
     return true;
 
-  if((currentTime - lastSensorTriggerTime) > 0.5)
+  if((currentTime - lastSensorTriggerTime) > 0.75)
     return true;
   
   return false;

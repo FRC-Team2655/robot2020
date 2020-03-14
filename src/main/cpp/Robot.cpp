@@ -269,6 +269,13 @@ void Robot::AutonomousInit() {
 }
 
 void Robot::AutonomousPeriodic() {
+    if (intake.isIntakeLocked) {
+        intake.setLockPID();
+        std::cout << "Locked in" << std::endl;
+    }else if (intake.isIntakeOut) {
+        intake.setLockDownPID();
+        std::cout << "Locked out" << std::endl;
+    }
 }
 
 void Robot::TeleopInit() {
