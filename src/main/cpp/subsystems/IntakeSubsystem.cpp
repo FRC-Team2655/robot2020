@@ -18,7 +18,7 @@ IntakeSubsystem::IntakeSubsystem() {
     intakeArm.SetSmartCurrentLimit(armRestCurrent);
 
     #if COMPBOT
-    intakeRollers.SetInverted(true);
+    intakeRollers.SetInverted(false);
     #else
     intakeRollers.SetInverted(false);
     #endif

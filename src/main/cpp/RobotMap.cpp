@@ -21,13 +21,13 @@ const int Shooter2ID = 8;
 
 const int IntakeArm = 11;
 
-const int KickerID = 12;
+const int KickerID = 14; //12;
 
-const int BeltLeft = 15;
-const int BeltRight = 14;
+const int SideBelts = 12; //15;
+//const int BeltRight = 14;
 const int BeltBottom = 13;
 
-const int RollerShooters = 16;
+const int RollerShooters = 15; //16;
 
 const int ClimbMotor1 = 9;
 const int ClimbMotor2 = 10;
@@ -87,9 +87,9 @@ const int REncB = 3;
 const int IntakePWM = 4;
 const int LEDPWMPort = 9;
 
-const int proximitySensorTopChannel = 7;
-const int proximitySensorMiddleChannel = 8;
-const int proximitySensorBottomChannel = 9;
+const int proximitySensorTopChannel = 9;//8;
+const int proximitySensorMiddleChannel = 8;//8;
+const int proximitySensorBottomChannel = 7;//9;
 #else
 const int LEncA = 5;
 const int LEncB = 0;

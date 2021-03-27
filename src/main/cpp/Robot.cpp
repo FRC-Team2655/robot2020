@@ -291,6 +291,7 @@ void Robot::TeleopInit() {
  * This function is called periodically during operator control.
  */
 void Robot::TeleopPeriodic() {
+
     if (intake.isIntakeLocked) {
         intake.setLockPID();
         std::cout << "Locked in" << std::endl;

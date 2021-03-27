@@ -16,6 +16,7 @@ void OI::runButtons() {
   triangleBtn = new frc2::JoystickButton(js0, 4);
   circleBtn = new frc2::JoystickButton(js0, 3);
   l2Btn = new frc2::JoystickButton(js0, 7);
+  l1Btn = new frc2::JoystickButton(js0, 5);
   r2Btn = new frc2::JoystickButton(js0, 8);
   r1Btn = new frc2::JoystickButton(js0, 6);
   shareBtn = new frc2::JoystickButton(js0, 9);

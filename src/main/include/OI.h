@@ -42,7 +42,7 @@ public:
   frc2::JoystickButton *circleBtn;
   frc2::JoystickButton *l2Btn;
   frc2::JoystickButton *l2Btn1;
-  frc2::JoystickButton *l1Btn1;
+  frc2::JoystickButton *l1Btn;
   frc2::JoystickButton *r2Btn;
   frc2::JoystickButton *r2Btn1;
   frc2::JoystickButton *r1Btn;

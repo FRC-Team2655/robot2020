@@ -51,8 +51,9 @@ const extern double maxShooterSpeed;
 
 const extern int KickerID;
 
-const extern int BeltLeft;
-const extern int BeltRight;
+/*const extern int BeltLeft;
+const extern int BeltRight;*/
+const extern int SideBelts;
 const extern int BeltBottom;
 
 const extern int RollerShooters;

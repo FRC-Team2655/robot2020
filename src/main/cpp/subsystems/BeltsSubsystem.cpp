@@ -11,11 +11,11 @@ using NeutralMode = ctre::phoenix::motorcontrol::NeutralMode;
 
 BeltsSubsystem::BeltsSubsystem() {
     #if COMPBOT
-    bottomBelt.SetInverted(false);
+    bottomBelt.SetInverted(true);
     #else
     bottomBelt.SetInverted(true);
     #endif
-    leftBelt.SetInverted(true);
+    sideBelts.SetInverted(true);
 }
 
 void BeltsSubsystem::Periodic() {}
@@ -37,18 +37,28 @@ void BeltsSubsystem::runBelts(double speed, bool useProximitySensor) {
     }
 }
 
+void BeltsSubsystem::runAllBelts(double speed) {
+    //leftBelt.Set(speed);
+    //rightBelt.Set(speed);
+    sideBelts.Set(speed);
+    bottomBelt.Set(speed);
+    kicker.Set(speed);
+}
+
 void BeltsSubsystem::stopBelts() {
-    leftBelt.Set(0);
-    rightBelt.Set(0);
+    //leftBelt.Set(0);
+    //rightBelt.Set(0);
+    sideBelts.Set(0);
     bottomBelt.Set(0);
     kicker.Set(0);
 }
 
 void BeltsSubsystem::setCoastMode() {
     kicker.SetNeutralMode(NeutralMode::Coast);
-    leftBelt.SetNeutralMode(NeutralMode::Coast);
-    rightBelt.SetNeutralMode(NeutralMode::Coast);
+    //leftBelt.SetNeutralMode(NeutralMode::Coast);
+    //rightBelt.SetNeutralMode(NeutralMode::Coast);
     bottomBelt.SetNeutralMode(NeutralMode::Coast);
+    sideBelts.SetNeutralMode(NeutralMode::Coast);
 }
 
 bool BeltsSubsystem::isProximSensorTopTriggered() {
@@ -66,41 +76,45 @@ bool BeltsSubsystem::isProximSensorBottomTriggered() {
 void BeltsSubsystem::runBeltsSpeeds(double sidesSpeed, double bottomSpeed, double kickerSpeed) {
     static double firstSwitchTime = 0.0;
     static double secondSwitchTime = beltsSwitchTime;
-    static double thirdSwitchTime = 2 * beltsSwitchTime;
+    //static double thirdSwitchTime = 2 * beltsSwitchTime;
     if(frc::Timer::GetFPGATimestamp() < firstSwitchTime)
     {
-        leftBelt.Set(sidesSpeed);
-        rightBelt.Set(-sidesSpeed);
+        /*elt.Set(sidesSpeed);
+        rightBelt.Set(sidesSpeed); //-sidesSpeed);*/
+        sideBelts.Set(-sidesSpeed);
     }
     else if(frc::Timer::GetFPGATimestamp() < secondSwitchTime)
     {
-        leftBelt.Set(-sidesSpeed);
-        rightBelt.Set(sidesSpeed);
-    }
-    else if(frc::Timer::GetFPGATimestamp() < thirdSwitchTime) {
+        //leftBelt.Set(sidesSpeed);//-sidesSpeed);
+        //rightBelt.Set(sidesSpeed);
+        sideBelts.Set(sidesSpeed);
+    }else
+    /*else if(frc::Timer::GetFPGATimestamp() < thirdSwitchTime) {
         leftBelt.Set(sidesSpeed);
         rightBelt.Set(sidesSpeed);
     }
-    else
+    else*/
     {
         firstSwitchTime = frc::Timer::GetFPGATimestamp() + beltsSwitchTime;
         secondSwitchTime = firstSwitchTime + beltsSwitchTime;
-        thirdSwitchTime = secondSwitchTime + beltsSwitchTime;
+        //thirdSwitchTime = secondSwitchTime + beltsSwitchTime;
     }
     bottomBelt.Set(bottomSpeed);
     kicker.Set(kickerSpeed);
 }
 
 void BeltsSubsystem::runBeltsInverted(double speed) {
-    leftBelt.Set(-speed);
-    rightBelt.Set(-speed);
+    //leftBelt.Set(-speed);
+    //rightBelt.Set(-speed);
+    sideBelts.Set(-speed);
     bottomBelt.Set(-speed);
     kicker.Set(-speed);
 }
 
 void BeltsSubsystem::runSideBelts() {
-    rightBelt.Set(beltsSpeed);
-    leftBelt.Set(beltsSpeed);
+    /*rightBelt.Set(beltsSpeed);
+    leftBelt.Set(beltsSpeed);*/
+    sideBelts.Set(beltsSpeed);
 }
 
 void BeltsSubsystem::runBottomBelt() {

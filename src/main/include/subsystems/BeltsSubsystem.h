@@ -33,6 +33,8 @@ class BeltsSubsystem : public frc2::SubsystemBase {
   void runBeltsSpeeds(double sides, double bottom, double kicker);
   void runBeltsInverted(double speed);
 
+  void runAllBelts(double speed);
+
   int getBeltsState();
 
   void Periodic();
@@ -40,11 +42,12 @@ class BeltsSubsystem : public frc2::SubsystemBase {
   bool shouldRunBelts = true;
 
  private:
-  WPI_TalonSRX leftBelt {BeltLeft};
-  WPI_TalonSRX rightBelt {BeltRight};
+  //WPI_TalonSRX leftBelt {BeltLeft};
+  //WPI_TalonSRX rightBelt {BeltRight};
+  WPI_VictorSPX sideBelts {SideBelts};
 
   #if COMPBOT
-  WPI_TalonSRX bottomBelt {BeltBottom};
+  WPI_VictorSPX bottomBelt {BeltBottom};
   WPI_TalonSRX kicker {KickerID};
   #else
   WPI_VictorSPX bottomBelt {BeltBottom};
