@@ -292,6 +292,11 @@ void Robot::TeleopInit() {
  */
 void Robot::TeleopPeriodic() {
 
+    belts.runBelts(0.5, true);
+
+    std::cout << "Raw: " << oi.js0->GetRawAxis(4) << std::endl;
+    std::cout << "Scaled: " << jshelper::getAxisValue(oi.driveAxisConfig, oi.js0->GetRawAxis(4)) << std::endl;
+
     if (intake.isIntakeLocked) {
         intake.setLockPID();
         std::cout << "Locked in" << std::endl;

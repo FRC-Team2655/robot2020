@@ -14,7 +14,7 @@
 
 
 
-#define COMPBOT true
+#define PRACTICEBOT false
 
 
 
@@ -51,9 +51,13 @@ const extern double maxShooterSpeed;
 
 const extern int KickerID;
 
-/*const extern int BeltLeft;
-const extern int BeltRight;*/
+#if PRACTICEBOT
 const extern int SideBelts;
+#else
+const extern int BeltLeft;
+const extern int BeltRight;
+#endif
+
 const extern int BeltBottom;
 
 const extern int RollerShooters;

@@ -55,8 +55,8 @@ DriveBaseSubsystem::DriveBaseSubsystem() {
 
   SetDefaultCommand(driveJoystick);
 
-  rightMaster.SetInverted(false);
-  leftMaster.SetInverted(true);
+  //rightMaster.SetInverted(true);
+  //leftMaster.SetInverted(false);
 }
 
 // This method will be called once per scheduler run
